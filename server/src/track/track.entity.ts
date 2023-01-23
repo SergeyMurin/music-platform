@@ -16,10 +16,11 @@ export class Track extends Model {
   @Column({
     type: DataType.UUID,
     comment: 'UUID primary key',
+    allowNull: false,
   })
   id: string;
 
-  @Column
+  @Column({ allowNull: false })
   title: string;
 
   @Column
