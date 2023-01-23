@@ -9,8 +9,8 @@ export class TrackService {
   ) {}
 
   async findAll(): Promise<Track[]> {
-    const a = await this.trackRepository.findAll<Track>();
-    return null;
+    const trackEntities = await this.trackRepository.findAll<Track>();
+    return trackEntities.map((trackEntity) => trackEntity.dataValues);
   }
 
   async uploadTrack(): Promise<any> {
@@ -22,5 +22,10 @@ export class TrackService {
     });
     const a = track instanceof Track;
     return null;
+  }
+
+  async removeTrack(id: number): Promise<any> {
+    const track = await this.trackRepository.findByPk(id);
+    await track.destroy();
   }
 }
