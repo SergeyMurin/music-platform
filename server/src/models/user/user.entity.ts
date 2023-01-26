@@ -2,11 +2,20 @@ import {
   Column,
   DataType,
   Default,
+  ForeignKey,
+  HasMany,
   IsUUID,
   Model,
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
+import { Subscriber } from '../subscriber/subscriber.entity';
+import { Subscription } from '../subscription/subscription.entity';
+import { Favorite } from '../favorite/favorite.entity';
+import { Track } from '../track/track.entity';
+import { Repost } from '../repost/repost.entity';
+import { Playlist } from '../playlist/playlist.entity';
+import { Album } from '../album/album.entity';
 
 @Table
 export class User extends Model {
@@ -40,22 +49,22 @@ export class User extends Model {
   @Column
   bio: string;
 
-  @Column
-  subscribers: [];
-  @Column
-  subscriptions: [];
-  @Column
-  favorites: [];
-  @Column
-  playlists: [];
-  @Column
-  reposts: [];
+  @HasMany(() => Subscriber)
+  subscribers: Subscriber[];
+  @HasMany(() => Subscription)
+  subscriptions: Subscription[];
+  @HasMany(() => Favorite)
+  favorites: Favorite[];
+  @HasMany(() => Playlist)
+  playlists: Playlist[];
+  @HasMany(() => Repost)
+  reposts: Repost[];
   @Column
   general_plays: number;
 
-  @Column
-  tracks: [];
+  @HasMany(() => Track)
+  tracks: Track[];
 
-  @Column
-  albums: [];
+  @HasMany(() => Album)
+  albums: Album[];
 }

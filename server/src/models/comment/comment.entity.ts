@@ -2,11 +2,14 @@ import {
   Column,
   DataType,
   Default,
+  ForeignKey,
+  HasMany,
   IsUUID,
   Model,
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
+import { Track } from '../track/track.entity';
 
 @Table
 export class Comment extends Model {
@@ -21,10 +24,18 @@ export class Comment extends Model {
   id: string;
   @Column
   user_id: string;
-  @Column
-  track_id: string;
+
   @Column
   content: string;
-  @Column
-  comments: [];
+
+  @HasMany(() => Comment)
+  comments: Comment[];
+
+  @ForeignKey(() => Comment)
+  @Column({ field: 'id' })
+  comment_id: string;
+
+  @ForeignKey(() => Track)
+  @Column({ field: 'id' })
+  track_id: string;
 }

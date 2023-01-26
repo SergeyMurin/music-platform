@@ -1,5 +1,16 @@
-import { Sequelize } from 'sequelize-typescript';
+import { Model, ModelCtor, Sequelize } from 'sequelize-typescript';
 import { Track } from '../models/track/track.entity';
+import { User } from '../models/user/user.entity';
+import { Favorite } from '../models/favorite/favorite.entity';
+import { Subscription } from '../models/subscription/subscription.entity';
+import { Subscriber } from '../models/subscriber/subscriber.entity';
+import { Album } from '../models/album/album.entity';
+import { Genre } from '../models/genre/genre.entity';
+import { Playlist } from '../models/playlist/playlist.entity';
+import { Repost } from '../models/repost/repost.entity';
+import { Role } from '../models/role/role.entity';
+import { Tag } from '../models/tag/tag.entity';
+import { Comment } from '../models/comment/comment.entity';
 
 export const databaseProviders = [
   {
@@ -21,7 +32,23 @@ export const databaseProviders = [
         console.error('Unable to connect to the database:', error);
       }
 
-      sequelize.addModels([Track]);
+      const modelsToAdd: ModelCtor<Model<any, any>>[] = [
+        Album,
+        Comment,
+        Favorite,
+        Genre,
+        Playlist,
+        User,
+        Repost,
+        Role,
+        Subscriber,
+        Subscription,
+        Tag,
+        Track,
+        User,
+      ];
+
+      sequelize.addModels(modelsToAdd);
       await sequelize.sync();
 
       return sequelize;

@@ -2,11 +2,17 @@ import {
   Column,
   DataType,
   Default,
+  ForeignKey,
+  HasMany,
   IsUUID,
   Model,
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
+import { Track } from '../track/track.entity';
+import { Genre } from '../genre/genre.entity';
+import { Tag } from '../tag/tag.entity';
+import { User } from '../user/user.entity';
 
 @Table
 export class Album extends Model {
@@ -19,18 +25,21 @@ export class Album extends Model {
     allowNull: false,
   })
   id: string;
-  @Column
-  user_id: string;
+
   @Column
   album_picture_url: string;
   @Column
   title: string;
-  @Column
-  tracks: [];
-  @Column
-  genres: [];
-  @Column
-  tags: [];
+  @HasMany(() => Track)
+  tracks: Track[];
+  @HasMany(() => Genre)
+  genres: Genre[];
+  @HasMany(() => Tag)
+  tags: Tag[];
   @Column
   duration: number;
+
+  @ForeignKey(() => User)
+  @Column({ field: 'id' })
+  user_id: string;
 }

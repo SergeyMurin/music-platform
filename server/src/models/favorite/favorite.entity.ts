@@ -8,12 +8,10 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
-import { Playlist } from '../playlist/playlist.entity';
 import { User } from '../user/user.entity';
-import { Track } from '../track/track.entity';
 
 @Table
-export class Repost extends Model {
+export class Favorite extends Model {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)
@@ -23,15 +21,10 @@ export class Repost extends Model {
     allowNull: false,
   })
   id: string;
-
-  @ForeignKey(() => Track)
-  @Column({ field: 'id' })
-  track_id: string;
+  @Column
+  createdAt: string;
 
   @ForeignKey(() => User)
   @Column({ field: 'id' })
   user_id: string;
-  @ForeignKey(() => User)
-  @Column({ field: 'id' })
-  parent_user_id: string;
 }
