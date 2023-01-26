@@ -9,7 +9,7 @@ import {
 } from 'sequelize-typescript';
 
 @Table
-export class Track extends Model {
+export class Role extends Model {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)
@@ -19,15 +19,8 @@ export class Track extends Model {
     allowNull: false,
   })
   id: string;
-
-  @Column({ allowNull: false })
+  @Column
   title: string;
-
   @Column
-  author: string;
-
-  @Column
-  duration: number;
-  @Column
-  explicit: boolean;
+  access: boolean;
 }

@@ -1,6 +1,18 @@
-import { Controller, Delete, Get, Param, Post, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Req,
+  Res,
+  UploadedFiles,
+  UseInterceptors,
+} from '@nestjs/common';
 import { TrackService } from './track.service';
 import { Request, Response } from 'express';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 
 @Controller('track')
 export class TrackController {
@@ -12,8 +24,14 @@ export class TrackController {
   }
 
   @Post()
-  upload(@Req() request: Request, @Res() response: Response) {
-    this.trackService.uploadTrack(request, response);
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'soundtrack', maxCount: 1 }]))
+  upload(
+    @UploadedFiles() files,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
+    console.log('a');
+    //this.trackService.uploadTrack(request, response);
   }
 
   @Delete(':id')

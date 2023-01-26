@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize-typescript';
-import { Track } from '../track/track.entity';
+import { Track } from '../models/track/track.entity';
 
 export const databaseProviders = [
   {
