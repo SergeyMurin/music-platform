@@ -9,6 +9,11 @@ export class TrackService {
     private trackRepository: typeof Track,
   ) {}
 
+  async getEntityByPK(pk) {
+    const trackEntity = await this.trackRepository.findByPk(pk);
+    return trackEntity;
+  }
+
   async findAll(request, response): Promise<Track[]> {
     const trackEntities = await this.trackRepository.findAll<Track>();
     const data = trackEntities.map((trackEntity) => trackEntity.dataValues);
@@ -18,10 +23,7 @@ export class TrackService {
   async uploadTrack(request, response): Promise<any> {
     try {
       await Track.create({
-        title: 'aa',
-        author: 'b',
-        duration: 123,
-        explicit: true,
+        name: 'track1',
       });
 
       response.status(HttpStatus.CREATED).send();

@@ -5,7 +5,9 @@ import * as process from 'process';
 const start = async () => {
   try {
     const PORT = process.env.PORT || 4000;
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule, {
+      rawBody: true,
+    });
     app.enableCors();
     await app.listen(PORT, () =>
       console.log(

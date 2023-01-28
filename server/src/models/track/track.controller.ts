@@ -31,7 +31,7 @@ export class TrackController {
     @Res() response: Response,
   ) {
     console.log('a');
-    //this.trackService.uploadTrack(request, response);
+    this.trackService.uploadTrack(request, response);
   }
 
   @Delete(':id')

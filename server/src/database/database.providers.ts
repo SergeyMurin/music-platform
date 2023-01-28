@@ -11,6 +11,7 @@ import { Repost } from '../models/repost/repost.entity';
 import { Role } from '../models/role/role.entity';
 import { Tag } from '../models/tag/tag.entity';
 import { Comment } from '../models/comment/comment.entity';
+import { PlaylistTracks } from '../models/playlist.tracks/playlist.tracks.entity';
 
 export const databaseProviders = [
   {
@@ -33,19 +34,11 @@ export const databaseProviders = [
       }
 
       const modelsToAdd: ModelCtor<Model<any, any>>[] = [
-        Album,
-        Comment,
-        Favorite,
-        Genre,
-        Playlist,
         User,
-        Repost,
-        Role,
         Subscriber,
-        Subscription,
-        Tag,
         Track,
-        User,
+        Playlist,
+        PlaylistTracks,
       ];
 
       sequelize.addModels(modelsToAdd);
