@@ -1,16 +1,16 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { PlaylistTracks } from './playlist.tracks.entity';
+import { PlaylistTrack } from './playlist.track.entity';
 
 @Injectable()
-export class PlaylistTracksService {
+export class PlaylistTrackService {
   constructor(
-    @Inject('PLAYLIST_TRACKS_REPOSITORY')
-    private playlistTracksRepository: typeof PlaylistTracks,
+    @Inject('PLAYLIST_TRACK_REPOSITORY')
+    private playlistTrackRepository: typeof PlaylistTrack,
   ) {}
 
   async create(playlist_id, track_id) {
     try {
-      await PlaylistTracks.create({
+      await PlaylistTrack.create({
         playlist_id,
         track_id,
       });

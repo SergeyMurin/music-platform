@@ -11,7 +11,7 @@ import { Repost } from '../models/repost/repost.entity';
 import { Role } from '../models/role/role.entity';
 import { Tag } from '../models/tag/tag.entity';
 import { Comment } from '../models/comment/comment.entity';
-import { PlaylistTracks } from '../models/playlist/playlist.tracks/playlist.tracks.entity';
+import { PlaylistTrack } from '../models/playlist/playlist.track/playlist.track.entity';
 import { UserRole } from '../models/user/user.role/user.role.entity';
 import { TagTrack } from '../models/tag/tag.track/tag.track.entity';
 import { TagAlbum } from '../models/tag/tag.album/tag.album.entity';
@@ -21,6 +21,7 @@ import { FavoriteAlbum } from '../models/favorite/favorite.album/favorite.album.
 import { FavoriteTrack } from '../models/favorite/favorite.track/favorite.track.entity';
 import { RepostTrack } from '../models/repost/repost.track/repost.track.entity';
 import { RepostAlbum } from '../models/repost/repost.album/repost.album.entity';
+import { AlbumTrack } from '../models/album/album.track.entity/album.track.entity';
 
 export const databaseProviders = [
   {
@@ -47,7 +48,7 @@ export const databaseProviders = [
         Subscriber,
         Track,
         Playlist,
-        PlaylistTracks,
+        PlaylistTrack,
         Role,
         UserRole,
         Tag,
@@ -55,6 +56,7 @@ export const databaseProviders = [
         TagAlbum,
         Genre,
         Album,
+        AlbumTrack,
         GenreAlbum,
         GenreTrack,
         Comment,

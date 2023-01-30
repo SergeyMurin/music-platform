@@ -1,6 +1,6 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Playlist } from './playlist.entity';
-import { PlaylistTracksService } from './playlist.tracks/playlist.tracks.service';
+import { PlaylistTrackService } from './playlist.track/playlist.track.service';
 import { TrackService } from '../track/track.service';
 import { Track } from '../track/track.entity';
 
@@ -10,7 +10,7 @@ export class PlaylistService {
     @Inject('PLAYLIST_REPOSITORY')
     private playlistRepository: typeof Playlist,
     private readonly trackService: TrackService,
-    private readonly playlistTracksService: PlaylistTracksService,
+    private readonly playlistTracksService: PlaylistTrackService,
   ) {}
 
   async create(request, response) {

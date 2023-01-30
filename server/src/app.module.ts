@@ -6,7 +6,7 @@ import { DatabaseModule } from './database/database.module';
 import { TrackModule } from './models/track/track.module';
 import { UserModule } from './models/user/user.module';
 import { PlaylistModule } from './models/playlist/playlist.module';
-import { PlaylistTracksModule } from './models/playlist/playlist.tracks/playlist.tracks.module';
+import { PlaylistTrackModule } from './models/playlist/playlist.track/playlist.track.module';
 import { SubscriberModule } from './models/subscriber/subscriber.module';
 import { RoleModule } from './models/role/role.module';
 import { UserRoleModule } from './models/user/user.role/user.role.module';
@@ -22,6 +22,7 @@ import { FavoriteTrackModule } from './models/favorite/favorite.track/favorite.t
 import { RepostModule } from './models/repost/repost.module';
 import { RepostTrackModule } from './models/repost/repost.track/repost.track.module';
 import { RepostAlbumModule } from './models/repost/repost.album/repost.album.module';
+import { AlbumTrackModule } from './models/album/album.track.entity/album.track.module';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import { RepostAlbumModule } from './models/repost/repost.album/repost.album.mod
     TrackModule,
     UserModule,
     PlaylistModule,
-    PlaylistTracksModule,
+    PlaylistTrackModule,
     SubscriberModule,
     RoleModule,
     UserRoleModule,
@@ -37,6 +38,7 @@ import { RepostAlbumModule } from './models/repost/repost.album/repost.album.mod
     TagTrackModule,
     TagModule,
     AlbumModule,
+    AlbumTrackModule,
     GenreModule,
     CommentModule,
     FavoriteModule,

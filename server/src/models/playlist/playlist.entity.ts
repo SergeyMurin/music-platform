@@ -10,7 +10,7 @@ import {
   ForeignKey,
   BelongsTo,
 } from 'sequelize-typescript';
-import { PlaylistTracks } from './playlist.tracks/playlist.tracks.entity';
+import { PlaylistTrack } from './playlist.track/playlist.track.entity';
 import { Track } from '../track/track.entity';
 import { Length } from 'class-validator';
 import { User } from '../user/user.entity';
@@ -43,6 +43,9 @@ export class Playlist extends Model<Playlist> {
   @BelongsTo(() => User)
   user: User;
 
-  @BelongsToMany(() => Track, () => PlaylistTracks)
+  @Column({ defaultValue: 0 })
+  tracks_count: number;
+
+  @BelongsToMany(() => Track, () => PlaylistTrack)
   tracks: Track[];
 }

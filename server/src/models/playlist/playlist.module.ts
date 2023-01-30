@@ -3,13 +3,13 @@ import { DatabaseModule } from '../../database/database.module';
 import { PlaylistController } from './playlist.controller';
 import { PlaylistService } from './playlist.service';
 import { playlistProviders } from './playlist.providers';
-import { PlaylistTracksService } from './playlist.tracks/playlist.tracks.service';
-import { PlaylistTracksModule } from './playlist.tracks/playlist.tracks.module';
-import { playlistTracksProviders } from './playlist.tracks/playlist.tracks.providers';
+import { PlaylistTrackService } from './playlist.track/playlist.track.service';
+import { PlaylistTrackModule } from './playlist.track/playlist.track.module';
+import { playlistTrackProviders } from './playlist.track/playlist.track.providers';
 import { TrackModule } from '../track/track.module';
 
 @Module({
-  imports: [DatabaseModule, PlaylistTracksModule, TrackModule],
+  imports: [DatabaseModule, PlaylistTrackModule, TrackModule],
   controllers: [PlaylistController],
   providers: [PlaylistService, ...playlistProviders],
 })

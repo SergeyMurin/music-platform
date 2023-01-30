@@ -9,7 +9,6 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { Subscriber } from '../subscriber/subscriber.entity';
-import { Comment } from '../comment/comment.entity';
 import { Favorite } from '../favorite/favorite.entity';
 import { Repost } from '../repost/repost.entity';
 import { Track } from '../track/track.entity';
@@ -49,19 +48,38 @@ export class User extends Model<User> {
 
   @HasMany(() => Subscriber)
   subscribers: Subscriber[];
+  @Column({ defaultValue: 0 })
+  subscribers_count: number;
+
+  @Column({ defaultValue: 0 })
+  subscriptions_count: number;
 
   @HasMany(() => Favorite)
   favorites: Favorite[];
 
+  @Column({ defaultValue: 0 })
+  favorites_count: number;
+
   @HasMany(() => Repost)
   reposts: Repost[];
+
+  @Column({ defaultValue: 0 })
+  reposts_count: number;
 
   @HasMany(() => Track)
   tracks: Track[];
 
+  @Column({ defaultValue: 0 })
+  tracks_count: number;
+
   @HasMany(() => Album)
   albums: Album[];
 
+  @Column({ defaultValue: 0 })
+  albums_count: number;
+
   @HasMany(() => Playlist)
   playlists: Playlist[];
+  @Column({ defaultValue: 0 })
+  playlists_count: number;
 }

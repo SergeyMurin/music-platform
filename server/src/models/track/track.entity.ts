@@ -12,7 +12,7 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 import { Playlist } from '../playlist/playlist.entity';
-import { PlaylistTracks } from '../playlist/playlist.tracks/playlist.tracks.entity';
+import { PlaylistTrack } from '../playlist/playlist.track/playlist.track.entity';
 import { TagTrack } from '../tag/tag.track/tag.track.entity';
 import { Album } from '../album/album.entity';
 import { GenreTrack } from '../genre/genre.track/genre.track.entity';
@@ -44,10 +44,13 @@ export class Track extends Model<Track> {
   @Column({ allowNull: false })
   explicit: boolean;
 
+  @Column({ defaultValue: 0 })
+  plays: number;
+
   @Column
   lyrics: string;
 
-  @BelongsToMany(() => Playlist, () => PlaylistTracks)
+  @BelongsToMany(() => Playlist, () => PlaylistTrack)
   playlists: Playlist[];
 
   @ForeignKey(() => Album)
@@ -76,4 +79,6 @@ export class Track extends Model<Track> {
 
   @HasMany(() => Comment)
   comments: Comment[];
+  @Column({ defaultValue: 0 })
+  comments_count: number;
 }

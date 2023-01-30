@@ -34,14 +34,17 @@ export class Album extends Model {
   @Column({ allowNull: false })
   title: string;
 
+  @Column({ defaultValue: 0 })
+  tracks_count: number;
+
   @HasMany(() => Track)
-  album_tracks: Track[];
+  tracks: Track[];
 
   @HasMany(() => GenreAlbum)
-  album_genres: GenreAlbum[];
+  genres: GenreAlbum[];
 
   @HasMany(() => TagAlbum)
-  album_tags: TagAlbum[];
+  tags: TagAlbum[];
 
   @ForeignKey(() => User)
   @Column({

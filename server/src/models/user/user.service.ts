@@ -1,6 +1,7 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { Track } from '../track/track.entity';
+
 import { User } from './user.entity';
+import { Request, Response } from 'express';
 
 @Injectable()
 export class UserService {
@@ -9,12 +10,9 @@ export class UserService {
     private userRepository: typeof User,
   ) {}
 
-  async create(request, response) {
+  async create(request: Request, response: Response, dto) {
     try {
-      await User.create({
-        login: 'bb',
-      });
-
+      await User.create({ ...dto });
       return response.status(HttpStatus.CREATED).send();
     } catch (error) {
       return response

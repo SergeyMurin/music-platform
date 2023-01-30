@@ -1,19 +1,19 @@
 import {
-  BelongsTo,
-  Column,
-  DataType,
-  Default,
-  ForeignKey,
-  IsUUID,
-  Model,
-  PrimaryKey,
   Table,
+  Model,
+  ForeignKey,
+  BelongsTo,
+  PrimaryKey,
+  IsUUID,
+  Default,
+  DataType,
+  Column,
 } from 'sequelize-typescript';
+import { Playlist } from '../playlist.entity';
 import { Track } from '../../track/track.entity';
-import { Tag } from '../tag.entity';
 
 @Table
-export class TagTrack extends Model {
+export class PlaylistTrack extends Model<PlaylistTrack> {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)
@@ -23,16 +23,15 @@ export class TagTrack extends Model {
     allowNull: false,
   })
   id: string;
-
-  @ForeignKey(() => Tag)
+  @ForeignKey(() => Playlist)
   @Column({
     type: DataType.UUID,
     allowNull: false,
   })
-  tag_id: string;
+  playlist_id: string;
 
-  @BelongsTo(() => Tag)
-  tag: Tag;
+  @BelongsTo(() => Playlist)
+  playlist: Playlist;
 
   @ForeignKey(() => Track)
   @Column({
