@@ -23,8 +23,4 @@ export class Favorite extends Model {
   id: string;
   @Column
   createdAt: string;
-
-  @ForeignKey(() => User)
-  @Column({ field: 'id' })
-  user_id: string;
 }

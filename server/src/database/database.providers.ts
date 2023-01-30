@@ -12,6 +12,8 @@ import { Tag } from '../models/tag/tag.entity';
 import { Comment } from '../models/comment/comment.entity';
 import { PlaylistTracks } from '../models/playlist/playlist.tracks/playlist.tracks.entity';
 import { UserRole } from '../models/user/user.role/user.role.entity';
+import { TagTrack } from '../models/tag/tag.track/tag.track.entity';
+import { TagAlbum } from '../models/tag/tag.album/tag.album.entity';
 
 export const databaseProviders = [
   {
@@ -41,6 +43,11 @@ export const databaseProviders = [
         PlaylistTracks,
         Role,
         UserRole,
+        Tag,
+        TagTrack,
+        TagAlbum,
+        Genre,
+        Album,
       ];
 
       sequelize.addModels(modelsToAdd);

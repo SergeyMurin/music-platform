@@ -23,15 +23,4 @@ export class Repost extends Model {
     allowNull: false,
   })
   id: string;
-
-  @ForeignKey(() => Track)
-  @Column({ field: 'id' })
-  track_id: string;
-
-  @ForeignKey(() => User)
-  @Column({ field: 'id' })
-  user_id: string;
-  @ForeignKey(() => User)
-  @Column({ field: 'id' })
-  parent_user_id: string;
 }

@@ -27,15 +27,4 @@ export class Comment extends Model {
 
   @Column
   content: string;
-
-  @HasMany(() => Comment)
-  comments: Comment[];
-
-  @ForeignKey(() => Comment)
-  @Column({ field: 'id' })
-  comment_id: string;
-
-  @ForeignKey(() => Track)
-  @Column({ field: 'id' })
-  track_id: string;
 }

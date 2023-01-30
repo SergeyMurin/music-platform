@@ -24,12 +24,4 @@ export class Genre extends Model {
   id: string;
   @Column
   title: string;
-
-  @ForeignKey(() => Album)
-  @Column({ field: 'id' })
-  album_id: string;
-
-  @ForeignKey(() => Track)
-  @Column({ field: 'id' })
-  track_id: string;
 }

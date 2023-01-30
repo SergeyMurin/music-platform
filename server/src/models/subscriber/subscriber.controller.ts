@@ -2,7 +2,6 @@ import { Controller, Get, Post, Query, Req, Res } from '@nestjs/common';
 
 import { Request } from 'express';
 import { SubscriberService } from './subscriber.service';
-import { UserService } from '../user/user.service';
 
 @Controller('subscribe')
 export class SubscriberController {

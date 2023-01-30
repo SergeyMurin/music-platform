@@ -9,9 +9,10 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
+import { Album } from '../../album/album.entity';
 
 @Table
-export class Tag extends Model {
+export class TagAlbum extends Model {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)
@@ -21,6 +22,12 @@ export class Tag extends Model {
     allowNull: false,
   })
   id: string;
-  @Column
-  title: string;
+  @ForeignKey(() => Album)
+  @Column({
+    type: DataType.UUID,
+  })
+  album_id: string;
+
+  @BelongsTo(() => Album)
+  album: Album;
 }

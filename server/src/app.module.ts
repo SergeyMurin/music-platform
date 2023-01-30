@@ -9,6 +9,10 @@ import { PlaylistTracksModule } from './models/playlist/playlist.tracks/playlist
 import { SubscriberModule } from './models/subscriber/subscriber.module';
 import { RoleModule } from './models/role/role.module';
 import { UserRoleModule } from './models/user/user.role/user.role.module';
+import { TagAlbumModule } from './models/tag/tag.album/tag.album.module';
+import { TagTrackModule } from './models/tag/tag.track/tag.track.module';
+import { Tag } from './models/tag/tag.entity';
+import { TagModule } from './models/tag/tag.module';
 
 @Module({
   imports: [
@@ -20,6 +24,9 @@ import { UserRoleModule } from './models/user/user.role/user.role.module';
     SubscriberModule,
     RoleModule,
     UserRoleModule,
+    TagAlbumModule,
+    TagTrackModule,
+    TagModule,
   ],
   controllers: [AppController],
   providers: [AppService],

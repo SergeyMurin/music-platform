@@ -9,9 +9,10 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
+import { Track } from '../../track/track.entity';
 
 @Table
-export class Tag extends Model {
+export class TagTrack extends Model {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)
@@ -21,6 +22,13 @@ export class Tag extends Model {
     allowNull: false,
   })
   id: string;
-  @Column
-  title: string;
+
+  @ForeignKey(() => Track)
+  @Column({
+    type: DataType.UUID,
+  })
+  track_id: string;
+
+  @BelongsTo(() => Track)
+  track: Track;
 }
