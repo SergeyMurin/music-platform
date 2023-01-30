@@ -1,4 +1,5 @@
 import {
+  BelongsTo,
   Column,
   DataType,
   Default,
@@ -8,9 +9,10 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
+import { Album } from '../../album/album.entity';
 
 @Table
-export class Genre extends Model {
+export class GenreAlbum extends Model {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)
@@ -20,6 +22,12 @@ export class Genre extends Model {
     allowNull: false,
   })
   id: string;
-  @Column
-  title: string;
+  @ForeignKey(() => Album)
+  @Column({
+    type: DataType.UUID,
+  })
+  album_id: string;
+
+  @BelongsTo(() => Album)
+  album: Album;
 }

@@ -14,6 +14,7 @@ import { TagTrackModule } from './models/tag/tag.track/tag.track.module';
 import { Tag } from './models/tag/tag.entity';
 import { TagModule } from './models/tag/tag.module';
 import { AlbumModule } from './models/album/album.module';
+import { GenreModule } from './models/genre/genre.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { AlbumModule } from './models/album/album.module';
     TagTrackModule,
     TagModule,
     AlbumModule,
+    GenreModule,
   ],
   controllers: [AppController],
   providers: [AppService],

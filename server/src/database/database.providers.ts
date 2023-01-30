@@ -14,6 +14,8 @@ import { PlaylistTracks } from '../models/playlist/playlist.tracks/playlist.trac
 import { UserRole } from '../models/user/user.role/user.role.entity';
 import { TagTrack } from '../models/tag/tag.track/tag.track.entity';
 import { TagAlbum } from '../models/tag/tag.album/tag.album.entity';
+import { GenreAlbum } from '../models/genre/genre.album/genre.album.entity';
+import { GenreTrack } from '../models/genre/genre.track/genre.track.entity';
 
 export const databaseProviders = [
   {
@@ -48,6 +50,8 @@ export const databaseProviders = [
         TagAlbum,
         Genre,
         Album,
+        GenreAlbum,
+        GenreTrack,
       ];
 
       sequelize.addModels(modelsToAdd);
