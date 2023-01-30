@@ -2,12 +2,12 @@ import {
   Column,
   DataType,
   Default,
-  ForeignKey,
   IsUUID,
   Model,
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
+import { Length } from 'class-validator';
 
 @Table
 export class Genre extends Model {
@@ -20,6 +20,7 @@ export class Genre extends Model {
     allowNull: false,
   })
   id: string;
-  @Column
+  @Length(1, 50)
+  @Column({ allowNull: false })
   title: string;
 }

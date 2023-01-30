@@ -10,6 +10,8 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { User } from '../user/user.entity';
+import { Track } from '../track/track.entity';
+import { Length } from 'class-validator';
 
 @Table
 export class Comment extends Model {
@@ -23,14 +25,25 @@ export class Comment extends Model {
   })
   id: string;
 
-  @Column
+  @Length(1, 256)
+  @Column({ allowNull: false })
   content: string;
 
   @ForeignKey(() => User)
   @Column({
     type: DataType.UUID,
+    allowNull: false,
   })
   user_id: string;
   @BelongsTo(() => User)
   user: User;
+
+  @ForeignKey(() => Track)
+  @Column({
+    type: DataType.UUID,
+    allowNull: false,
+  })
+  track_id: string;
+  @BelongsTo(() => Track)
+  track: Track;
 }

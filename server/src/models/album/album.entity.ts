@@ -14,6 +14,7 @@ import { Track } from '../track/track.entity';
 import { TagAlbum } from '../tag/tag.album/tag.album.entity';
 import { GenreAlbum } from '../genre/genre.album/genre.album.entity';
 import { User } from '../user/user.entity';
+import { Length } from 'class-validator';
 
 @Table
 export class Album extends Model {
@@ -29,7 +30,8 @@ export class Album extends Model {
 
   @Column
   album_picture_url: string;
-  @Column
+  @Length(5, 64)
+  @Column({ allowNull: false })
   title: string;
 
   @HasMany(() => Track)
@@ -44,6 +46,7 @@ export class Album extends Model {
   @ForeignKey(() => User)
   @Column({
     type: DataType.UUID,
+    allowNull: false,
   })
   user_id: string;
   @BelongsTo(() => User)

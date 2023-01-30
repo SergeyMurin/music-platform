@@ -15,7 +15,7 @@ export class UserService {
         login: 'bb',
       });
 
-      response.status(HttpStatus.CREATED).send();
+      return response.status(HttpStatus.CREATED).send();
     } catch (error) {
       return response
         .status(HttpStatus.BAD_REQUEST)

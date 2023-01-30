@@ -26,6 +26,7 @@ export class Subscriber extends Model<Subscriber> {
   @ForeignKey(() => User)
   @Column({
     type: DataType.UUID,
+    allowNull: false,
   })
   user_id: string;
 

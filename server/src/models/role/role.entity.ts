@@ -1,14 +1,13 @@
 import {
-  BelongsTo,
   Column,
   DataType,
   Default,
-  ForeignKey,
   IsUUID,
   Model,
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
+import { Length } from 'class-validator';
 
 @Table
 export class Role extends Model {
@@ -21,8 +20,9 @@ export class Role extends Model {
     allowNull: false,
   })
   id: string;
-  @Column
+  @Length(1, 25)
+  @Column({ allowNull: false, unique: true })
   title: string;
-  @Column
+  @Column({ allowNull: false })
   access: boolean;
 }

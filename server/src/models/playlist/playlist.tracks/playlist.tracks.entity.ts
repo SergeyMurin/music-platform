@@ -11,7 +11,6 @@ import {
 } from 'sequelize-typescript';
 import { Playlist } from '../playlist.entity';
 import { Track } from '../../track/track.entity';
-import { User } from '../../user/user.entity';
 
 @Table
 export class PlaylistTracks extends Model<PlaylistTracks> {
@@ -25,23 +24,22 @@ export class PlaylistTracks extends Model<PlaylistTracks> {
   })
   id: string;
   @ForeignKey(() => Playlist)
-  @Column
+  @Column({
+    type: DataType.UUID,
+    allowNull: false,
+  })
   playlist_id: string;
 
   @BelongsTo(() => Playlist)
   playlist: Playlist;
 
   @ForeignKey(() => Track)
-  @Column
+  @Column({
+    type: DataType.UUID,
+    allowNull: false,
+  })
   track_id: string;
 
   @BelongsTo(() => Track)
   track: Track;
-
-  @ForeignKey(() => User)
-  @Column
-  user_id: string;
-
-  @BelongsTo(() => User)
-  user: User;
 }

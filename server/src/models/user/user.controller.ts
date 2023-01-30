@@ -1,4 +1,4 @@
-import { Controller, Post, Query, Req, Res } from '@nestjs/common';
+import { Body, Controller, Post, Query, Req, Res } from '@nestjs/common';
 
 import { UserService } from './user.service';
 
@@ -8,6 +8,6 @@ export class UserController {
 
   @Post()
   create(@Req() request, @Res() response) {
-    this.userService.create(request, response);
+    return this.userService.create(request, response);
   }
 }

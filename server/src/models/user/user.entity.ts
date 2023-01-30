@@ -2,7 +2,6 @@ import {
   Column,
   DataType,
   Default,
-  ForeignKey,
   HasMany,
   IsUUID,
   Model,
@@ -15,6 +14,8 @@ import { Favorite } from '../favorite/favorite.entity';
 import { Repost } from '../repost/repost.entity';
 import { Track } from '../track/track.entity';
 import { Album } from '../album/album.entity';
+import { Length } from 'class-validator';
+import { Playlist } from '../playlist/playlist.entity';
 
 @Table
 export class User extends Model<User> {
@@ -27,29 +28,27 @@ export class User extends Model<User> {
     allowNull: false,
   })
   id: string;
-  @Column
-  login: string;
+  @Length(5, 25)
+  @Column({ unique: true, allowNull: false })
+  username: string;
 
-  @Column
+  @Column({ unique: true, allowNull: false })
   email: string;
 
-  @Column
+  @Column({ allowNull: false })
   email_confirmed: boolean;
 
-  @Column
+  @Column({ allowNull: false })
   password: string;
 
   @Column
   user_picture_url: string;
-
+  @Length(1, 256)
   @Column
   bio: string;
 
   @HasMany(() => Subscriber)
   subscribers: Subscriber[];
-
-  @HasMany(() => Comment)
-  comments: Comment[];
 
   @HasMany(() => Favorite)
   favorites: Favorite[];
@@ -62,4 +61,7 @@ export class User extends Model<User> {
 
   @HasMany(() => Album)
   albums: Album[];
+
+  @HasMany(() => Playlist)
+  playlists: Playlist[];
 }

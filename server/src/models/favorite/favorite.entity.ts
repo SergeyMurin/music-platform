@@ -10,8 +10,6 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { User } from '../user/user.entity';
-import { Track } from '../track/track.entity';
-import { Album } from '../album/album.entity';
 
 @Table
 export class Favorite extends Model {
@@ -28,6 +26,7 @@ export class Favorite extends Model {
   @ForeignKey(() => User)
   @Column({
     type: DataType.UUID,
+    allowNull: false,
   })
   user_id: string;
   @BelongsTo(() => User)

@@ -13,12 +13,12 @@ import {
 } from 'sequelize-typescript';
 import { Playlist } from '../playlist/playlist.entity';
 import { PlaylistTracks } from '../playlist/playlist.tracks/playlist.tracks.entity';
-import { Tag } from '../tag/tag.entity';
 import { TagTrack } from '../tag/tag.track/tag.track.entity';
 import { Album } from '../album/album.entity';
-import { GenreAlbum } from '../genre/genre.album/genre.album.entity';
 import { GenreTrack } from '../genre/genre.track/genre.track.entity';
 import { User } from '../user/user.entity';
+import { Comment } from '../comment/comment.entity';
+import { Length } from 'class-validator';
 
 @Table
 export class Track extends Model<Track> {
@@ -31,8 +31,21 @@ export class Track extends Model<Track> {
     allowNull: false,
   })
   id: string;
-  @Column
+  @Length(5, 64)
+  @Column({ allowNull: false })
   title: string;
+
+  @Column({ allowNull: false })
+  track_url: string;
+
+  @Column({ allowNull: false })
+  track_picture_url: string;
+
+  @Column({ allowNull: false })
+  explicit: boolean;
+
+  @Column
+  lyrics: string;
 
   @BelongsToMany(() => Playlist, () => PlaylistTracks)
   playlists: Playlist[];
@@ -46,17 +59,21 @@ export class Track extends Model<Track> {
   @BelongsTo(() => Album)
   album: Album;
 
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.UUID,
+    allowNull: false,
+  })
+  user_id: string;
+  @BelongsTo(() => User)
+  user: User;
+
   @HasMany(() => TagTrack)
   track_tags: TagTrack[];
 
   @HasMany(() => GenreTrack)
   track_genres: GenreTrack[];
 
-  @ForeignKey(() => User)
-  @Column({
-    type: DataType.UUID,
-  })
-  user_id: string;
-  @BelongsTo(() => User)
-  user: User;
+  @HasMany(() => Comment)
+  comments: Comment[];
 }

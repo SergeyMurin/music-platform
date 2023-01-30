@@ -1,14 +1,13 @@
 import {
-  BelongsTo,
   Column,
   DataType,
   Default,
-  ForeignKey,
   IsUUID,
   Model,
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
+import { Length } from 'class-validator';
 
 @Table
 export class Tag extends Model {
@@ -21,6 +20,7 @@ export class Tag extends Model {
     allowNull: false,
   })
   id: string;
-  @Column
+  @Length(2, 15)
+  @Column({ unique: true, allowNull: false })
   title: string;
 }

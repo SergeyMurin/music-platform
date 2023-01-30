@@ -26,6 +26,7 @@ export class TagTrack extends Model {
   @ForeignKey(() => Track)
   @Column({
     type: DataType.UUID,
+    allowNull: false,
   })
   track_id: string;
 

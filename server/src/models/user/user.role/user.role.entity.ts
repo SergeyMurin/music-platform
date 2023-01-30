@@ -27,6 +27,7 @@ export class UserRole extends Model {
   @ForeignKey(() => Role)
   @Column({
     type: DataType.UUID,
+    allowNull: false,
   })
   role_id: string;
 

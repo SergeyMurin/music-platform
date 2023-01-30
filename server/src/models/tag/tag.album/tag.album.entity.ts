@@ -25,6 +25,7 @@ export class TagAlbum extends Model {
   @ForeignKey(() => Album)
   @Column({
     type: DataType.UUID,
+    allowNull: false,
   })
   album_id: string;
 
