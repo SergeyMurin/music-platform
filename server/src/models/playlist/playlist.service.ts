@@ -16,7 +16,7 @@ export class PlaylistService {
   async create(request, response) {
     try {
       await Playlist.create({
-        name: 'playlist 2',
+        title: 'playlist 2',
       });
 
       response.status(HttpStatus.CREATED).send();

@@ -19,6 +19,8 @@ import { GenreAlbum } from '../models/genre/genre.album/genre.album.entity';
 import { GenreTrack } from '../models/genre/genre.track/genre.track.entity';
 import { FavoriteAlbum } from '../models/favorite/favorite.album/favorite.album.entity';
 import { FavoriteTrack } from '../models/favorite/favorite.track/favorite.track.entity';
+import { RepostTrack } from '../models/repost/repost.track/repost.track.entity';
+import { RepostAlbum } from '../models/repost/repost.album/repost.album.entity';
 
 export const databaseProviders = [
   {
@@ -60,6 +62,8 @@ export const databaseProviders = [
         FavoriteAlbum,
         FavoriteTrack,
         Repost,
+        RepostTrack,
+        RepostAlbum,
       ];
 
       sequelize.addModels(modelsToAdd);

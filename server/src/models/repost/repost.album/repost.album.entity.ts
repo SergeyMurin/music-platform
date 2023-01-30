@@ -9,12 +9,10 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
-import { User } from '../user/user.entity';
-import { Track } from '../track/track.entity';
-import { Album } from '../album/album.entity';
+import { Album } from '../../album/album.entity';
 
 @Table
-export class Repost extends Model {
+export class RepostAlbum extends Model {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)
@@ -25,17 +23,12 @@ export class Repost extends Model {
   })
   id: string;
 
-  @ForeignKey(() => User)
+  @ForeignKey(() => Album)
   @Column({
     type: DataType.UUID,
   })
-  user_id: string;
-  @BelongsTo(() => User)
-  user: User;
+  album_id: string;
 
-  @ForeignKey(() => User)
-  @Column({
-    type: DataType.UUID,
-  })
-  repost_author_user_id: string;
+  @BelongsTo(() => Album)
+  album: Album;
 }

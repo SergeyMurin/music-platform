@@ -16,6 +16,12 @@ import { TagModule } from './models/tag/tag.module';
 import { AlbumModule } from './models/album/album.module';
 import { GenreModule } from './models/genre/genre.module';
 import { CommentModule } from './models/comment/comment.module';
+import { FavoriteModule } from './models/favorite/favorite.module';
+import { FavoriteAlbumModule } from './models/favorite/favorite.album/favorite.album.module';
+import { FavoriteTrackModule } from './models/favorite/favorite.track/favorite.track.module';
+import { RepostModule } from './models/repost/repost.module';
+import { RepostTrackModule } from './models/repost/repost.track/repost.track.module';
+import { RepostAlbumModule } from './models/repost/repost.album/repost.album.module';
 
 @Module({
   imports: [
@@ -33,6 +39,12 @@ import { CommentModule } from './models/comment/comment.module';
     AlbumModule,
     GenreModule,
     CommentModule,
+    FavoriteModule,
+    FavoriteAlbumModule,
+    FavoriteTrackModule,
+    RepostModule,
+    RepostTrackModule,
+    RepostAlbumModule,
   ],
   controllers: [AppController],
   providers: [AppService],

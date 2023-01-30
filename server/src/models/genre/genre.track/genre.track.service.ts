@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Genre } from '../genre.entity';
+
 import { GenreTrack } from './genre.track.entity';
 
 @Injectable()
