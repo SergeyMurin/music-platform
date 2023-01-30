@@ -23,7 +23,7 @@ export class TrackService {
   async uploadTrack(request, response): Promise<any> {
     try {
       await Track.create({
-        name: 'track1',
+        title: 'track3',
       });
 
       response.status(HttpStatus.CREATED).send();

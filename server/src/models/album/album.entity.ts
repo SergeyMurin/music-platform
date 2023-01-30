@@ -10,9 +10,6 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { Track } from '../track/track.entity';
-import { Genre } from '../genre/genre.entity';
-import { Tag } from '../tag/tag.entity';
-import { User } from '../user/user.entity';
 import { TagAlbum } from '../tag/tag.album/tag.album.entity';
 
 @Table
@@ -34,4 +31,7 @@ export class Album extends Model {
 
   @HasMany(() => TagAlbum)
   album_tags: TagAlbum[];
+
+  @HasMany(() => Track)
+  album_tracks: Track[];
 }

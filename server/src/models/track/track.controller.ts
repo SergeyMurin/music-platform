@@ -30,7 +30,6 @@ export class TrackController {
     @Req() request: Request,
     @Res() response: Response,
   ) {
-    console.log('a');
     this.trackService.uploadTrack(request, response);
   }
 

@@ -8,6 +8,6 @@ import { TrackController } from './track.controller';
   imports: [DatabaseModule],
   controllers: [TrackController],
   providers: [TrackService, ...trackProviders],
-  exports: [TrackService],
+  exports: [TrackService, ...trackProviders],
 })
 export class TrackModule {}

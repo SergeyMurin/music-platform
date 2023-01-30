@@ -8,11 +8,14 @@ import {
   Default,
   DataType,
   HasMany,
+  ForeignKey,
+  BelongsTo,
 } from 'sequelize-typescript';
 import { Playlist } from '../playlist/playlist.entity';
 import { PlaylistTracks } from '../playlist/playlist.tracks/playlist.tracks.entity';
 import { Tag } from '../tag/tag.entity';
 import { TagTrack } from '../tag/tag.track/tag.track.entity';
+import { Album } from '../album/album.entity';
 
 @Table
 export class Track extends Model<Track> {
@@ -26,11 +29,20 @@ export class Track extends Model<Track> {
   })
   id: string;
   @Column
-  name: string;
+  title: string;
 
   @BelongsToMany(() => Playlist, () => PlaylistTracks)
   playlists: Playlist[];
 
   @HasMany(() => TagTrack)
   track_tags: TagTrack[];
+
+  @ForeignKey(() => Album)
+  @Column({
+    type: DataType.UUID,
+  })
+  album_id: string;
+
+  @BelongsTo(() => Album)
+  album: Album;
 }
