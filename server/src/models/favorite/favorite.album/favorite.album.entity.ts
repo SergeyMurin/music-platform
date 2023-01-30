@@ -12,7 +12,7 @@ import {
 import { Album } from '../../album/album.entity';
 
 @Table
-export class GenreAlbum extends Model {
+export class FavoriteAlbum extends Model {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)
@@ -22,6 +22,7 @@ export class GenreAlbum extends Model {
     allowNull: false,
   })
   id: string;
+
   @ForeignKey(() => Album)
   @Column({
     type: DataType.UUID,

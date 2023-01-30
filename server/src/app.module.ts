@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
@@ -11,10 +12,10 @@ import { RoleModule } from './models/role/role.module';
 import { UserRoleModule } from './models/user/user.role/user.role.module';
 import { TagAlbumModule } from './models/tag/tag.album/tag.album.module';
 import { TagTrackModule } from './models/tag/tag.track/tag.track.module';
-import { Tag } from './models/tag/tag.entity';
 import { TagModule } from './models/tag/tag.module';
 import { AlbumModule } from './models/album/album.module';
 import { GenreModule } from './models/genre/genre.module';
+import { CommentModule } from './models/comment/comment.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { GenreModule } from './models/genre/genre.module';
     TagModule,
     AlbumModule,
     GenreModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

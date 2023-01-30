@@ -16,6 +16,9 @@ import { PlaylistTracks } from '../playlist/playlist.tracks/playlist.tracks.enti
 import { Tag } from '../tag/tag.entity';
 import { TagTrack } from '../tag/tag.track/tag.track.entity';
 import { Album } from '../album/album.entity';
+import { GenreAlbum } from '../genre/genre.album/genre.album.entity';
+import { GenreTrack } from '../genre/genre.track/genre.track.entity';
+import { User } from '../user/user.entity';
 
 @Table
 export class Track extends Model<Track> {
@@ -34,9 +37,6 @@ export class Track extends Model<Track> {
   @BelongsToMany(() => Playlist, () => PlaylistTracks)
   playlists: Playlist[];
 
-  @HasMany(() => TagTrack)
-  track_tags: TagTrack[];
-
   @ForeignKey(() => Album)
   @Column({
     type: DataType.UUID,
@@ -45,4 +45,18 @@ export class Track extends Model<Track> {
 
   @BelongsTo(() => Album)
   album: Album;
+
+  @HasMany(() => TagTrack)
+  track_tags: TagTrack[];
+
+  @HasMany(() => GenreTrack)
+  track_genres: GenreTrack[];
+
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.UUID,
+  })
+  user_id: string;
+  @BelongsTo(() => User)
+  user: User;
 }

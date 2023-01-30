@@ -9,10 +9,10 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
-import { Album } from '../../album/album.entity';
+import { Track } from '../../track/track.entity';
 
 @Table
-export class GenreAlbum extends Model {
+export class FavoriteTrack extends Model {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)
@@ -22,12 +22,13 @@ export class GenreAlbum extends Model {
     allowNull: false,
   })
   id: string;
-  @ForeignKey(() => Album)
+
+  @ForeignKey(() => Track)
   @Column({
     type: DataType.UUID,
   })
-  album_id: string;
+  track_id: string;
 
-  @BelongsTo(() => Album)
-  album: Album;
+  @BelongsTo(() => Track)
+  track: Track;
 }

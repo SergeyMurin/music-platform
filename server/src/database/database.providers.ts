@@ -1,4 +1,5 @@
 import { Model, ModelCtor, Sequelize } from 'sequelize-typescript';
+
 import { Track } from '../models/track/track.entity';
 import { User } from '../models/user/user.entity';
 import { Favorite } from '../models/favorite/favorite.entity';
@@ -16,6 +17,8 @@ import { TagTrack } from '../models/tag/tag.track/tag.track.entity';
 import { TagAlbum } from '../models/tag/tag.album/tag.album.entity';
 import { GenreAlbum } from '../models/genre/genre.album/genre.album.entity';
 import { GenreTrack } from '../models/genre/genre.track/genre.track.entity';
+import { FavoriteAlbum } from '../models/favorite/favorite.album/favorite.album.entity';
+import { FavoriteTrack } from '../models/favorite/favorite.track/favorite.track.entity';
 
 export const databaseProviders = [
   {
@@ -52,6 +55,11 @@ export const databaseProviders = [
         Album,
         GenreAlbum,
         GenreTrack,
+        Comment,
+        Favorite,
+        FavoriteAlbum,
+        FavoriteTrack,
+        Repost,
       ];
 
       sequelize.addModels(modelsToAdd);

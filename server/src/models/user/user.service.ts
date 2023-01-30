@@ -12,7 +12,7 @@ export class UserService {
   async create(request, response) {
     try {
       await User.create({
-        name: 'bb',
+        login: 'bb',
       });
 
       response.status(HttpStatus.CREATED).send();

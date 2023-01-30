@@ -23,7 +23,7 @@ export class Playlist extends Model<Playlist> {
   })
   id: string;
   @Column
-  name: string;
+  title: string;
 
   @BelongsToMany(() => Track, () => PlaylistTracks)
   tracks: Track[];

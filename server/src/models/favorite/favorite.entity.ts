@@ -1,4 +1,5 @@
 import {
+  BelongsTo,
   Column,
   DataType,
   Default,
@@ -9,6 +10,8 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { User } from '../user/user.entity';
+import { Track } from '../track/track.entity';
+import { Album } from '../album/album.entity';
 
 @Table
 export class Favorite extends Model {
@@ -21,6 +24,12 @@ export class Favorite extends Model {
     allowNull: false,
   })
   id: string;
-  @Column
-  createdAt: string;
+
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.UUID,
+  })
+  user_id: string;
+  @BelongsTo(() => User)
+  user: User;
 }

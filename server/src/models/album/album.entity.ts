@@ -1,4 +1,5 @@
 import {
+  BelongsTo,
   Column,
   DataType,
   Default,
@@ -11,6 +12,8 @@ import {
 } from 'sequelize-typescript';
 import { Track } from '../track/track.entity';
 import { TagAlbum } from '../tag/tag.album/tag.album.entity';
+import { GenreAlbum } from '../genre/genre.album/genre.album.entity';
+import { User } from '../user/user.entity';
 
 @Table
 export class Album extends Model {
@@ -29,9 +32,20 @@ export class Album extends Model {
   @Column
   title: string;
 
+  @HasMany(() => Track)
+  album_tracks: Track[];
+
+  @HasMany(() => GenreAlbum)
+  album_genres: GenreAlbum[];
+
   @HasMany(() => TagAlbum)
   album_tags: TagAlbum[];
 
-  @HasMany(() => Track)
-  album_tracks: Track[];
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.UUID,
+  })
+  user_id: string;
+  @BelongsTo(() => User)
+  user: User;
 }
