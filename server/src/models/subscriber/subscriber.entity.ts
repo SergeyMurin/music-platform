@@ -22,8 +22,6 @@ export class Subscriber extends Model<Subscriber> {
     allowNull: false,
   })
   id: string;
-  @Column
-  name: string;
 
   @ForeignKey(() => User)
   @Column({

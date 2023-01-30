@@ -9,7 +9,7 @@ import {
   DataType,
 } from 'sequelize-typescript';
 import { Playlist } from '../playlist/playlist.entity';
-import { PlaylistTracks } from '../playlist.tracks/playlist.tracks.entity';
+import { PlaylistTracks } from '../playlist/playlist.tracks/playlist.tracks.entity';
 
 @Table
 export class Track extends Model<Track> {

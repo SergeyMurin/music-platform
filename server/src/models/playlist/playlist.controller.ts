@@ -1,15 +1,4 @@
-import {
-  Body,
-  Controller,
-  Post,
-  Put,
-  Query,
-  RawBodyRequest,
-  Req,
-  Res,
-  UsePipes,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Controller, Post, Put, Req, Res } from '@nestjs/common';
 import { PlaylistService } from './playlist.service';
 
 @Controller('playlist')

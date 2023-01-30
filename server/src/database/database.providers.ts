@@ -2,7 +2,6 @@ import { Model, ModelCtor, Sequelize } from 'sequelize-typescript';
 import { Track } from '../models/track/track.entity';
 import { User } from '../models/user/user.entity';
 import { Favorite } from '../models/favorite/favorite.entity';
-import { Subscription } from '../models/subscription/subscription.entity';
 import { Subscriber } from '../models/subscriber/subscriber.entity';
 import { Album } from '../models/album/album.entity';
 import { Genre } from '../models/genre/genre.entity';
@@ -11,7 +10,8 @@ import { Repost } from '../models/repost/repost.entity';
 import { Role } from '../models/role/role.entity';
 import { Tag } from '../models/tag/tag.entity';
 import { Comment } from '../models/comment/comment.entity';
-import { PlaylistTracks } from '../models/playlist.tracks/playlist.tracks.entity';
+import { PlaylistTracks } from '../models/playlist/playlist.tracks/playlist.tracks.entity';
+import { UserRole } from '../models/user/user.role/user.role.entity';
 
 export const databaseProviders = [
   {
@@ -39,6 +39,8 @@ export const databaseProviders = [
         Track,
         Playlist,
         PlaylistTracks,
+        Role,
+        UserRole,
       ];
 
       sequelize.addModels(modelsToAdd);

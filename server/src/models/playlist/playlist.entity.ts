@@ -8,7 +8,7 @@ import {
   Default,
   DataType,
 } from 'sequelize-typescript';
-import { PlaylistTracks } from '../playlist.tracks/playlist.tracks.entity';
+import { PlaylistTracks } from './playlist.tracks/playlist.tracks.entity';
 import { Track } from '../track/track.entity';
 
 @Table

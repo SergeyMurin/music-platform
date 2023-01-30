@@ -1,6 +1,6 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Playlist } from './playlist.entity';
-import { PlaylistTracksService } from '../playlist.tracks/playlist.tracks.service';
+import { PlaylistTracksService } from './playlist.tracks/playlist.tracks.service';
 import { TrackService } from '../track/track.service';
 import { Track } from '../track/track.entity';
 

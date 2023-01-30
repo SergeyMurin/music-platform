@@ -1,4 +1,5 @@
 import {
+  BelongsTo,
   Column,
   DataType,
   Default,
@@ -8,10 +9,10 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
-import { User } from '../user/user.entity';
+import { Role } from '../../role/role.entity';
 
 @Table
-export class Subscription extends Model {
+export class UserRole extends Model {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)
@@ -19,12 +20,16 @@ export class Subscription extends Model {
     type: DataType.UUID,
     comment: 'UUID primary key',
     allowNull: false,
+    unique: true,
   })
   id: string;
-  @Column
-  createdAt: string;
 
-  @ForeignKey(() => User)
-  @Column({ field: 'id' })
-  user_id: string;
+  @ForeignKey(() => Role)
+  @Column({
+    type: DataType.UUID,
+  })
+  role_id: string;
+
+  @BelongsTo(() => Role)
+  role: Role;
 }
