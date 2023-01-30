@@ -8,8 +8,6 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
-import { Album } from '../album/album.entity';
-import { Track } from '../track/track.entity';
 
 @Table
 export class Genre extends Model {
@@ -24,12 +22,4 @@ export class Genre extends Model {
   id: string;
   @Column
   title: string;
-
-  @ForeignKey(() => Album)
-  @Column({ field: 'id' })
-  album_id: string;
-
-  @ForeignKey(() => Track)
-  @Column({ field: 'id' })
-  track_id: string;
 }

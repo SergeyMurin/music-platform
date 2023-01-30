@@ -1,15 +1,15 @@
 import {
+  BelongsTo,
   Column,
   DataType,
   Default,
   ForeignKey,
-  HasMany,
   IsUUID,
   Model,
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
-import { Track } from '../track/track.entity';
+import { User } from '../user/user.entity';
 
 @Table
 export class Comment extends Model {
@@ -22,20 +22,15 @@ export class Comment extends Model {
     allowNull: false,
   })
   id: string;
-  @Column
-  user_id: string;
 
   @Column
   content: string;
 
-  @HasMany(() => Comment)
-  comments: Comment[];
-
-  @ForeignKey(() => Comment)
-  @Column({ field: 'id' })
-  comment_id: string;
-
-  @ForeignKey(() => Track)
-  @Column({ field: 'id' })
-  track_id: string;
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.UUID,
+  })
+  user_id: string;
+  @BelongsTo(() => User)
+  user: User;
 }

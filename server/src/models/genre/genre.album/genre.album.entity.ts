@@ -1,4 +1,5 @@
 import {
+  BelongsTo,
   Column,
   DataType,
   Default,
@@ -8,10 +9,10 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
-import { User } from '../user/user.entity';
+import { Album } from '../../album/album.entity';
 
 @Table
-export class Subscription extends Model {
+export class GenreAlbum extends Model {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)
@@ -21,10 +22,12 @@ export class Subscription extends Model {
     allowNull: false,
   })
   id: string;
-  @Column
-  createdAt: string;
+  @ForeignKey(() => Album)
+  @Column({
+    type: DataType.UUID,
+  })
+  album_id: string;
 
-  @ForeignKey(() => User)
-  @Column({ field: 'id' })
-  user_id: string;
+  @BelongsTo(() => Album)
+  album: Album;
 }

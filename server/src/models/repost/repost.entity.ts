@@ -1,4 +1,5 @@
 import {
+  BelongsTo,
   Column,
   DataType,
   Default,
@@ -8,9 +9,9 @@ import {
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
-import { Playlist } from '../playlist/playlist.entity';
 import { User } from '../user/user.entity';
 import { Track } from '../track/track.entity';
+import { Album } from '../album/album.entity';
 
 @Table
 export class Repost extends Model {
@@ -24,14 +25,17 @@ export class Repost extends Model {
   })
   id: string;
 
-  @ForeignKey(() => Track)
-  @Column({ field: 'id' })
-  track_id: string;
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.UUID,
+  })
+  user_id: string;
+  @BelongsTo(() => User)
+  user: User;
 
   @ForeignKey(() => User)
-  @Column({ field: 'id' })
-  user_id: string;
-  @ForeignKey(() => User)
-  @Column({ field: 'id' })
-  parent_user_id: string;
+  @Column({
+    type: DataType.UUID,
+  })
+  repost_author_user_id: string;
 }

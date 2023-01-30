@@ -1,7 +1,9 @@
 import {
+  BelongsTo,
   Column,
   DataType,
   Default,
+  ForeignKey,
   IsUUID,
   Model,
   PrimaryKey,

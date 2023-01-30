@@ -1,4 +1,5 @@
 import {
+  BelongsTo,
   Column,
   DataType,
   Default,
@@ -11,7 +12,7 @@ import {
 import { User } from '../user/user.entity';
 
 @Table
-export class Subscriber extends Model {
+export class Subscriber extends Model<Subscriber> {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)
@@ -21,10 +22,13 @@ export class Subscriber extends Model {
     allowNull: false,
   })
   id: string;
-  @Column
-  createdAt: string;
 
   @ForeignKey(() => User)
-  @Column({ field: 'id' })
+  @Column({
+    type: DataType.UUID,
+  })
   user_id: string;
+
+  @BelongsTo(() => User)
+  user: User;
 }

@@ -1,23 +1,27 @@
 import {
+  Table,
   Column,
-  DataType,
-  Default,
-  ForeignKey,
-  HasMany,
-  IsUUID,
+  BelongsToMany,
   Model,
   PrimaryKey,
-  Table,
+  IsUUID,
+  Default,
+  DataType,
+  HasMany,
+  ForeignKey,
+  BelongsTo,
 } from 'sequelize-typescript';
-import { Genre } from '../genre/genre.entity';
-import { Tag } from '../tag/tag.entity';
-import { Comment } from '../comment/comment.entity';
-import { User } from '../user/user.entity';
-import { Album } from '../album/album.entity';
 import { Playlist } from '../playlist/playlist.entity';
+import { PlaylistTracks } from '../playlist/playlist.tracks/playlist.tracks.entity';
+import { Tag } from '../tag/tag.entity';
+import { TagTrack } from '../tag/tag.track/tag.track.entity';
+import { Album } from '../album/album.entity';
+import { GenreAlbum } from '../genre/genre.album/genre.album.entity';
+import { GenreTrack } from '../genre/genre.track/genre.track.entity';
+import { User } from '../user/user.entity';
 
 @Table
-export class Track extends Model {
+export class Track extends Model<Track> {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)
@@ -27,41 +31,32 @@ export class Track extends Model {
     allowNull: false,
   })
   id: string;
-
-  @Column({ allowNull: false })
+  @Column
   title: string;
 
-  @Column
-  track_picture_url: string;
-
-  @Column
-  track_url: string;
-  @HasMany(() => Genre)
-  genres: Genre[];
-  @HasMany(() => Tag)
-  tags: Tag[];
-  @Column
-  duration: number;
-  @Column
-  explicit: boolean;
-
-  @Column
-  plays: number;
-
-  @Column
-  lyrics: string;
-
-  @HasMany(() => Comment)
-  comments: Comment[];
+  @BelongsToMany(() => Playlist, () => PlaylistTracks)
+  playlists: Playlist[];
 
   @ForeignKey(() => Album)
-  @Column({ field: 'id' })
+  @Column({
+    type: DataType.UUID,
+  })
   album_id: string;
-  @ForeignKey(() => Playlist)
-  @Column({ field: 'id' })
-  playlist_id: string;
+
+  @BelongsTo(() => Album)
+  album: Album;
+
+  @HasMany(() => TagTrack)
+  track_tags: TagTrack[];
+
+  @HasMany(() => GenreTrack)
+  track_genres: GenreTrack[];
 
   @ForeignKey(() => User)
-  @Column({ field: 'id' })
+  @Column({
+    type: DataType.UUID,
+  })
   user_id: string;
+  @BelongsTo(() => User)
+  user: User;
 }
