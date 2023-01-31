@@ -6,6 +6,7 @@ import { UserSignInResponseDto } from './dto/user.sign.in.response.dto';
 import { JwtPayload } from './auth/jwt.payload.model';
 import { sign } from 'jsonwebtoken';
 import { ConfigService } from '../../shared/config/config.service';
+import { UserSignInRequestDto } from './dto/user.sign.in.request.dto';
 
 @Injectable()
 export class UserService {
@@ -34,6 +35,24 @@ export class UserService {
 
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  async signIn(dto: UserSignInRequestDto) {
+    const email = dto.email;
+    const password = dto.password;
+
+    const user = await this.getUserByEmail(email);
+    if (!user) {
+      throw new HttpException('Invalid email.', HttpStatus.BAD_REQUEST);
+    }
+
+    const isMatch = await compare(password, user.password);
+    if (!isMatch) {
+      throw new HttpException('Invalid password.', HttpStatus.BAD_REQUEST);
+    }
+
+    const token = await this.signToken(user);
+    return new UserSignInResponseDto(user, token);
   }
 
   async getUserByEmail(email: string) {

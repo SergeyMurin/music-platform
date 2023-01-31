@@ -1,9 +1,16 @@
-import { Body, Controller, Post, Query, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 
 import { UserService } from './user.service';
-import { UserSignUpDto } from './dto/user.sign.up.dto';
+import { UserSignUpRequestDto } from './dto/user.sign.up.request.dto';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { UserSignInResponseDto } from './dto/user.sign.in.response.dto';
+import { UserSignInRequestDto } from './dto/user.sign.in.request.dto';
 
 @Controller('user')
 export class UserController {
@@ -11,13 +18,15 @@ export class UserController {
 
   @Post('sign-up')
   @ApiOkResponse({ type: UserSignInResponseDto })
-  signUp(@Body() dto: UserSignUpDto): Promise<UserSignInResponseDto> {
+  @UsePipes(new ValidationPipe())
+  signUp(@Body() dto: UserSignUpRequestDto): Promise<UserSignInResponseDto> {
     return this.userService.signUp(dto);
   }
 
-  //@nestjs/swagger bcrypt jsonwebtoken passport-jwt
-  @Post()
-  create(@Req() request, @Res() response, @Body() dto: UserSignUpDto) {
-    //return this.userService.create(request, response, dto);
+  @Post('sign-in')
+  @ApiOkResponse({ type: UserSignInResponseDto })
+  @UsePipes(new ValidationPipe())
+  signIn(@Body() dto: UserSignInRequestDto): Promise<UserSignInResponseDto> {
+    return this.userService.signIn(dto);
   }
 }

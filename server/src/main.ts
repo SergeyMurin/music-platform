@@ -4,7 +4,7 @@ import * as process from 'process';
 
 const start = async () => {
   try {
-    const PORT = process.env.PORT || 4000;
+    const PORT = process.env.PORT || 5000;
     const app = await NestFactory.create(AppModule, {
       rawBody: true,
     });
