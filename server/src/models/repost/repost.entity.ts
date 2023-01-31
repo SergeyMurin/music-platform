@@ -10,6 +10,8 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { User } from '../user/user.entity';
+import { Album } from '../album/album.entity';
+import { Track } from '../track/track.entity';
 
 @Table
 export class Repost extends Model {
@@ -38,4 +40,22 @@ export class Repost extends Model {
     allowNull: false,
   })
   repost_author_user_id: string;
+
+  @ForeignKey(() => Album)
+  @Column({
+    type: DataType.UUID,
+  })
+  album_id: string;
+
+  @BelongsTo(() => Album)
+  album: Album;
+
+  @ForeignKey(() => Track)
+  @Column({
+    type: DataType.UUID,
+  })
+  track_id: string;
+
+  @BelongsTo(() => Track)
+  track: Track;
 }

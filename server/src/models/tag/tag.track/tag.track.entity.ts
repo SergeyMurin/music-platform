@@ -13,7 +13,7 @@ import { Track } from '../../track/track.entity';
 import { Tag } from '../tag.entity';
 
 @Table
-export class TagTrack extends Model {
+export class TagTrack extends Model<TagTrack> {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)

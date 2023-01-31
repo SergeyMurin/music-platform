@@ -19,30 +19,20 @@ import { GenreAlbum } from '../models/genre/genre.album/genre.album.entity';
 import { GenreTrack } from '../models/genre/genre.track/genre.track.entity';
 import { FavoriteAlbum } from '../models/favorite/favorite.album/favorite.album.entity';
 import { FavoriteTrack } from '../models/favorite/favorite.track/favorite.track.entity';
-import { RepostTrack } from '../models/repost/repost.track/repost.track.entity';
-import { RepostAlbum } from '../models/repost/repost.album/repost.album.entity';
 import { AlbumTrack } from '../models/album/album.track.entity/album.track.entity';
+import { ConfigService } from '../shared/config/config.service';
 
 export const databaseProviders = [
   {
     provide: 'SEQUELIZE',
-    useFactory: async () => {
-      const sequelize = new Sequelize({
-        dialect: 'postgres',
-        host: 'localhost',
-        port: 5555,
-        username: 'postgres',
-        password: 'admin',
-        database: 'music-platform',
-      });
-
+    useFactory: async (configService: ConfigService) => {
+      const sequelize = new Sequelize(configService.sequelizeOrmConfig);
       try {
         await sequelize.authenticate();
         console.log('Connection has been established successfully.');
       } catch (error) {
         console.error('Unable to connect to the database:', error);
       }
-
       const modelsToAdd: ModelCtor<Model<any, any>>[] = [
         User,
         Subscriber,
@@ -64,14 +54,11 @@ export const databaseProviders = [
         FavoriteAlbum,
         FavoriteTrack,
         Repost,
-        RepostTrack,
-        RepostAlbum,
       ];
-
       sequelize.addModels(modelsToAdd);
       await sequelize.sync();
-
       return sequelize;
     },
+    inject: [ConfigService],
   },
 ];

@@ -10,7 +10,7 @@ import {
 import { Length } from 'class-validator';
 
 @Table
-export class Tag extends Model {
+export class Tag extends Model<Tag> {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)

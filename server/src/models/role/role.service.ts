@@ -17,7 +17,7 @@ export class RoleService {
         title: title,
         access: access,
       });
-      return;
+      return res.send();
     } catch (error) {
       console.error(error);
     }

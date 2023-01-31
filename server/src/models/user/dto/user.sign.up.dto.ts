@@ -1,6 +1,8 @@
-export class CreateUserDto {
+export class UserSignUpDto {
   readonly username: string;
-  readonly email_confirmed: string;
+
+  readonly email: string;
+  readonly email_confirmed: boolean;
 
   readonly password: string;
 

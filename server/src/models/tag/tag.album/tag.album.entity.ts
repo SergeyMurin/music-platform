@@ -12,7 +12,7 @@ import {
 import { Album } from '../../album/album.entity';
 
 @Table
-export class TagAlbum extends Model {
+export class TagAlbum extends Model<TagAlbum> {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)

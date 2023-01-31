@@ -12,7 +12,7 @@ import {
 import { Role } from '../../role/role.entity';
 
 @Table
-export class UserRole extends Model {
+export class UserRole extends Model<UserRole> {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)

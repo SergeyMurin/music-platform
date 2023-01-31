@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { TrackModule } from './models/track/track.module';
 import { UserModule } from './models/user/user.module';
@@ -20,9 +18,8 @@ import { FavoriteModule } from './models/favorite/favorite.module';
 import { FavoriteAlbumModule } from './models/favorite/favorite.album/favorite.album.module';
 import { FavoriteTrackModule } from './models/favorite/favorite.track/favorite.track.module';
 import { RepostModule } from './models/repost/repost.module';
-import { RepostTrackModule } from './models/repost/repost.track/repost.track.module';
-import { RepostAlbumModule } from './models/repost/repost.album/repost.album.module';
 import { AlbumTrackModule } from './models/album/album.track.entity/album.track.module';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
@@ -45,10 +42,9 @@ import { AlbumTrackModule } from './models/album/album.track.entity/album.track.
     FavoriteAlbumModule,
     FavoriteTrackModule,
     RepostModule,
-    RepostTrackModule,
-    RepostAlbumModule,
+    SharedModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

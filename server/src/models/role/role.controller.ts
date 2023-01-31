@@ -14,6 +14,6 @@ export class RoleController {
 
   @Post()
   addAdmin(@Query() query, @Req() request: Request, @Res() response: Response) {
-    this.roleService.add(query, request, response);
+    return this.roleService.add(query, request, response);
   }
 }
