@@ -12,7 +12,7 @@ export class UserDto {
   readonly email_confirmed: boolean;
 
   @ApiProperty()
-  readonly user_picture_url: string;
+  readonly picture_url: string;
 
   @ApiProperty()
   readonly bio: string;
@@ -21,7 +21,7 @@ export class UserDto {
     this.id = user.id;
     this.email = user.email;
     this.email_confirmed = user.email_confirmed;
-    this.user_picture_url = user.user_picture_url;
+    this.picture_url = user.picture_url;
     this.bio = user.bio;
   }
 }

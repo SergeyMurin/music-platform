@@ -1,9 +1,8 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { genSalt, hash, compare } from 'bcrypt';
 import { User } from './user.entity';
-import { Request, Response } from 'express';
 import { UserSignInResponseDto } from './dto/user.sign.in.response.dto';
-import { JwtPayload } from './auth/jwt.payload.model';
+import { JwtPayload } from './auth/jwt/jwt.payload.model';
 import { sign } from 'jsonwebtoken';
 import { ConfigService } from '../../shared/config/config.service';
 import { UserSignInRequestDto } from './dto/user.sign.in.request.dto';
@@ -18,6 +17,32 @@ export class UserService {
     private readonly configService: ConfigService,
   ) {
     this.jwtPrivateKey = this.configService.jwtConfig.privateKey;
+  }
+
+  async googleSignIn(req) {
+    try {
+      if (!req.user) {
+        return;
+      }
+      const existingUser = await this.getUserByEmail(req.user.email);
+      if (existingUser) {
+        const token = await this.signToken(existingUser);
+        return new UserSignInResponseDto(existingUser, token);
+      }
+
+      const user = await User.create({
+        email: req.user.email,
+        email_confirmed: true,
+        username: req.user.firstName,
+        picture_url: req.user.picture,
+        google_auth: true,
+      });
+
+      const token = await this.signToken(user);
+      return new UserSignInResponseDto(user, token);
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async signUp(dto): Promise<UserSignInResponseDto> {

@@ -36,10 +36,10 @@ export class Track extends Model<Track> {
   title: string;
 
   @Column({ allowNull: false })
-  track_url: string;
+  url: string;
 
   @Column({ allowNull: false })
-  track_picture_url: string;
+  picture_url: string;
 
   @Column({ allowNull: false })
   explicit: boolean;

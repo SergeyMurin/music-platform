@@ -34,6 +34,9 @@ export class Album extends Model {
   @Column({ allowNull: false })
   title: string;
 
+  @Column
+  picture_url: string;
+
   @Column({ defaultValue: 0 })
   tracks_count: number;
 

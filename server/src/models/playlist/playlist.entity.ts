@@ -31,7 +31,7 @@ export class Playlist extends Model<Playlist> {
   title: string;
 
   @Column
-  playlist_picture_url: string;
+  picture_url: string;
 
   @ForeignKey(() => User)
   @Column({

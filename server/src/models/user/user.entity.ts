@@ -37,11 +37,14 @@ export class User extends Model<User> {
   @Column({ allowNull: false })
   email_confirmed: boolean;
 
-  @Column({ allowNull: false })
+  @Column
   password: string;
 
+  @Column({ allowNull: false, defaultValue: false })
+  google_auth: boolean;
+
   @Column
-  user_picture_url: string;
+  picture_url: string;
   @Length(1, 256)
   @Column
   bio: string;
