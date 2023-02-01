@@ -3,12 +3,12 @@ import { DatabaseModule } from '../../database/database.module';
 import { UserService } from './user.service';
 import { userProviders } from './user.providers';
 import { UserController } from './user.controller';
-import { GoogleStrategy } from './auth/google/google.strategy';
+import { JwtStrategy } from './auth/jwt.strategy';
 
 @Module({
   imports: [DatabaseModule],
   controllers: [UserController],
-  providers: [UserService, ...userProviders, GoogleStrategy],
+  providers: [UserService, ...userProviders, JwtStrategy],
   exports: [UserService, ...userProviders],
 })
 export class UserModule {}

@@ -6,6 +6,9 @@ export class UserDto {
   id: string;
 
   @ApiProperty()
+  readonly username: string;
+
+  @ApiProperty()
   readonly email: string;
 
   @ApiProperty()
@@ -19,6 +22,7 @@ export class UserDto {
 
   constructor(user: User) {
     this.id = user.id;
+    this.username = user.username;
     this.email = user.email;
     this.email_confirmed = user.email_confirmed;
     this.picture_url = user.picture_url;
