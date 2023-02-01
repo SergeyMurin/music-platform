@@ -1,8 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import cors from 'cors';
-import * as dotenv from 'dotenv';
 import * as process from 'process';
+import * as dotenv from 'dotenv';
+
 dotenv.config();
 
 const start = async () => {

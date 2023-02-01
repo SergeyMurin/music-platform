@@ -3,9 +3,12 @@ import { S3 } from 'aws-sdk';
 import * as process from 'process';
 import * as dotenv from 'dotenv';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const download = require('download');
+
 dotenv.config();
 
-export const s3 = new S3({
+export const digitalOceanClient = new S3({
   endpoint: process.env.DIGITAL_OCEAN_ENDPOINT,
   credentials: {
     accessKeyId: process.env.DIGITAL_OCEAN_ACCESS_KEY_ID,
@@ -15,59 +18,46 @@ export const s3 = new S3({
 
 @Injectable()
 export class DigitalOceanService {
-  constructor() {
-    this.getFileURL(
-      process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH,
-      'img.jpg',
-    );
-  }
+  constructor() {}
 
-  async uploadFile(file, key: string, title: string) {
+  async uploadFile(file, title: string, key?: string): Promise<string> {
     try {
-      if (key) {
-        throw new Error('Key param is required');
-      }
-      s3.putObject(
-        {
-          Bucket: process.env.DIGITAL_OCEAN_BUCKET,
-          ACL: 'private',
-          Body: file,
-          Key: key + title,
-        },
-        () => console.log(`File ${title} was uploaded`),
-      );
+      const uploadedFile = await digitalOceanClient
+        .putObject(
+          {
+            Bucket: process.env.DIGITAL_OCEAN_BUCKET,
+            ACL: 'public-read',
+            Body: file,
+            Key: key ? key + title : title,
+          },
+          () => console.log(`File ${title} was uploaded`),
+        )
+        .promise();
+      return (uploadedFile as any).Location;
     } catch (error) {
       console.error(error);
     }
   }
 
-  async downloadFile(key: string, title: string) {
-    try {
-      const file = await s3.getObject({
+  async removeFile(title: string, key?: string): Promise<boolean> {
+    const response = await digitalOceanClient
+      .deleteObject({
         Bucket: process.env.DIGITAL_OCEAN_BUCKET,
-        Key: key + title,
-      });
-    } catch (error) {
-      console.error(error);
-    }
+        Key: key ? key + title : title,
+      })
+      .promise();
+    return !response.$response.error;
   }
 
-  async getFileURL(key: string, title: string): Promise<string | null> {
-    let signedUrl;
-    await s3.getSignedUrl(
-      'getObject',
-      {
-        Bucket: process.env.DIGITAL_OCEAN_BUCKET,
-        Key: key + title,
-      },
-      function (err, url) {
-        if (err) {
-          console.error(err);
-        } else {
-          signedUrl = url;
-        }
-      },
-    );
+  async downloadFileByURL(url: string) {
+    await Promise.all([url].map((url) => download(url, 'downloads')));
+  }
+
+  getFileURL(title: string, key?: string) {
+    const signedUrl = digitalOceanClient.getSignedUrl('getObject', {
+      Bucket: process.env.DIGITAL_OCEAN_BUCKET,
+      Key: key ? key + title : title,
+    });
     return signedUrl ? signedUrl : null;
   }
 }
