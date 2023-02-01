@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import cors from 'cors';
 import * as process from 'process';
 
 const start = async () => {
@@ -8,7 +9,14 @@ const start = async () => {
     const app = await NestFactory.create(AppModule, {
       rawBody: true,
     });
-    app.enableCors();
+    app.use(
+      cors({
+        origin: 'http://localhost:3000',
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        allowedHeaders: 'Content-Type,Authorization',
+      }),
+    );
+    //app.enableCors();
     await app.listen(PORT, () =>
       console.log(
         `[${new Date().toLocaleDateString()}] Server started on ${PORT}`,
