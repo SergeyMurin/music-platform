@@ -20,6 +20,7 @@ import { FavoriteTrackModule } from './models/favorite/favorite.track/favorite.t
 import { RepostModule } from './models/repost/repost.module';
 import { AlbumTrackModule } from './models/album/album.track.entity/album.track.module';
 import { SharedModule } from './shared/shared.module';
+import { DigitalOceanModule } from './digtal.ocean/digita.ocean.module';
 
 @Module({
   imports: [
@@ -43,6 +44,8 @@ import { SharedModule } from './shared/shared.module';
     FavoriteTrackModule,
     RepostModule,
     SharedModule,
+
+    DigitalOceanModule,
   ],
   controllers: [],
   providers: [],
