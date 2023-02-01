@@ -24,7 +24,12 @@ export class TrackController {
   }
 
   @Post()
-  @UseInterceptors(FileFieldsInterceptor([{ name: 'soundtrack', maxCount: 1 }]))
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'soundtrack', maxCount: 1 },
+      { name: 'picture', maxCount: 1 },
+    ]),
+  )
   upload(
     @UploadedFiles() files,
     @Req() request: Request,

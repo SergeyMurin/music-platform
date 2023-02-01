@@ -1,0 +1,10 @@
+[
+  {
+    "title": "admin",
+    "access": true
+  },
+  {
+    "title": "user",
+    "access": true
+  }
+]

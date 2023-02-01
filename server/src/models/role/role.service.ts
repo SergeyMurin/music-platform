@@ -1,13 +1,30 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { User } from '../user/user.entity';
+import { Inject, Injectable, Module } from '@nestjs/common';
 import { Role } from './role.entity';
+import initData from './init/default.json';
 
 @Injectable()
 export class RoleService {
   constructor(
     @Inject('ROLE_REPOSITORY')
     private roleRepository: typeof Role,
-  ) {}
+    @Inject('SEQUELIZE')
+    private sequelize,
+  ) {
+    sequelize.sync().then(() => this.init());
+  }
+
+  async init() {
+    if (await this.roleRepository.findOne()) {
+      return;
+    }
+    const roles = initData;
+    for (const role of roles) {
+      await this.roleRepository.create({
+        title: role.title,
+        access: role.access,
+      });
+    }
+  }
 
   async add(query, req, res) {
     try {
