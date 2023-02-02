@@ -8,6 +8,11 @@ dotenv.config();
 
 @Injectable()
 export class MailService {
+  /**
+   * Using gmail service and gmail account to send email from app email to user
+   * @type {any}
+   * @private
+   */
   private transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -16,15 +21,19 @@ export class MailService {
     },
   });
 
-  constructor() {}
-
+  /**
+   * Generates a message to send and sends it to the specified email
+   * @param {string} to - specified email
+   * @param {string} subject - email subject
+   * @param {string} confirmationLink - link that redirect to client for confirm
+   * @returns {Promise<void>}
+   * Outputs to the console sending info
+   */
   async sendConfirmationEmail(
     to: string,
     subject: string,
     confirmationLink: string,
   ) {
-    //const html = fs.readFileSync(process.env.PATH_TO_MAIL_HTML, 'utf8');
-
     const message = {
       from: `Track Tornado <${process.env.EMAIL}>`,
       to,
