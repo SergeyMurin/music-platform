@@ -7,6 +7,14 @@ import { sign } from 'jsonwebtoken';
 import { ConfigService } from '../../shared/config/config.service';
 import { UserSignInRequestDto } from './dto/user.sign.in.request.dto';
 import { OAuth2Client } from 'google-auth-library';
+import { JwtService } from '@nestjs/jwt';
+import { UserTokenService } from './user.token/user.token.service';
+import { UserToken } from './user.token/user.token.entity';
+import * as dotenv from 'dotenv';
+import * as process from 'process';
+import { MailService } from '../../mail/mail.service';
+
+dotenv.config();
 
 @Injectable()
 export class UserService {
@@ -16,6 +24,9 @@ export class UserService {
     @Inject('USER_REPOSITORY')
     private userRepository: typeof User,
     private readonly configService: ConfigService,
+    private readonly jwtService: JwtService,
+    private readonly tokenService: UserTokenService,
+    private readonly mailService: MailService,
   ) {
     this.jwtPrivateKey = this.configService.jwtConfig.privateKey;
   }
@@ -71,6 +82,9 @@ export class UserService {
       const user = await User.create({ ...dto, password });
 
       const token = await this.signToken(user);
+      await this.tokenService.create(user.id, token);
+      await this.sendConfirmation(user);
+
       return new UserSignInResponseDto(user, token);
     } catch (error) {
       if (error.name === 'SequelizeUniqueConstraintError') {
@@ -102,6 +116,43 @@ export class UserService {
     return new UserSignInResponseDto(user, token);
   }
 
+  async confirm(token: string) {
+    try {
+      const data = await this.verifyToken(token);
+      const user = await this.userRepository.findOne<User>({
+        where: { id: data.user_id },
+      });
+
+      //await this.tokenService.delete(data.user_id);
+
+      if (user && !user.email_confirmed) {
+        user.email_confirmed = true;
+        return await user.save();
+      }
+      throw new HttpException('Confirmation error', HttpStatus.BAD_REQUEST);
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Server error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async sendConfirmation(user: User) {
+    const userToken: UserToken = await this.tokenService.find(user.id);
+    if (!userToken) {
+      throw new HttpException(
+        'Cannot find user token',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    const confirmLink = `${process.env.CLIENT_URI}/user/confirm?token=${userToken.token}`;
+    await this.mailService.sendConfirmationEmail(
+      user.email,
+      'Confirm Your Email',
+      confirmLink,
+    );
+  }
+
   async getUserByEmail(email: string) {
     return await this.userRepository.findOne<User>({
       where: { email },
@@ -111,7 +162,19 @@ export class UserService {
   async signToken(user: User) {
     const payload: JwtPayload = {
       email: user.email,
+      user_id: user.id,
     };
     return sign(payload, this.jwtPrivateKey, {});
+  }
+
+  private async verifyToken(token): Promise<JwtPayload> {
+    const data = this.jwtService.verify(token, {
+      secret: this.jwtPrivateKey,
+    }) as JwtPayload;
+    const tokenExists = await this.tokenService.exists(data.user_id, token);
+    if (tokenExists) {
+      return data;
+    }
+    throw new HttpException("Token doesn't exist", HttpStatus.BAD_REQUEST);
   }
 }

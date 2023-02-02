@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Post,
+  Query,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -14,6 +15,7 @@ import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
 import { UserSignInResponseDto } from './dto/user.sign.in.response.dto';
 import { UserSignInRequestDto } from './dto/user.sign.in.request.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { ConfirmAccountDto } from './dto/confirm.account.dto';
 
 @Controller('user')
 export class UserController {
@@ -38,6 +40,14 @@ export class UserController {
   @UsePipes(new ValidationPipe())
   signIn(@Body() dto: UserSignInRequestDto): Promise<UserSignInResponseDto> {
     return this.userService.signIn(dto);
+  }
+
+  @Get('confirm')
+  async confirm(
+    @Query(new ValidationPipe()) query: ConfirmAccountDto,
+  ): Promise<boolean> {
+    await this.userService.confirm(query.token);
+    return true;
   }
 
   @Get('test')
