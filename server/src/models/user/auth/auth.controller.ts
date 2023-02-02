@@ -2,17 +2,23 @@ import {
   Body,
   Controller,
   Get,
+  Patch,
   Post,
   Query,
+  Req,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiOkResponse } from '@nestjs/swagger';
-import { UserSignInResponseDto } from '../dto/user.sign.in.response.dto';
-import { UserSignUpRequestDto } from '../dto/user.sign.up.request.dto';
-import { UserSignInRequestDto } from '../dto/user.sign.in.request.dto';
-import { ConfirmAccountDto } from '../dto/confirm.account.dto';
+import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
+import { UserSignInResponseDto } from './dto/user.sign.in.response.dto';
+import { UserSignUpRequestDto } from './dto/user.sign.up.request.dto';
+import { UserSignInRequestDto } from './dto/user.sign.in.request.dto';
+import { ConfirmAccountDto } from './dto/confirm.account.dto';
+import { ForgotPasswordDto } from './dto/forgot.password.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { ResetPasswordDto } from './dto/reset.password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -45,5 +51,23 @@ export class AuthController {
   ): Promise<boolean> {
     await this.authService.confirm(query.token);
     return true;
+  }
+
+  @Post('forgot-password')
+  async forgotPassword(
+    @Body(new ValidationPipe()) forgotPasswordDto: ForgotPasswordDto,
+  ): Promise<void> {
+    return this.authService.forgotPassword(forgotPasswordDto);
+  }
+
+  @Patch('reset-password')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  async changePassword(
+    @Body(new ValidationPipe()) resetPasswordDto: ResetPasswordDto,
+    @Req() request,
+  ): Promise<boolean> {
+    const token = request.rawHeaders[1].replace('Bearer ', '');
+    return this.authService.resetPassword(token, resetPasswordDto);
   }
 }

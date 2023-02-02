@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 
 import { UserService } from './user.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
@@ -11,7 +11,7 @@ export class UserController {
   @Get('test')
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
-  async test(): Promise<any> {
+  async test(@Req() req): Promise<any> {
     return 'auth test success!';
   }
 }

@@ -7,6 +7,6 @@ import { userTokenProviders } from './user.token.providers';
   imports: [DatabaseModule],
   controllers: [],
   providers: [UserTokenService, ...userTokenProviders],
-  exports: [UserTokenService],
+  exports: [UserTokenService, ...userTokenProviders],
 })
 export class UserTokenModule {}

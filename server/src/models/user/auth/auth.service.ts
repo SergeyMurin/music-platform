@@ -6,8 +6,8 @@ import { JwtService } from '@nestjs/jwt';
 import { UserTokenService } from '../user.token/user.token.service';
 import { MailService } from '../../../mail/mail.service';
 import { OAuth2Client } from 'google-auth-library';
-import { UserSignInResponseDto } from '../dto/user.sign.in.response.dto';
-import { UserSignInRequestDto } from '../dto/user.sign.in.request.dto';
+import { UserSignInResponseDto } from './dto/user.sign.in.response.dto';
+import { UserSignInRequestDto } from './dto/user.sign.in.request.dto';
 import { UserToken } from '../user.token/user.token.entity';
 import { JwtPayload } from './jwt/jwt.payload.model';
 import { sign } from 'jsonwebtoken';
@@ -15,6 +15,8 @@ import { sign } from 'jsonwebtoken';
 import process from 'process';
 import * as dotenv from 'dotenv';
 import { UserService } from '../user.service';
+import { ForgotPasswordDto } from './dto/forgot.password.dto';
+import { ResetPasswordDto } from './dto/reset.password.dto';
 
 dotenv.config();
 
@@ -25,6 +27,8 @@ export class AuthService {
   constructor(
     @Inject('USER_REPOSITORY')
     private userRepository: typeof User,
+    @Inject('USER_TOKEN_REPOSITORY')
+    private userTokenRepository: typeof UserToken,
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
     private readonly tokenService: UserTokenService,
@@ -153,7 +157,7 @@ export class AuthService {
   }
 
   /**
-   * Sends email with link to confirm controlelr using MailService
+   * Sends email with link to confirm controller using MailService
    * @param {User} user User entity
    * @returns {Promise<void>} if without errors then complete
    */
@@ -174,7 +178,7 @@ export class AuthService {
     );
   }
 
-  async signToken(user: User) {
+  private async signToken(user: User) {
     const payload: JwtPayload = {
       email: user.email,
       user_id: user.id,
@@ -191,5 +195,47 @@ export class AuthService {
       return data;
     }
     throw new HttpException("Token doesn't exist", HttpStatus.BAD_REQUEST);
+  }
+
+  async forgotPassword(forgotPasswordDto: ForgotPasswordDto): Promise<void> {
+    const user = await this.userService.getUserByEmail(forgotPasswordDto.email);
+    if (!user) {
+      throw new HttpException('Invalid email', HttpStatus.BAD_REQUEST);
+    }
+    const token = await this.tokenService.find(user.id);
+    const resetLink = `${process.env.CLIENT_URI}/auth/reset-password?token=${token.token}`;
+
+    await this.mailService.sendResetPasswordEmail(
+      user.email,
+      'Reset password',
+      resetLink,
+    );
+  }
+
+  async resetPassword(
+    token: string,
+    resetPasswordDto: ResetPasswordDto,
+  ): Promise<boolean> {
+    try {
+      const salt = await genSalt(10);
+      const password = await hash(resetPasswordDto.password, salt);
+
+      const userToken = await this.userTokenRepository.findOne({
+        where: {
+          token,
+        },
+      });
+
+      const user = await this.userRepository.findOne({
+        where: {
+          id: userToken.user_id,
+        },
+      });
+      user.password = password;
+      await user.save();
+      return true;
+    } catch (error) {
+      throw new HttpException('Error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }

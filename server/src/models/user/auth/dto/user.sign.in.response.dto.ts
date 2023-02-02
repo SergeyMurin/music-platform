@@ -1,6 +1,6 @@
 import { UserDto } from './user.dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '../user.entity';
+import { User } from '../../user.entity';
 
 export class UserSignInResponseDto extends UserDto {
   @ApiProperty()
