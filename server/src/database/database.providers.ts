@@ -21,6 +21,7 @@ import { FavoriteAlbum } from '../models/favorite/favorite.album/favorite.album.
 import { FavoriteTrack } from '../models/favorite/favorite.track/favorite.track.entity';
 import { AlbumTrack } from '../models/album/album.track.entity/album.track.entity';
 import { ConfigService } from '../shared/config/config.service';
+import { UserToken } from '../models/user/user.token/user.token.entity';
 
 export const databaseProviders = [
   {
@@ -54,6 +55,7 @@ export const databaseProviders = [
         FavoriteAlbum,
         FavoriteTrack,
         Repost,
+        UserToken,
       ];
       sequelize.addModels(modelsToAdd);
       await sequelize.sync();

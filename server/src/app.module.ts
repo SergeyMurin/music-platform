@@ -21,6 +21,9 @@ import { RepostModule } from './models/repost/repost.module';
 import { AlbumTrackModule } from './models/album/album.track.entity/album.track.module';
 import { SharedModule } from './shared/shared.module';
 import { DigitalOceanModule } from './digtal.ocean/digita.ocean.module';
+import { UserTokenService } from './models/user/user.token/user.token.service';
+import { UserTokenModule } from './models/user/user.token/user.token.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -44,7 +47,9 @@ import { DigitalOceanModule } from './digtal.ocean/digita.ocean.module';
     FavoriteTrackModule,
     RepostModule,
     SharedModule,
+    UserTokenModule,
 
+    MailModule,
     DigitalOceanModule,
   ],
   controllers: [],
