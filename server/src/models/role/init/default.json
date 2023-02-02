@@ -5,6 +5,6 @@
   },
   {
     "title": "user",
-    "access": true
+    "access": false
   }
 ]

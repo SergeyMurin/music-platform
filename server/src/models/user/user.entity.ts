@@ -34,7 +34,7 @@ export class User extends Model<User> {
   @Column({ unique: true, allowNull: false })
   email: string;
 
-  @Column({ allowNull: false })
+  @Column({ allowNull: false, defaultValue: false })
   email_confirmed: boolean;
 
   @Column
@@ -49,40 +49,44 @@ export class User extends Model<User> {
   @Column
   bio: string;
 
-  @HasMany(() => Subscriber)
-  subscribers: Subscriber[];
+  @Column({ allowNull: false, defaultValue: false })
+  blocked: boolean;
+
   @Column({ defaultValue: 0 })
   subscribers_count: number;
 
   @Column({ defaultValue: 0 })
   subscriptions_count: number;
 
-  @HasMany(() => Favorite)
-  favorites: Favorite[];
-
   @Column({ defaultValue: 0 })
   favorites_count: number;
-
-  @HasMany(() => Repost)
-  reposts: Repost[];
 
   @Column({ defaultValue: 0 })
   reposts_count: number;
 
-  @HasMany(() => Track)
-  tracks: Track[];
-
   @Column({ defaultValue: 0 })
   tracks_count: number;
+  @Column({ defaultValue: 0 })
+  albums_count: number;
+
+  @Column({ defaultValue: 0 })
+  playlists_count: number;
+
+  @HasMany(() => Subscriber)
+  subscribers: Subscriber[];
+
+  @HasMany(() => Favorite)
+  favorites: Favorite[];
+
+  @HasMany(() => Repost)
+  reposts: Repost[];
+
+  @HasMany(() => Track)
+  tracks: Track[];
 
   @HasMany(() => Album)
   albums: Album[];
 
-  @Column({ defaultValue: 0 })
-  albums_count: number;
-
   @HasMany(() => Playlist)
   playlists: Playlist[];
-  @Column({ defaultValue: 0 })
-  playlists_count: number;
 }
