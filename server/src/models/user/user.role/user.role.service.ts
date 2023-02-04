@@ -2,6 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { User } from '../user.entity';
 import { UserRole } from './user.role.entity';
 import { Role } from '../../role/role.entity';
+import { RoleService } from '../../role/role.service';
+import { UserService } from '../user.service';
 
 @Injectable()
 export class UserRoleService {
@@ -12,6 +14,8 @@ export class UserRoleService {
     private roleRepository: typeof Role,
     @Inject('USER_REPOSITORY')
     private userRepository: typeof User,
+    private roleService: RoleService,
+    private userService: UserService,
   ) {}
 
   async initRole(query, req, res) {
@@ -34,5 +38,13 @@ export class UserRoleService {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  async create(user_id: string, role_title: string) {
+    const role = await this.roleService.findByTitle(role_title);
+    return await this.userRoleRepository.create({
+      id: user_id,
+      role_id: role.id,
+    });
   }
 }

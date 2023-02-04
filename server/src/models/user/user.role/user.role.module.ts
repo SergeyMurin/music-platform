@@ -10,5 +10,6 @@ import { DatabaseModule } from '../../../database/database.module';
   imports: [DatabaseModule, UserModule, RoleModule],
   controllers: [UserRoleController],
   providers: [UserRoleService, ...userRoleProviders],
+  exports: [UserRoleService, ...userRoleProviders],
 })
 export class UserRoleModule {}

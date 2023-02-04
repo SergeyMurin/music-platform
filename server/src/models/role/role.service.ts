@@ -39,4 +39,8 @@ export class RoleService {
       console.error(error);
     }
   }
+
+  async findByTitle(title: string): Promise<Role> {
+    return await this.roleRepository.findOne({ where: { title } });
+  }
 }

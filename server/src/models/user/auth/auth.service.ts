@@ -17,6 +17,8 @@ import * as dotenv from 'dotenv';
 import { UserService } from '../user.service';
 import { ForgotPasswordDto } from './dto/forgot.password.dto';
 import { ResetPasswordDto } from './dto/reset.password.dto';
+import { UserRoleService } from '../user.role/user.role.service';
+import { RoleTitleEnum } from '../../../shared/enum/role.title.enum';
 
 dotenv.config();
 
@@ -34,6 +36,7 @@ export class AuthService {
     private readonly tokenService: UserTokenService,
     private readonly mailService: MailService,
     private readonly userService: UserService,
+    private readonly userRoleService: UserRoleService,
   ) {
     this.jwtPrivateKey = this.configService.jwtConfig.privateKey;
   }
@@ -59,11 +62,13 @@ export class AuthService {
       if (!payload) {
         return;
       }
-      const existingUser = await this.userService.getUserByEmail(payload.email);
+      const existingUser = await this.userService.getByEmail(payload.email);
       if (existingUser) {
         const token = await this.signToken(existingUser);
+        await this.tokenService.update(existingUser.id, token);
         return new UserSignInResponseDto(existingUser, token);
       }
+
       const user = await this.userRepository.create({
         email: payload.email,
         email_confirmed: payload.email_verified,
@@ -71,8 +76,9 @@ export class AuthService {
         picture_url: payload.picture,
         google_auth: true,
       });
-
       const token = await this.signToken(user);
+      await this.userRoleService.create(user.id, RoleTitleEnum.USER);
+      await this.tokenService.create(user.id, token);
       return new UserSignInResponseDto(user, token);
     } catch (error) {
       throw new HttpException(
@@ -95,6 +101,8 @@ export class AuthService {
 
       const token = await this.signToken(user);
       await this.tokenService.create(user.id, token);
+      await this.userRoleService.create(user.id, RoleTitleEnum.USER);
+
       await this.sendConfirmation(user);
 
       return new UserSignInResponseDto(user, token);
@@ -119,7 +127,7 @@ export class AuthService {
     const email = dto.email;
     const password = dto.password;
 
-    const user = await this.userService.getUserByEmail(email);
+    const user = await this.userService.getByEmail(email);
     if (!user) {
       throw new HttpException('Invalid email.', HttpStatus.BAD_REQUEST);
     }
@@ -129,8 +137,8 @@ export class AuthService {
       throw new HttpException('Invalid password.', HttpStatus.BAD_REQUEST);
     }
 
-    const token = await this.signToken(user);
-    return new UserSignInResponseDto(user, token);
+    const token = await this.tokenService.find(user.id);
+    return new UserSignInResponseDto(user, token.token);
   }
 
   /**
@@ -198,7 +206,7 @@ export class AuthService {
   }
 
   async forgotPassword(forgotPasswordDto: ForgotPasswordDto): Promise<void> {
-    const user = await this.userService.getUserByEmail(forgotPasswordDto.email);
+    const user = await this.userService.getByEmail(forgotPasswordDto.email);
     if (!user) {
       throw new HttpException('Invalid email', HttpStatus.BAD_REQUEST);
     }
