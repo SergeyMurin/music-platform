@@ -1,6 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 
 import { Tag } from './tag.entity';
+import { CreateTagDto } from './dto/create.tag.dto';
+import { isArray } from 'class-validator';
 
 @Injectable()
 export class TagService {
@@ -9,12 +11,38 @@ export class TagService {
     private tagRepository: typeof Tag,
   ) {}
 
-  async create(query, req, res) {
-    const title = query.title;
-    const tag = await this.tagRepository.findOne({ where: { title: title } });
-    if (tag) return;
-    await this.tagRepository.create({
-      title: title,
-    });
+  async getTagByTitle(title): Promise<Tag> {
+    return await this.tagRepository.findOne({ where: { title } });
+  }
+
+  async createTag(dto: CreateTagDto | CreateTagDto[]): Promise<Tag> {
+    if (isArray(dto)) {
+      for (const tag of dto) {
+        if (!(await this.getTagByTitle(tag.title))) {
+          await this.tagRepository.create({ title: tag.title });
+        }
+      }
+    } else {
+      if (await this.getTagByTitle(dto.title)) {
+        throw new BadRequestException('Already Exist');
+      }
+      return await this.tagRepository.create({ title: dto.title });
+    }
+  }
+
+  async removeTag(dto: CreateTagDto | CreateTagDto[]): Promise<boolean> {
+    if (isArray(dto)) {
+      for (const tag of dto) {
+        if (await this.getTagByTitle(tag.title)) {
+          await this.tagRepository.destroy({ where: { title: tag.title } });
+        }
+      }
+    } else {
+      if (!(await this.getTagByTitle(dto.title))) {
+        throw new BadRequestException('There is no such token');
+      }
+      await this.tagRepository.destroy({ where: { title: dto.title } });
+      return true;
+    }
   }
 }

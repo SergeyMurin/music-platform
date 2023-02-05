@@ -23,4 +23,7 @@ export class Tag extends Model<Tag> {
   @Length(2, 15)
   @Column({ unique: true, allowNull: false })
   title: string;
+
+  @Column({ allowNull: false, defaultValue: 0 })
+  amount: number;
 }

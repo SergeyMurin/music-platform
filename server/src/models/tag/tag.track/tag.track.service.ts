@@ -19,7 +19,7 @@ export class TagTrackService {
     const trackId = query.track_id;
     if (isArray(title)) {
       for (const titleElement of title) {
-        await this.tagService.create(
+        await this.tagService.createTag(
           { title: titleElement, track_id: trackId },
           req,
           res,

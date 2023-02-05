@@ -19,7 +19,7 @@ export class TagAlbumService {
     const albumId = query.album_id;
     if (isArray(title)) {
       for (const titleElement of title) {
-        await this.tagService.create(
+        await this.tagService.createTag(
           { title: titleElement, track_id: albumId },
           req,
           res,
