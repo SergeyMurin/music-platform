@@ -10,6 +10,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { Track } from '../../track/track.entity';
+import { Genre } from '../genre.entity';
 
 @Table
 export class GenreTrack extends Model {
@@ -22,6 +23,16 @@ export class GenreTrack extends Model {
     allowNull: false,
   })
   id: string;
+
+  @ForeignKey(() => Genre)
+  @Column({
+    type: DataType.UUID,
+    allowNull: false,
+  })
+  genre_id: string;
+
+  @BelongsTo(() => Genre)
+  genre: Genre;
 
   @ForeignKey(() => Track)
   @Column({

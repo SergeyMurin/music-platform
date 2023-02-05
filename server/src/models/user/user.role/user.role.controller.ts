@@ -19,8 +19,6 @@ export class UserRoleController {
   constructor(private readonly userRoleService: UserRoleService) {}
 
   @Get()
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt'))
   async getRoleByUserId(@Req() request: Request, @Query('id') id) {
     return await this.userRoleService.getRoleByUserId(id);
   }

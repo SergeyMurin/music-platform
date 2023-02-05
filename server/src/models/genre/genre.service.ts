@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Genre } from './genre.entity';
 import initData from './init/default.json';
-import { updateInitJSON } from '../../shared/updateInitJSON';
+import { GetAllGenresDto } from './dto/get.all.genres.dto';
 
 @Injectable()
 export class GenreService {
@@ -24,5 +24,18 @@ export class GenreService {
         title: genre,
       });
     }
+  }
+
+  async getAll(): Promise<GetAllGenresDto[]> {
+    const genres = await this.genreRepository.findAll({
+      order: [['title', 'ASC']],
+    });
+
+    return genres.map((genre) => {
+      const responseDto = new GetAllGenresDto();
+      responseDto.id = genre.id;
+      responseDto.title = genre.title;
+      return responseDto;
+    });
   }
 }

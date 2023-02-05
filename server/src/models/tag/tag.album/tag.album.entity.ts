@@ -10,6 +10,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { Album } from '../../album/album.entity';
+import { Tag } from '../tag.entity';
 
 @Table
 export class TagAlbum extends Model<TagAlbum> {
@@ -22,6 +23,17 @@ export class TagAlbum extends Model<TagAlbum> {
     allowNull: false,
   })
   id: string;
+
+  @ForeignKey(() => Tag)
+  @Column({
+    type: DataType.UUID,
+    allowNull: false,
+  })
+  tag_id: string;
+
+  @BelongsTo(() => Tag)
+  tag: Tag;
+
   @ForeignKey(() => Album)
   @Column({
     type: DataType.UUID,

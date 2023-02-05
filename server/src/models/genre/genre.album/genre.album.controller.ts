@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Res } from '@nestjs/common';
+import { Controller, Get, Query, Req, Res } from '@nestjs/common';
 import { Request } from 'express';
 import { GenreAlbumService } from './genre.album.service';
 
@@ -7,7 +7,7 @@ export class GenreAlbumController {
   constructor(private readonly genreAlbumService: GenreAlbumService) {}
 
   @Get()
-  getAll(@Req() request: Request, @Res() response) {
-    return null;
+  async getAlbumGenres(@Query('id') album_id) {
+    return await this.genreAlbumService.getAlbumGenres(album_id);
   }
 }
