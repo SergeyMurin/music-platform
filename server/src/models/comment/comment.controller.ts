@@ -18,19 +18,15 @@ import { CreateCommentDto } from './dto/create.comment.dto';
 import { AuthService } from '../user/auth/auth.service';
 import { RemoveTrackDto } from '../track/dto/remove.track.dto';
 import { RemoveCommentDto } from './dto/remove.comment.dto';
+import { GetTrackCommentsDto } from './dto/get.track.comments.dto';
 
 @Controller('comment')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
-  @Get()
-  getAll(
-    @Req()
-    request: Request,
-    @Res()
-    response,
-  ) {
-    return null;
+  @Get('/track')
+  async getTrackComments(@Body() dto: GetTrackCommentsDto) {
+    return await this.commentService.getTrackComments(dto);
   }
 
   @Post()

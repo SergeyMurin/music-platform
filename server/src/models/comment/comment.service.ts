@@ -12,6 +12,7 @@ import { TrackService } from '../track/track.service';
 import { CreateCommentDto } from './dto/create.comment.dto';
 import { RemoveCommentDto } from './dto/remove.comment.dto';
 import { UserRoleService } from '../user/user.role/user.role.service';
+import { GetTrackCommentsDto } from './dto/get.track.comments.dto';
 
 @Injectable()
 export class CommentService {
@@ -22,6 +23,26 @@ export class CommentService {
     private readonly trackService: TrackService,
     private readonly userRoleService: UserRoleService,
   ) {}
+
+  async getTrackComments(dto: GetTrackCommentsDto) {
+    const track = await this.trackService.getTrackById(dto.track_id);
+    if (!track) {
+      throw new BadRequestException();
+    }
+    const comments = await this.commentRepository.findAll({
+      where: {
+        track_id: dto.track_id,
+      },
+    });
+    return comments.map((comment) => {
+      return {
+        id: comment.id,
+        user_id: comment.user_id,
+        track_id: comment.track_id,
+        content: comment.content,
+      };
+    });
+  }
 
   async create(token: string, dto: CreateCommentDto) {
     const jwtPayload = await this.authService.verifyToken(token);
