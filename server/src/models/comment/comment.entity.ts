@@ -14,7 +14,7 @@ import { Track } from '../track/track.entity';
 import { Length } from 'class-validator';
 
 @Table
-export class Comment extends Model {
+export class Comment extends Model<Comment> {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)

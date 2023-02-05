@@ -21,6 +21,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateTrackDto } from './dto/create.track.dto';
 import { PlayTrackDto } from './dto/play.track.dto';
+import { RemoveTrackDto } from './dto/remove.track.dto';
 
 @Controller('track')
 export class TrackController {
@@ -56,12 +57,19 @@ export class TrackController {
     return await this.trackService.play(dto.track_id);
   }
 
+  @Delete()
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe())
+  async remove(@Body() dto: RemoveTrackDto) {
+    return await this.trackService.remove(dto.track_id);
+  }
+
   /* @Delete(':id')
-         remove(
-           @Param('id') id: string,
-           @Req() request: Request,
-           @Res() response: Response,
-         ) {
-           this.trackService.removeTrack(request, response, id);
-         }*/
+               remove(
+                 @Param('id') id: string,
+                 @Req() request: Request,
+                 @Res() response: Response,
+               ) {
+                 this.trackService.removeTrack(request, response, id);
+               }*/
 }

@@ -5,6 +5,7 @@ import {
   Inject,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { Track } from './track.entity';
 
@@ -93,10 +94,38 @@ export class TrackService {
     throw new HttpException('Created', HttpStatus.CREATED);
   }
 
-  async play(track_id) {
+  // WIP
+  async remove(track_id: string) {
     const track = await this.getTrackById(track_id);
     if (!track) {
-      throw new BadRequestException();
+      throw new NotFoundException();
+    }
+
+    const removeTrackFile = await this.digitalOceanService.removeFile(
+      process.env.DIGITAL_OCEAN_BUCKET_TRACK_PATH,
+      track.id,
+    );
+
+    if (
+      !(
+        process.env.DIGITAL_OCEAN_HREF +
+          '/' +
+          process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH_DEFAULT ===
+        track.picture_url
+      )
+    ) {
+      const removePictureFile = await this.digitalOceanService.removeFile(
+        process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH,
+        track.id,
+      );
+    }
+    await track.destroy();
+  }
+
+  async play(track_id: string) {
+    const track = await this.getTrackById(track_id);
+    if (!track) {
+      throw new NotFoundException();
     }
     track.plays++;
     await track.save();
