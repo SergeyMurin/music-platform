@@ -93,6 +93,16 @@ export class TrackService {
     throw new HttpException('Created', HttpStatus.CREATED);
   }
 
+  async play(track_id) {
+    const track = await this.getTrackById(track_id);
+    if (!track) {
+      throw new BadRequestException();
+    }
+    track.plays++;
+    await track.save();
+    throw new HttpException('Updated', HttpStatus.OK);
+  }
+
   async parseComma(str: string): Promise<string[]> {
     return str.split(',');
   }
