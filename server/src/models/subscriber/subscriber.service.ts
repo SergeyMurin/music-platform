@@ -1,28 +1,95 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Subscriber } from './subscriber.entity';
-import { User } from '../user/user.entity';
+import { UserService } from '../user/user.service';
+import { AuthService } from '../user/auth/auth.service';
 
 @Injectable()
 export class SubscriberService {
   constructor(
     @Inject('SUBSCRIBER_REPOSITORY')
     private subscriberRepository: typeof Subscriber,
-    @Inject('USER_REPOSITORY')
-    private userRepository: typeof User,
+    private userService: UserService,
+    private authService: AuthService,
   ) {}
 
-  async subscribe(query, request, response) {
-    try {
-      const userId = query.user_id;
-      const subscribeId = query.subscribe_id;
-      const user = await this.userRepository.findByPk(userId);
-      const subscribe = await this.userRepository.findByPk(subscribeId);
-      await this.subscriberRepository.create({
-        id: userId,
-        user_id: subscribeId,
-      });
-    } catch (error) {
-      console.error(error);
+  async getSubscriber(user_id, subscriber_id) {
+    return await this.subscriberRepository.findOne({
+      where: {
+        on_whom_user_id: user_id,
+        who_user_id: subscriber_id,
+      },
+    });
+  }
+
+  async getSubscription(user_id, subscription_id) {
+    return await this.subscriberRepository.findOne({
+      where: {
+        on_whom_user_id: subscription_id,
+        who_user_id: user_id,
+      },
+    });
+  }
+
+  async getAllSubscriptions(token) {
+    const jwtPayload = await this.authService.verifyToken(token);
+    const subscribers = await this.subscriberRepository.findAll({
+      where: { who_user_id: jwtPayload.user_id },
+      order: [['createdAt', 'DESC']],
+    });
+
+    return subscribers.map((subscriber) => {
+      return subscriber.on_whom_user_id;
+    });
+  }
+
+  async getAllSubscribers(token) {
+    const jwtPayload = await this.authService.verifyToken(token);
+    const subscribers = await this.subscriberRepository.findAll({
+      where: { on_whom_user_id: jwtPayload.user_id },
+      order: [['createdAt', 'DESC']],
+    });
+
+    return subscribers.map((subscriber) => {
+      return subscriber.who_user_id;
+    });
+  }
+
+  async subscribe(token, dto) {
+    const jwtPayload = await this.authService.verifyToken(token);
+    if (await this.getSubscription(jwtPayload.user_id, dto.user_id)) {
+      throw new HttpException('Already subscribed', HttpStatus.BAD_REQUEST);
     }
+
+    const user = await this.userService.getById(jwtPayload.user_id);
+    if (user.id !== dto.user_id) {
+      await this.subscriberRepository.create({
+        who_user_id: user.id,
+        on_whom_user_id: dto.user_id,
+      });
+      return {
+        who_user_id: user.id,
+        on_whom_user_id: dto.user_id,
+      };
+    }
+    throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
+  }
+
+  async removeSubscribe(token, dto) {
+    const jwtPayload = await this.authService.verifyToken(token);
+    if (!(await this.getSubscription(jwtPayload.user_id, dto.user_id))) {
+      throw new HttpException('Already unsubscribed', HttpStatus.BAD_REQUEST);
+    }
+
+    const user = await this.userService.getById(jwtPayload.user_id);
+    if (user.id !== dto.user_id) {
+      await this.subscriberRepository.destroy({
+        where: { who_user_id: user.id, on_whom_user_id: dto.user_id },
+      });
+      return {
+        who_user_id: user.id,
+        on_whom_user_id: dto.user_id,
+      };
+    }
+    throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
   }
 }

@@ -12,6 +12,6 @@ import { UserRoleModule } from '../user.role/user.role.module';
   imports: [UserTokenModule, MailModule, UserModule, UserRoleModule],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, JwtService],
-  exports: [],
+  exports: [AuthService],
 })
 export class AuthModule {}

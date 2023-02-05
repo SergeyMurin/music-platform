@@ -28,8 +28,15 @@ export class Subscriber extends Model<Subscriber> {
     type: DataType.UUID,
     allowNull: false,
   })
-  user_id: string;
+  who_user_id: string;
 
   @BelongsTo(() => User)
   user: User;
+
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.UUID,
+    allowNull: false,
+  })
+  on_whom_user_id: string;
 }

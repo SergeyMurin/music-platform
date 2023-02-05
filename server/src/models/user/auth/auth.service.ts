@@ -194,7 +194,7 @@ export class AuthService {
     return sign(payload, this.jwtPrivateKey, {});
   }
 
-  private async verifyToken(token): Promise<JwtPayload> {
+  async verifyToken(token): Promise<JwtPayload> {
     const data = this.jwtService.verify(token, {
       secret: this.jwtPrivateKey,
     }) as JwtPayload;

@@ -67,7 +67,7 @@ export class AuthController {
     @Body(new ValidationPipe()) resetPasswordDto: ResetPasswordDto,
     @Req() request,
   ): Promise<boolean> {
-    const token = request.rawHeaders[1].replace('Bearer ', '');
+    const token = request.headers.authorization.replace('Bearer ', '');
     return this.authService.resetPassword(token, resetPasswordDto);
   }
 }
