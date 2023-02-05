@@ -33,10 +33,22 @@ export class DigitalOceanService {
           () => console.log(`File ${title} was uploaded`),
         )
         .promise();
-      return (uploadedFile as any).Location;
+
+      if (uploadedFile.$response.httpResponse.statusCode === 200) {
+        return await this.getUploadedFileURL(uploadedFile);
+      } else return null;
     } catch (error) {
       console.error(error);
+      return null;
     }
+  }
+
+  async getUploadedFileURL(uploadedFile: any) {
+    const protocol =
+      uploadedFile.$response.request.httpRequest.endpoint.protocol;
+    const host = uploadedFile.$response.request.httpRequest.endpoint.host;
+    const path = uploadedFile.$response.request.httpRequest.path;
+    return protocol + '//' + host + path;
   }
 
   async removeFile(title: string, key?: string): Promise<boolean> {

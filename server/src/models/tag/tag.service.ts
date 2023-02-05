@@ -19,6 +19,19 @@ export class TagService {
     return await this.tagRepository.findOne({ where: { title } });
   }
 
+  async createTagByTitle(title): Promise<Tag> {
+    const tag = await this.getTagByTitle(title);
+    if (tag) {
+      tag.amount++;
+      await tag.save();
+      return tag;
+    }
+
+    return await this.tagRepository.create({
+      title,
+    });
+  }
+
   async createTag(dto: CreateTagDto | CreateTagDto[]): Promise<Tag> {
     if (isArray(dto)) {
       for (const tag of dto) {

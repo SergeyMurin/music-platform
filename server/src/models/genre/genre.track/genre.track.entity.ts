@@ -13,7 +13,7 @@ import { Track } from '../../track/track.entity';
 import { Genre } from '../genre.entity';
 
 @Table
-export class GenreTrack extends Model {
+export class GenreTrack extends Model<GenreTrack> {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)

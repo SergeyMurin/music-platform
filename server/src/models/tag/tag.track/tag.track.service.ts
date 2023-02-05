@@ -15,6 +15,13 @@ export class TagTrackService {
     private readonly tagService: TagService,
   ) {}
 
+  async createOne(tag_id, track_id): Promise<TagTrack> {
+    return await this.tagTrackRepository.create({
+      tag_id,
+      track_id,
+    });
+  }
+
   async getTrackTags(track_id: string): Promise<Promise<TrackTagsDto>[]> {
     const trackTags = await this.tagTrackRepository.findAll({
       where: { track_id },

@@ -24,6 +24,8 @@ import { DigitalOceanModule } from './digtal.ocean/digita.ocean.module';
 import { UserTokenModule } from './models/user/user.token/user.token.module';
 import { MailModule } from './mail/mail.module';
 import { AuthModule } from './models/user/auth/auth.module';
+import { GenreTrackModule } from './models/genre/genre.track/genre.track.module';
+import { GenreAlbumModule } from './models/genre/genre.album/genre.album.module';
 
 @Module({
   imports: [
@@ -41,6 +43,8 @@ import { AuthModule } from './models/user/auth/auth.module';
     AlbumModule,
     AlbumTrackModule,
     GenreModule,
+    GenreTrackModule,
+    GenreAlbumModule,
     CommentModule,
     FavoriteModule,
     FavoriteAlbumModule,

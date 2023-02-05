@@ -14,6 +14,22 @@ export class GenreTrackService {
     private trackRepository: typeof Track,
   ) {}
 
+  async find(genre_id, track_id): Promise<GenreTrack> {
+    return await this.genreTrackRepository.findOne({
+      where: { genre_id, track_id },
+    });
+  }
+
+  async create(genre_id, track_id): Promise<GenreTrack> {
+    if (await this.find(genre_id, track_id)) {
+      return;
+    }
+    await this.genreTrackRepository.create({
+      genre_id,
+      track_id,
+    });
+  }
+
   async getTrackGenres(track_id: string): Promise<Promise<TrackGenresDto>[]> {
     const trackGenres = await this.genreTrackRepository.findAll({
       where: { track_id },

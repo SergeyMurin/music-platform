@@ -35,10 +35,10 @@ export class Track extends Model<Track> {
   @Column({ allowNull: false })
   title: string;
 
-  @Column({ allowNull: false })
+  @Column
   url: string;
 
-  @Column({ allowNull: false })
+  @Column
   picture_url: string;
 
   @Column({ allowNull: false })
@@ -47,7 +47,7 @@ export class Track extends Model<Track> {
   @Column({ defaultValue: 0 })
   plays: number;
 
-  @Column
+  @Column({ allowNull: false, defaultValue: '' })
   lyrics: string;
 
   @BelongsToMany(() => Playlist, () => PlaylistTrack)

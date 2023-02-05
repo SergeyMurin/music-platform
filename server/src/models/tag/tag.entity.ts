@@ -24,6 +24,6 @@ export class Tag extends Model<Tag> {
   @Column({ unique: true, allowNull: false })
   title: string;
 
-  @Column({ allowNull: false, defaultValue: 0 })
+  @Column({ allowNull: false, defaultValue: 1 })
   amount: number;
 }

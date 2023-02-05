@@ -32,7 +32,7 @@ export class PlaylistService {
       const playlist = await this.playlistRepository.findByPk(
         request.query.playlist_id,
       );
-      const track: Track = await this.trackService.getEntityByPK(
+      const track: Track = await this.trackService.getTrackById(
         request.query.track_id,
       );
       await this.playlistTracksService.create(playlist.id, track.id);

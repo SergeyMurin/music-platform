@@ -9,5 +9,6 @@ import { TagModule } from '../tag.module';
   imports: [DatabaseModule, TagModule],
   controllers: [TagTrackController],
   providers: [TagTrackService, ...tagTrackProviders],
+  exports: [TagTrackService, ...tagTrackProviders],
 })
 export class TagTrackModule {}
