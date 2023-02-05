@@ -1,16 +1,22 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { User } from '../user.entity';
+import {
+  ForbiddenException,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserRole } from './user.role.entity';
 import { Role } from '../../role/role.entity';
 import { RoleService } from '../../role/role.service';
 import { UserService } from '../user.service';
-import { AuthService } from '../auth/auth.service';
 import { JwtPayload } from '../auth/jwt/jwt.payload.model';
 import { JwtService } from '@nestjs/jwt';
 import { UserTokenService } from '../user.token/user.token.service';
 import { RoleTitleEnum } from '../../../shared/enum/role.title.enum';
 import { ConfigService } from '../../../shared/config/config.service';
 import { SwitchRoleDto } from './dto/switch.role.dto';
+import { RoleDto } from './dto/role.dto';
 
 @Injectable()
 export class UserRoleService {
@@ -30,95 +36,76 @@ export class UserRoleService {
     this.jwtPrivateKey = this.configService.jwtConfig.privateKey;
   }
 
-  async userIsAdmin(user_id: string) {
-    const adminRole = await this.roleRepository.findOne({
-      where: {
-        title: RoleTitleEnum.ADMIN,
-      },
+  async getRoleByUserId(user_id: string): Promise<RoleDto> {
+    const userRole = await this.userRoleRepository.findOne({
+      where: { id: user_id },
     });
-    return await this.userRoleRepository.findOne({
+    const role = await this.roleService.getById(userRole.role_id);
+    if (!role) {
+      throw new NotFoundException(
+        `Role not found for user with id: ${user_id}`,
+      );
+    }
+    return {
+      id: role.id,
+      title: role.title,
+      access: role.access,
+    };
+  }
+
+  async isUserAdmin(user_id: string): Promise<boolean> {
+    const adminRole = await this.roleService.getByTitle(RoleTitleEnum.ADMIN);
+    const userRole = await this.userRoleRepository.findOne({
       where: { id: user_id, role_id: adminRole.id },
     });
+    return !!userRole;
   }
 
-  async getAllUsers(token) {
-    const jwtPayload = await this.verifyTokenForAdmin(token);
-    if (!(await this.userIsAdmin(jwtPayload.user_id))) {
-      throw new HttpException('Not admin', HttpStatus.BAD_REQUEST);
-    }
-
+  async getRoleIdByTitle(roleTitle: RoleTitleEnum): Promise<string> {
     const role = await this.roleRepository.findOne({
-      where: { title: RoleTitleEnum.USER },
+      where: { title: roleTitle },
     });
+    if (!role) {
+      throw new NotFoundException(`Role with title ${roleTitle} not found`);
+    }
+    return role.id;
+  }
 
+  async getUserIdsByRole(
+    token: string,
+    roleTitle: RoleTitleEnum,
+  ): Promise<string[]> {
+    const jwtPayload = await this.verifyTokenForAdmin(token);
+    if (!(await this.isUserAdmin(jwtPayload.user_id))) {
+      throw new ForbiddenException('Not authorized to access this resource');
+    }
+    const roleId = await this.getRoleIdByTitle(roleTitle);
     const users = await this.userRoleRepository.findAll({
-      where: { role_id: role.id },
+      where: { role_id: roleId },
     });
-
-    return users.map((user) => {
-      return user.id;
-    });
+    return users.map((user) => user.id);
   }
 
-  async getAllAdmins(token) {
-    const jwtPayload = await this.verifyTokenForAdmin(token);
-    if (!(await this.userIsAdmin(jwtPayload.user_id))) {
-      throw new HttpException('Not admin', HttpStatus.BAD_REQUEST);
-    }
-
-    const role = await this.roleRepository.findOne({
-      where: { title: RoleTitleEnum.ADMIN },
-    });
-
-    const admins = await this.userRoleRepository.findAll({
-      where: { role_id: role.id },
-    });
-
-    return admins.map((admin) => {
-      return admin.id;
-    });
-  }
-
-  /* async initRole(query, req, res) {
-                                                        try {
-                                                          const roleId = query.role_id;
-                                                          const userId = query.user_id;
-                                                          const user = await this.userRepository.findByPk(userId);
-                                                          const role = await this.roleRepository.findByPk(roleId);
-                                                          const userRole = await this.userRoleRepository.findByPk(userId);
-                                                    
-                                                          if (userRole) {
-                                                            userRole.role_id = roleId;
-                                                            await userRole.save();
-                                                          } else {
-                                                            await this.userRoleRepository.create({
-                                                              id: userId,
-                                                              role_id: roleId,
-                                                            });
-                                                          }
-                                                        } catch (error) {
-                                                          console.error(error);
-                                                        }
-                                                      }*/
-
-  async create(user_id: string, role_title: string) {
-    const role = await this.roleService.findByTitle(role_title);
+  async create(user_id: string, role_title: string): Promise<UserRole> {
+    const role = await this.roleService.getByTitle(role_title);
     return await this.userRoleRepository.create({
       id: user_id,
       role_id: role.id,
     });
   }
 
-  async switchToAdmin(token: string, dto: SwitchRoleDto) {
+  async switchRole(
+    token: string,
+    dto: SwitchRoleDto,
+    roleTitle: RoleTitleEnum,
+  ) {
     await this.validateAdmin(token, dto);
 
     const userRole = await this.userRoleRepository.findOne({
-      where: {
-        id: dto.user_id,
-      },
+      where: { id: dto.user_id },
     });
     const role = await this.roleRepository.findOne({
-      where: { title: RoleTitleEnum.ADMIN },
+      where: { title: roleTitle },
     });
 
     userRole.role_id = role.id;
@@ -128,7 +115,7 @@ export class UserRoleService {
 
   async validateAdmin(token, dto) {
     const jwtPayload = await this.verifyTokenForAdmin(token);
-    if (!(await this.userIsAdmin(jwtPayload.user_id))) {
+    if (!(await this.isUserAdmin(jwtPayload.user_id))) {
       throw new HttpException('Not admin', HttpStatus.BAD_REQUEST);
     }
     if (jwtPayload.user_id === dto.user_id) {
@@ -139,30 +126,17 @@ export class UserRoleService {
     }
   }
 
-  async switchToUser(token: string, dto: SwitchRoleDto) {
-    await this.validateAdmin(token, dto);
-    const userRole = await this.userRoleRepository.findOne({
-      where: {
-        id: dto.user_id,
-      },
-    });
-    const role = await this.roleRepository.findOne({
-      where: { title: RoleTitleEnum.USER },
-    });
-
-    userRole.role_id = role.id;
-    await userRole.save();
-    return { user_id: userRole.id, role_id: userRole.role_id };
-  }
-
   async verifyTokenForAdmin(token: string): Promise<JwtPayload> {
     const data = this.jwtService.verify(token, {
       secret: this.jwtPrivateKey,
-    }) as JwtPayload;
+    });
     const tokenExists = await this.tokenService.exists(data.user_id, token);
-    if (tokenExists) {
-      return data;
+    if (!tokenExists) {
+      throw new HttpException(
+        'Token verification failed',
+        HttpStatus.BAD_REQUEST,
+      );
     }
-    throw new HttpException("Token doesn't exist", HttpStatus.BAD_REQUEST);
+    return data as JwtPayload;
   }
 }

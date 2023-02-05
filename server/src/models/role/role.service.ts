@@ -40,7 +40,11 @@ export class RoleService {
     }
   }
 
-  async findByTitle(title: string): Promise<Role> {
+  async getByTitle(title: string): Promise<Role> {
     return await this.roleRepository.findOne({ where: { title } });
+  }
+
+  async getById(id: string): Promise<Role> {
+    return await this.roleRepository.findOne({ where: { id } });
   }
 }
