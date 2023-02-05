@@ -3,6 +3,7 @@ import { TagTrack } from './tag.track.entity';
 import { Tag } from '../tag.entity';
 import { TagService } from '../tag.service';
 import { isArray } from 'class-validator';
+import { TrackTagsDto } from '../tag.album/dto/album.tags.dto';
 
 @Injectable()
 export class TagTrackService {
@@ -14,28 +15,21 @@ export class TagTrackService {
     private readonly tagService: TagService,
   ) {}
 
-  async add(query, req, res) {
-    const title = req.body.title;
-    const trackId = query.track_id;
-    if (isArray(title)) {
-      for (const titleElement of title) {
-        await this.tagService.createTag(
-          { title: titleElement, track_id: trackId },
-          req,
-          res,
-        );
-
-        const tag = await this.tagRepository.findOne({
-          where: {
-            title: titleElement,
-          },
-        });
-
-        await this.tagTrackRepository.create({
-          id: tag.id,
-          track_id: trackId,
-        });
-      }
-    }
+  async getTrackTags(track_id: string): Promise<Promise<TrackTagsDto>[]> {
+    const trackTags = await this.tagTrackRepository.findAll({
+      where: { track_id },
+    });
+    return trackTags.map(async (trackTag) => {
+      const responseDto = new TrackTagsDto();
+      responseDto.id = trackTag.tag_id;
+      const tag = await this.tagRepository.findOne({
+        where: {
+          id: trackTag.tag_id,
+        },
+      });
+      responseDto.title = tag.title;
+      responseDto.amount = tag.amount;
+      return responseDto;
+    });
   }
 }

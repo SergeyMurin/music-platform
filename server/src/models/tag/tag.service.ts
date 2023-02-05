@@ -11,6 +11,10 @@ export class TagService {
     private tagRepository: typeof Tag,
   ) {}
 
+  async getTagById(id): Promise<Tag> {
+    return await this.tagRepository.findOne({ where: { id } });
+  }
+
   async getTagByTitle(title): Promise<Tag> {
     return await this.tagRepository.findOne({ where: { title } });
   }

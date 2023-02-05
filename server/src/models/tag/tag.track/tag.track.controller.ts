@@ -8,12 +8,7 @@ export class TagTrackController {
   constructor(private readonly tagTrackService: TagTrackService) {}
 
   @Get()
-  getAll(@Req() request: Request, @Res() response) {
-    return null;
-  }
-
-  @Post()
-  add(@Query() query, @Req() request: Request, @Res() response: Response) {
-    this.tagTrackService.add(query, request, response);
+  async getAlbumTags(@Query('id') track_id) {
+    return await this.tagTrackService.getTrackTags(track_id);
   }
 }
