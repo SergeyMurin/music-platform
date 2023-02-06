@@ -12,7 +12,7 @@ import {
 import { Track } from '../../track/track.entity';
 
 @Table
-export class FavoriteTrack extends Model {
+export class FavoriteTrack extends Model<FavoriteTrack> {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)

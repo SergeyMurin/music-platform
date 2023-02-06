@@ -1,14 +1,30 @@
-import { Controller, Get, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Req,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { Request } from 'express';
 
 import { FavoriteService } from './favorite.service';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { RemoveFavoriteDto } from './dto/remove.favorite.dto';
 
 @Controller('favorite')
 export class FavoriteController {
   constructor(private readonly favoriteService: FavoriteService) {}
 
-  @Get()
-  getAll(@Req() request: Request, @Res() response) {
-    return null;
+  @Delete()
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe())
+  async remove(@Req() request: Request, @Body() dto: RemoveFavoriteDto) {
+    const token = request.headers.authorization.replace('Bearer ', '');
+    return await this.favoriteService.remove(token, dto);
   }
 }

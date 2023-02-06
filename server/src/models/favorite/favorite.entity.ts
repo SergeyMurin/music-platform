@@ -12,7 +12,7 @@ import {
 import { User } from '../user/user.entity';
 
 @Table
-export class Favorite extends Model {
+export class Favorite extends Model<Favorite> {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)
