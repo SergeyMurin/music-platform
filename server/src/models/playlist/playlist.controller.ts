@@ -1,17 +1,56 @@
-import { Controller, Post, Put, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Put,
+  Req,
+  Res,
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { PlaylistService } from './playlist.service';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+import { CreatePlaylistDto } from './dto/create.playlist.dto';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { AddTrackDto } from './dto/add.track.dto';
 
 @Controller('playlist')
 export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService) {}
 
+  //getPlaylist
+  //getPlaylistTracks
+  //removeTrackFromPlaylist
+  //removePlaylist
   @Post()
-  create(@Req() request, @Res() response) {
-    this.playlistService.create(request, response);
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe())
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'picture', maxCount: 1 }]))
+  async create(
+    @UploadedFiles() files,
+    @Req() request,
+    @Body() dto: CreatePlaylistDto,
+  ) {
+    const token = request.headers.authorization.replace('Bearer ', '');
+    return await this.playlistService.create(token, files, dto);
   }
 
-  @Put()
-  add(@Req() request, @Res() response) {
-    this.playlistService.add(request, response);
+  @Post('/track')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe())
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'track', maxCount: 1 }]))
+  async addTrack(
+    @UploadedFiles() files,
+    @Req() request,
+    @Body() dto: AddTrackDto,
+  ) {
+    const token = request.headers.authorization.replace('Bearer ', '');
+    return await this.playlistService.addTrack(token, files, dto);
   }
 }

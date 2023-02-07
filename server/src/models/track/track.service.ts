@@ -47,8 +47,8 @@ export class TrackService {
   async uploadTrack(token, files, dto) {
     const jwtPayload = await this.authService.verifyToken(token);
 
-    if (!files.track && !files.picture) {
-      throw new BadRequestException('No files to upload');
+    if (!files.track) {
+      throw new BadRequestException('No track to upload');
     }
 
     const track = await this.trackRepository.create({
@@ -67,10 +67,14 @@ export class TrackService {
       throw new InternalServerErrorException('Upload failed');
     } else track.url = trackUrl;
 
-    const pictureUrl = await this.digitalOceanService.uploadFile(
-      files.picture[0].buffer,
-      process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH + track.id,
-    );
+    let pictureUrl = null;
+    if (files.picture) {
+      pictureUrl = await this.digitalOceanService.uploadFile(
+        files.picture[0].buffer,
+        process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH + track.id,
+      );
+    }
+
     if (!pictureUrl) {
       track.picture_url =
         process.env.DIGITAL_OCEAN_HREF +
@@ -91,7 +95,11 @@ export class TrackService {
 
     await track.save();
 
-    throw new HttpException('Created', HttpStatus.CREATED);
+    return {
+      id: track.id,
+      title: track.title,
+      user_id: track.user_id,
+    };
   }
 
   // WIP

@@ -1,4 +1,9 @@
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  HttpStatus,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { PlaylistTrack } from './playlist.track.entity';
 
 @Injectable()
@@ -15,7 +20,7 @@ export class PlaylistTrackService {
         track_id,
       });
     } catch (error) {
-      console.error(error);
+      throw new InternalServerErrorException('Failed to create PlaylistTrack');
     }
   }
 }

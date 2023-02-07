@@ -63,13 +63,4 @@ export class TrackController {
   async remove(@Body() dto: RemoveTrackDto) {
     return await this.trackService.remove(dto.track_id);
   }
-
-  /* @Delete(':id')
-               remove(
-                 @Param('id') id: string,
-                 @Req() request: Request,
-                 @Res() response: Response,
-               ) {
-                 this.trackService.removeTrack(request, response, id);
-               }*/
 }

@@ -3,13 +3,19 @@ import { DatabaseModule } from '../../database/database.module';
 import { PlaylistController } from './playlist.controller';
 import { PlaylistService } from './playlist.service';
 import { playlistProviders } from './playlist.providers';
-import { PlaylistTrackService } from './playlist.track/playlist.track.service';
 import { PlaylistTrackModule } from './playlist.track/playlist.track.module';
-import { playlistTrackProviders } from './playlist.track/playlist.track.providers';
 import { TrackModule } from '../track/track.module';
+import { AuthModule } from '../user/auth/auth.module';
+import { DigitalOceanModule } from '../../digtal.ocean/digita.ocean.module';
 
 @Module({
-  imports: [DatabaseModule, PlaylistTrackModule, TrackModule],
+  imports: [
+    DatabaseModule,
+    PlaylistTrackModule,
+    TrackModule,
+    AuthModule,
+    DigitalOceanModule,
+  ],
   controllers: [PlaylistController],
   providers: [PlaylistService, ...playlistProviders],
 })
