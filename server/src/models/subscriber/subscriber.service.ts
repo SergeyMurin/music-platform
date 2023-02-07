@@ -60,18 +60,41 @@ export class SubscriberService {
       throw new HttpException('Already subscribed', HttpStatus.BAD_REQUEST);
     }
 
-    const user = await this.userService.getById(jwtPayload.user_id);
-    if (user.id !== dto.user_id) {
-      await this.subscriberRepository.create({
-        who_user_id: user.id,
-        on_whom_user_id: dto.user_id,
-      });
-      return {
-        who_user_id: user.id,
-        on_whom_user_id: dto.user_id,
-      };
+    const whoUser = await this.userService.getById(jwtPayload.user_id);
+    if (!whoUser) {
+      throw new HttpException(
+        `Cannot find user with id ${jwtPayload.user_id}`,
+        HttpStatus.NOT_FOUND,
+      );
     }
-    throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
+    const onWhomUser = await this.userService.getById(dto.user_id);
+    if (!onWhomUser) {
+      throw new HttpException(
+        `Cannot find user with od ${dto.user_id}`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    if (whoUser.id === onWhomUser.id) {
+      throw new HttpException(
+        'Cannot subscribe to yourself',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    await this.subscriberRepository.create({
+      who_user_id: whoUser.id,
+      on_whom_user_id: onWhomUser.id,
+    });
+    whoUser.subscriptions_count++;
+    onWhomUser.subscribers_count++;
+    await whoUser.save();
+    await onWhomUser.save();
+
+    return {
+      who_user_id: whoUser.id,
+      on_whom_user_id: onWhomUser.id,
+    };
   }
 
   async removeSubscribe(token, dto) {
@@ -80,16 +103,39 @@ export class SubscriberService {
       throw new HttpException('Already unsubscribed', HttpStatus.BAD_REQUEST);
     }
 
-    const user = await this.userService.getById(jwtPayload.user_id);
-    if (user.id !== dto.user_id) {
-      await this.subscriberRepository.destroy({
-        where: { who_user_id: user.id, on_whom_user_id: dto.user_id },
-      });
-      return {
-        who_user_id: user.id,
-        on_whom_user_id: dto.user_id,
-      };
+    const whoUser = await this.userService.getById(jwtPayload.user_id);
+    if (!whoUser) {
+      throw new HttpException(
+        `Cannot find user with id ${jwtPayload.user_id}`,
+        HttpStatus.NOT_FOUND,
+      );
     }
-    throw new HttpException('bad request', HttpStatus.BAD_REQUEST);
+    const onWhomUser = await this.userService.getById(dto.user_id);
+    if (!onWhomUser) {
+      throw new HttpException(
+        `Cannot find user with od ${dto.user_id}`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    if (whoUser.id === onWhomUser.id) {
+      throw new HttpException(
+        'Cannot unsubscribe from yourself',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    await this.subscriberRepository.destroy({
+      where: { who_user_id: whoUser.id, on_whom_user_id: onWhomUser.id },
+    });
+
+    whoUser.subscriptions_count--;
+    onWhomUser.subscribers_count--;
+    await whoUser.save();
+    await onWhomUser.save();
+
+    return {
+      who_user_id: whoUser.id,
+      on_whom_user_id: onWhomUser.id,
+    };
   }
 }

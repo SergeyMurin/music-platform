@@ -122,6 +122,8 @@ export class FavoriteService {
     if (favoriteTrack) {
       await favoriteTrack.destroy();
       await favorite.destroy();
+      user.favorites_count--;
+      await user.save();
       throw new HttpException('Track deleted', HttpStatus.OK);
     }
 
@@ -131,6 +133,8 @@ export class FavoriteService {
     if (favoriteAlbum) {
       await favoriteAlbum.destroy();
       await favorite.destroy();
+      user.favorites_count--;
+      await user.save();
       throw new HttpException('Album deleted', HttpStatus.OK);
     }
   }

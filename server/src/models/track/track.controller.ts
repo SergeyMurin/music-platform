@@ -26,11 +26,10 @@ import { RemoveTrackDto } from './dto/remove.track.dto';
 @Controller('track')
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}
-
-  @Get()
-  getAll(@Req() request: Request, @Res() response) {
-    return this.trackService.findAll(request, response);
-  }
+  //editTrack
+  //getTrack
+  //getTracks
+  //removetrack count--
 
   @Post()
   @ApiBearerAuth()

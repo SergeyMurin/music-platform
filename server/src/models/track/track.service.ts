@@ -19,6 +19,7 @@ import { TagService } from '../tag/tag.service';
 import validator from 'validator';
 import toBoolean = validator.toBoolean;
 import { AuthService } from '../user/auth/auth.service';
+import { UserService } from '../user/user.service';
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ export class TrackService {
     private readonly tagService: TagService,
     private readonly genreTrackService: GenreTrackService,
     private readonly authService: AuthService,
+    private readonly userService: UserService,
   ) {}
 
   async getTrackById(id) {
@@ -51,8 +53,16 @@ export class TrackService {
       throw new BadRequestException('No track to upload');
     }
 
+    const user = await this.userService.getById(jwtPayload.user_id);
+    if (!user) {
+      throw new HttpException(
+        `Cannot find user with od ${jwtPayload.user_id}`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
     const track = await this.trackRepository.create({
-      user_id: jwtPayload.user_id,
+      user_id: user.id,
       title: dto.title,
       explicit: toBoolean(dto.explicit),
       lyrics: dto.lyrics,
@@ -94,6 +104,9 @@ export class TrackService {
     });
 
     await track.save();
+
+    user.tracks_count++;
+    await user.save();
 
     return {
       id: track.id,

@@ -7,7 +7,10 @@ import { AuthGuard } from '@nestjs/passport';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
+  //getUser
+  //editUser
+  //search
+  //changeAvatar
   @Get('test')
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))

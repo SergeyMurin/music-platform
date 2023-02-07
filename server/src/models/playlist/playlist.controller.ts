@@ -26,6 +26,7 @@ export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService) {}
 
   //getPlaylistTracks
+  //editPlaylist
   //removeTrackFromPlaylist
   //removePlaylist
 

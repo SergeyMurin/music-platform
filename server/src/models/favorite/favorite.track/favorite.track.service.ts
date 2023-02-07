@@ -60,6 +60,8 @@ export class FavoriteTrackService {
       id: favorite.id,
       track_id: track.id,
     });
+    user.favorites_count++;
+    await user.save();
     return {
       id: favoriteTrack.id,
       track_id: favoriteTrack.id,

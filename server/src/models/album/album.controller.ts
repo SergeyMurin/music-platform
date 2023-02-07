@@ -5,6 +5,11 @@ import { AlbumService } from './album.service';
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
 
+  //createAlbum
+  //addTrackToAlbum
+  //removeTrackFromAlbum
+  //editAlbum
+  //removeAlbum count--
   @Post()
   create(@Req() request, @Res() response) {
     this.albumService.create(request, response);

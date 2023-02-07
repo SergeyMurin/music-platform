@@ -7,6 +7,10 @@ import { RepostService } from './repost.service';
 export class RepostController {
   constructor(private readonly repostService: RepostService) {}
 
+  //getRepost
+  //getReposts
+  //create count++
+  //remove count--
   @Get()
   getAll(@Req() request: Request, @Res() response) {
     return null;
