@@ -12,8 +12,6 @@ import { AuthService } from '../user/auth/auth.service';
 import { FavoriteTrack } from './favorite.track/favorite.track.entity';
 import { FavoriteAlbum } from './favorite.album/favorite.album.entity';
 import { UserService } from '../user/user.service';
-import { GetFavoriteDto } from './dto/get.favorite.dto';
-import { GetFavoritesDto } from './dto/get.favorites.dto';
 
 @Injectable()
 export class FavoriteService {
@@ -28,12 +26,12 @@ export class FavoriteService {
     private readonly userService: UserService,
   ) {}
 
-  async getFavorite(token: string, dto: GetFavoriteDto) {
+  async getFavorite(token: string, favoriteId: string) {
     const jwtPayload = await this.authService.verifyToken(token);
 
     const favorite = await this.favoriteRepository.findOne({
       where: {
-        id: dto.favorite_id,
+        id: favoriteId,
       },
     });
 
@@ -66,9 +64,9 @@ export class FavoriteService {
     }
   }
 
-  async getFavorites(dto: GetFavoritesDto) {
+  async getFavorites(userId: string) {
     const favorites = await this.favoriteRepository.findAll({
-      where: { user_id: dto.user_id },
+      where: { user_id: userId },
       order: [['updatedAt', 'ASC']],
     });
     if (!favorites) {
@@ -85,7 +83,7 @@ export class FavoriteService {
             type: 'track',
             id: favorite.id,
             track_id: favoriteTrack.track_id,
-            user_id: dto.user_id,
+            user_id: userId,
           };
         }
 
@@ -97,7 +95,7 @@ export class FavoriteService {
             type: 'album',
             id: favorite.id,
             track_id: favoriteAlbum.album_id,
-            user_id: dto.user_id,
+            user_id: userId,
           };
         }
       }),

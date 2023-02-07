@@ -24,14 +24,14 @@ export class CommentService {
     private readonly userRoleService: UserRoleService,
   ) {}
 
-  async getTrackComments(dto: GetTrackCommentsDto) {
-    const track = await this.trackService.getTrackById(dto.track_id);
+  async getTrackComments(id: string) {
+    const track = await this.trackService.getTrackById(id);
     if (!track) {
       throw new BadRequestException();
     }
     const comments = await this.commentRepository.findAll({
       where: {
-        track_id: dto.track_id,
+        track_id: id,
       },
     });
     return comments.map((comment) => {

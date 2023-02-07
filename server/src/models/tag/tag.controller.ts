@@ -22,7 +22,7 @@ export class TagController {
 
   @Get()
   async getAll() {
-    return null;
+    return await this.tagService.getAllTags();
   }
 
   @Post()

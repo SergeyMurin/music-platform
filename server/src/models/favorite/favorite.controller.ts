@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Query,
   Req,
   UseGuards,
   UsePipes,
@@ -24,17 +25,17 @@ export class FavoriteController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe())
-  async getFavorite(@Req() request: Request, @Body() dto: RemoveFavoriteDto) {
+  async getFavorite(@Query('id') favoriteId: string, @Req() request: Request) {
     const token = request.headers.authorization.replace('Bearer ', '');
-    return await this.favoriteService.getFavorite(token, dto);
+    return await this.favoriteService.getFavorite(token, favoriteId);
   }
 
   @Get('/all')
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe())
-  async getFavorites(@Body() dto: GetFavoritesDto) {
-    return await this.favoriteService.getFavorites(dto);
+  async getFavorites(@Query('id') userId: string) {
+    return await this.favoriteService.getFavorites(userId);
   }
 
   @Delete()

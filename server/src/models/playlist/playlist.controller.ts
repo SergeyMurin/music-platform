@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   Put,
+  Query,
   Req,
   Res,
   UploadedFiles,
@@ -26,6 +28,10 @@ export class PlaylistController {
   //getPlaylistTracks
   //removeTrackFromPlaylist
   //removePlaylist
+
+  @Get()
+  async getPlaylist(@Query('id') id: string) {}
+
   @Post()
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))

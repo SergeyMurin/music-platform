@@ -3,6 +3,7 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { Tag } from './tag.entity';
 import { CreateTagDto } from './dto/create.tag.dto';
 import { isArray } from 'class-validator';
+import { async } from 'rxjs';
 
 @Injectable()
 export class TagService {
@@ -17,6 +18,17 @@ export class TagService {
 
   async getTagByTitle(title): Promise<Tag> {
     return await this.tagRepository.findOne({ where: { title } });
+  }
+
+  async getAllTags() {
+    const tags: Tag[] = await this.tagRepository.findAll();
+    return tags.map((tag: Tag) => {
+      return {
+        id: tag.id,
+        title: tag.title,
+        amount: tag.amount,
+      };
+    });
   }
 
   async createTagByTitle(title): Promise<Tag> {

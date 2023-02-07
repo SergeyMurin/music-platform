@@ -5,7 +5,7 @@ import { GenreService } from './genre.service';
 export class GenreController {
   constructor(private readonly genreService: GenreService) {}
 
-  @Get()
+  @Get('/all')
   async getAll() {
     return await this.genreService.getAll();
   }

@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Post,
+  Query,
   Req,
   Res,
   UseGuards,
@@ -25,8 +26,8 @@ export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
   @Get('/track')
-  async getTrackComments(@Body() dto: GetTrackCommentsDto) {
-    return await this.commentService.getTrackComments(dto);
+  async getTrackComments(@Query('id') id: string) {
+    return await this.commentService.getTrackComments(id);
   }
 
   @Post()
