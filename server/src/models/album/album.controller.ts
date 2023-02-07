@@ -57,6 +57,6 @@ export class AlbumController {
     @Body() dto: AddTrackToAlbumDto,
   ) {
     const token = request.headers.authorization.replace('Bearer ', '');
-    return await this.albumService.addTrackToAlbum(token, files.track[0], dto);
+    return await this.albumService.addTrackToAlbum(token, files, dto);
   }
 }

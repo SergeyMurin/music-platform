@@ -47,6 +47,16 @@ export class AlbumService {
     private readonly tagAlbumService: TagAlbumService,
   ) {}
 
+  async getById(id: string) {
+    const album = await this.albumRepository.findByPk(id);
+    if (!album) {
+      throw new HttpException(
+        `Album with id ${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    } else return album;
+  }
+
   async uploadAlbumPicture(pictureFile: any, albumId: string): Promise<string> {
     let pictureUrl = null;
     if (pictureFile) {
@@ -65,6 +75,39 @@ export class AlbumService {
     } else return pictureUrl;
   }
 
+  async uploadAlbumTrack(
+    trackFile,
+    userId,
+    title,
+    explicit,
+    lyrics,
+    genres,
+    tags,
+    pictureUrl,
+  ) {
+    const track = await this.trackRepository.create({
+      user_id: userId,
+      title: title,
+      explicit: toBoolean(explicit),
+      lyrics: lyrics,
+    });
+
+    const trackUrl = await this.digitalOceanService.uploadFile(
+      trackFile.buffer,
+      process.env.DIGITAL_OCEAN_BUCKET_TRACK_PATH + track.id,
+    );
+    if (!trackUrl) {
+      await track.destroy();
+      throw new InternalServerErrorException('Upload failed');
+    } else track.url = trackUrl;
+    track.picture_url = pictureUrl;
+
+    await this.trackService.trackTagGenreHandler({ genres, tags }, track.id);
+    await track.save();
+
+    return track.id;
+  }
+
   async uploadAlbumTracks(
     trackFiles: any[],
     dto: CreateAlbumDto | any,
@@ -73,27 +116,27 @@ export class AlbumService {
   ): Promise<string[]> {
     return await Promise.all(
       trackFiles.map(async (trackFile, index) => {
-        const track = await this.trackRepository.create({
-          user_id: userId,
-          title: dto.tracks[index].title,
-          explicit: toBoolean(dto.tracks[index].explicit),
-          lyrics: dto.tracks[index].lyrics,
-        });
-
-        const trackUrl = await this.digitalOceanService.uploadFile(
-          trackFile.buffer,
-          process.env.DIGITAL_OCEAN_BUCKET_TRACK_PATH + track.id,
-        );
-        if (!trackUrl) {
-          await track.destroy();
-          throw new InternalServerErrorException('Upload failed');
-        } else track.url = trackUrl;
-        track.picture_url = pictureUrl;
-
-        await this.albumTagGenreHandler(dto, track.id);
-        await track.save();
-
-        return track.id;
+        return dto.tracks
+          ? await this.uploadAlbumTrack(
+              trackFile,
+              userId,
+              dto.tracks[index].title,
+              dto.tracks[index].explicit,
+              dto.tracks[index].lyrics,
+              dto.tracks[index].genres,
+              dto.tracks[index].tags,
+              pictureUrl,
+            )
+          : await this.uploadAlbumTrack(
+              trackFile,
+              userId,
+              dto.title,
+              dto.explicit,
+              dto.lyrics,
+              dto.genres,
+              dto.tags,
+              pictureUrl,
+            );
       }),
     );
   }
@@ -146,6 +189,7 @@ export class AlbumService {
       }),
     );
 
+    await this.albumTagGenreHandler(dto, album.id);
     user.albums_count++;
     await user.save();
     await album.save();
@@ -171,8 +215,33 @@ export class AlbumService {
     });
   }
 
-  async addTrackToAlbum(token, trackFile, dto: AddTrackToAlbumDto) {
+  async addTrackToAlbum(token, files, dto: AddTrackToAlbumDto) {
     const jwtPayload = await this.authService.verifyToken(token);
+    const user = await this.userService.getById(jwtPayload.user_id);
+    const album = await this.getById(dto.id);
+
+    if (user.id !== album.user_id) {
+      throw new HttpException(
+        `User ${user.id} is not owner of album ${album.id}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const trackId = await this.uploadAlbumTracks(
+      files.track,
+      dto,
+      album.picture_url,
+      user.id,
+    );
+    await this.albumTrackService.create(album.id, trackId[0]);
+    await this.albumTagGenreHandler(dto, album.id);
+    album.tracks_count++;
+    await album.save();
+
+    return {
+      id: album.id,
+      track_id: trackId[0],
+    };
   }
 
   async parseComma(str: string): Promise<string[]> {

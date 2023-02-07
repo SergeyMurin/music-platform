@@ -1,15 +1,20 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsUUID } from 'class-validator';
+import { IsBooleanString, IsString, IsUUID } from 'class-validator';
 import { CreateAlbumTrackDto } from './create.album.track.dto';
 
 export class AddTrackToAlbumDto {
   @ApiProperty()
   @IsUUID(4)
   id: string;
-
   @ApiProperty()
   @IsString()
   readonly title: string;
+  @ApiProperty()
+  @IsBooleanString()
+  readonly explicit: boolean;
+  @ApiProperty()
+  @IsString()
+  readonly lyrics: string;
   @ApiProperty()
   @IsString()
   readonly tags: string;
@@ -17,9 +22,4 @@ export class AddTrackToAlbumDto {
   @ApiProperty()
   @IsString()
   readonly genres: string;
-
-  @ApiProperty()
-  @IsString()
-  tracks: CreateAlbumTrackDto[] | string;
 }
-
