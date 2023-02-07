@@ -13,7 +13,7 @@ import { Album } from '../../album/album.entity';
 import { Genre } from '../genre.entity';
 
 @Table
-export class GenreAlbum extends Model {
+export class GenreAlbum extends Model<GenreAlbum> {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)

@@ -3,7 +3,7 @@ import { TagTrack } from './tag.track.entity';
 import { Tag } from '../tag.entity';
 import { TagService } from '../tag.service';
 import { isArray } from 'class-validator';
-import { TrackTagsDto } from '../tag.album/dto/album.tags.dto';
+import { TrackTagsDto } from './dto/track.tags.dto';
 
 @Injectable()
 export class TagTrackService {

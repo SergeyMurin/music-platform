@@ -4,7 +4,7 @@ import { Tag } from '../tag.entity';
 import { TagService } from '../tag.service';
 import { isArray } from 'class-validator';
 import { AlbumGenresDto } from '../../genre/genre.album/dto/album.genres.dto';
-import { TrackTagsDto } from './dto/album.tags.dto';
+import { AlbumTagsDto } from './dto/album.tags.dto';
 import { TagTrack } from '../tag.track/tag.track.entity';
 
 @Injectable()
@@ -24,12 +24,12 @@ export class TagAlbumService {
     });
   }
 
-  async getAlbumTags(album_id: string): Promise<Promise<TrackTagsDto>[]> {
+  async getAlbumTags(album_id: string): Promise<Promise<AlbumTagsDto>[]> {
     const albumTags = await this.tagAlbumRepository.findAll({
       where: { album_id },
     });
     return albumTags.map(async (albumTag) => {
-      const responseDto = new TrackTagsDto();
+      const responseDto = new AlbumTagsDto();
       responseDto.id = albumTag.tag_id;
       const tag = await this.tagRepository.findOne({
         where: {

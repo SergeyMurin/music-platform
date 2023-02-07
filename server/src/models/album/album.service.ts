@@ -19,14 +19,14 @@ import * as dotenv from 'dotenv';
 import * as process from 'process';
 import { AuthService } from '../user/auth/auth.service';
 import { UserService } from '../user/user.service';
-import { CreateAlbumTrackDto } from './dto/create.album.track.dto';
-import { GenreTrackService } from '../genre/genre.track/genre.track.service';
-import { TagTrackService } from '../tag/tag.track/tag.track.service';
 import { AlbumTrackService } from './album.track.entity/album.track.service';
 import validator from 'validator';
 import toBoolean = validator.toBoolean;
 import { TagAlbumService } from '../tag/tag.album/tag.album.service';
 import { AddTrackToAlbumDto } from './dto/add.track.to.album.dto';
+import { EditAlbumDto } from './dto/edit.album.dto';
+import { TagAlbum } from '../tag/tag.album/tag.album.entity';
+import { GenreAlbum } from '../genre/genre.album/genre.album.entity';
 
 dotenv.config();
 
@@ -37,6 +37,10 @@ export class AlbumService {
     private albumRepository: typeof Album,
     @Inject('TRACK_REPOSITORY')
     private trackRepository: typeof Track,
+    @Inject('TAG_ALBUM_REPOSITORY')
+    private tagAlbumRepository: typeof TagAlbum,
+    @Inject('GENRE_ALBUM_REPOSITORY')
+    private genreAlbumRepository: typeof GenreAlbum,
     private readonly digitalOceanService: DigitalOceanService,
     private readonly trackService: TrackService,
     private readonly tagService: TagService,
@@ -75,6 +79,18 @@ export class AlbumService {
     } else return pictureUrl;
   }
 
+  /**
+   *
+   * @param trackFile
+   * @param userId
+   * @param title
+   * @param explicit
+   * @param lyrics
+   * @param genres
+   * @param tags
+   * @param pictureUrl
+   * @returns {Promise<string>}
+   */
   async uploadAlbumTrack(
     trackFile,
     userId,
@@ -108,6 +124,14 @@ export class AlbumService {
     return track.id;
   }
 
+  /**
+   *
+   * @param {any[]} trackFiles
+   * @param dto
+   * @param {string} pictureUrl
+   * @param {string} userId
+   * @returns {Promise<string[]>}
+   */
   async uploadAlbumTracks(
     trackFiles: any[],
     dto: CreateAlbumDto | any,
@@ -141,6 +165,13 @@ export class AlbumService {
     );
   }
 
+  /**
+   *
+   * @param {string} token
+   * @param files
+   * @param {CreateAlbumDto} dto
+   * @returns {Promise<{picture_url: string, user_id: string, id: string, tracks: string[]}>}
+   */
   async create(token: string, files, dto: CreateAlbumDto) {
     const jwtPayload = await this.authService.verifyToken(token);
     if (typeof dto.tracks === 'string') {
@@ -202,6 +233,12 @@ export class AlbumService {
     };
   }
 
+  /**
+   *
+   * @param dto
+   * @param {string} albumId
+   * @returns {Promise<void>}
+   */
   async albumTagGenreHandler(dto, albumId: string) {
     const genreIds = await this.parseComma(dto.genres);
     genreIds.map(async (genreId) => {
@@ -215,6 +252,13 @@ export class AlbumService {
     });
   }
 
+  /**
+   *
+   * @param token
+   * @param files
+   * @param {AddTrackToAlbumDto} dto
+   * @returns {Promise<{track_id: string, id: string}>}
+   */
   async addTrackToAlbum(token, files, dto: AddTrackToAlbumDto) {
     const jwtPayload = await this.authService.verifyToken(token);
     const user = await this.userService.getById(jwtPayload.user_id);
@@ -244,6 +288,71 @@ export class AlbumService {
     };
   }
 
+  /**
+   *
+   * @param token
+   * @param {EditAlbumDto} dto
+   * @returns {Promise<void>}
+   */
+  async edit(token, dto: EditAlbumDto) {
+    const jwtPayload = await this.authService.verifyToken(token);
+    const user = await this.userService.getById(jwtPayload.user_id);
+    const album = await this.getById(dto.id);
+
+    if (user.id !== album.user_id) {
+      throw new HttpException(
+        `User ${user.id} is not owner of album ${album.id}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const genreIds = await this.parseComma(dto.genres);
+    const genresAlbum = await this.genreAlbumRepository.findAll({
+      where: {
+        album_id: album.id,
+      },
+    });
+    await Promise.all(
+      genresAlbum.map(async (genreAlbum) => {
+        await genreAlbum.destroy();
+      }),
+    );
+    await Promise.all(
+      genreIds.map(async (genreId) => {
+        await this.genreAlbumService.create(genreId, album.id);
+      }),
+    );
+
+    const tagTitles = await this.parseComma(dto.tags);
+    const tagsAlbum = await this.tagAlbumRepository.findAll({
+      where: {
+        album_id: album.id,
+      },
+    });
+    await Promise.all(
+      tagsAlbum.map(async (tagAlbum) => {
+        const tag = await this.tagService.getTagById(tagAlbum.tag_id);
+        await tagAlbum.destroy();
+        tag.amount--;
+        await tag.save();
+      }),
+    );
+    await Promise.all(
+      tagTitles.map(async (tagTitle) => {
+        const tag = await this.tagService.createTagByTitle(tagTitle);
+        await this.tagAlbumService.createOne(tag.id, album.id);
+      }),
+    );
+
+    album.title = dto.title;
+    await album.save();
+  }
+
+  /**
+   *
+   * @param {string} str
+   * @returns {Promise<string[]>}
+   */
   async parseComma(str: string): Promise<string[]> {
     return str.split(',');
   }
