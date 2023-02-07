@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { DatabaseModule } from '../../../database/database.module';
 import { GenreModule } from '../genre.module';
 import { GenreAlbumController } from './genre.album.controller';
@@ -7,8 +7,9 @@ import { genreAlbumProviders } from './genre.album.providers';
 import { AlbumModule } from '../../album/album.module';
 
 @Module({
-  imports: [DatabaseModule, GenreModule, AlbumModule],
+  imports: [DatabaseModule, GenreModule],
   controllers: [GenreAlbumController],
   providers: [GenreAlbumService, ...genreAlbumProviders],
+  exports: [GenreAlbumService, ...genreAlbumProviders],
 })
 export class GenreAlbumModule {}

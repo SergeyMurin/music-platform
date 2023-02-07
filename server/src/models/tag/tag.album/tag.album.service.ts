@@ -5,6 +5,7 @@ import { TagService } from '../tag.service';
 import { isArray } from 'class-validator';
 import { AlbumGenresDto } from '../../genre/genre.album/dto/album.genres.dto';
 import { TrackTagsDto } from './dto/album.tags.dto';
+import { TagTrack } from '../tag.track/tag.track.entity';
 
 @Injectable()
 export class TagAlbumService {
@@ -15,6 +16,13 @@ export class TagAlbumService {
     private tagRepository: typeof Tag,
     private readonly tagService: TagService,
   ) {}
+
+  async createOne(tag_id, album_id): Promise<TagAlbum> {
+    return await this.tagAlbumRepository.create({
+      tag_id,
+      album_id,
+    });
+  }
 
   async getAlbumTags(album_id: string): Promise<Promise<TrackTagsDto>[]> {
     const albumTags = await this.tagAlbumRepository.findAll({

@@ -8,7 +8,7 @@ import { TagTrackModule } from '../tag/tag.track/tag.track.module';
 import { GenreTrackModule } from '../genre/genre.track/genre.track.module';
 import { DigitalOceanModule } from '../../digtal.ocean/digita.ocean.module';
 import { TagModule } from '../tag/tag.module';
-import { GenreTrack } from '../genre/genre.track/genre.track.entity';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
@@ -17,6 +17,7 @@ import { GenreTrack } from '../genre/genre.track/genre.track.entity';
     TagTrackModule,
     DigitalOceanModule,
     TagModule,
+    UserModule,
     forwardRef(() => GenreTrackModule),
   ],
   controllers: [TrackController],

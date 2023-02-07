@@ -17,7 +17,7 @@ import { User } from '../user/user.entity';
 import { Length } from 'class-validator';
 
 @Table
-export class Album extends Model {
+export class Album extends Model<Album> {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)
@@ -28,8 +28,6 @@ export class Album extends Model {
   })
   id: string;
 
-  @Column
-  album_picture_url: string;
   @Length(5, 64)
   @Column({ allowNull: false })
   title: string;

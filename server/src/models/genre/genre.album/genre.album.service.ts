@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { GenreAlbum } from './genre.album.entity';
-import { Album } from '../../album/album.entity';
+
 import { Genre } from '../genre.entity';
 import { AlbumGenresDto } from './dto/album.genres.dto';
 
@@ -11,9 +11,23 @@ export class GenreAlbumService {
     private genreAlbumRepository: typeof GenreAlbum,
     @Inject('GENRE_REPOSITORY')
     private genreRepository: typeof Genre,
-    @Inject('ALBUM_REPOSITORY')
-    private albumRepository: typeof Album,
   ) {}
+
+  async find(genre_id, album_id): Promise<GenreAlbum> {
+    return await this.genreAlbumRepository.findOne({
+      where: { genre_id, album_id },
+    });
+  }
+
+  async create(genre_id, album_id): Promise<GenreAlbum> {
+    if (await this.find(genre_id, album_id)) {
+      return;
+    }
+    await this.genreAlbumRepository.create({
+      genre_id,
+      album_id,
+    });
+  }
 
   async getAlbumGenres(album_id: string): Promise<Promise<AlbumGenresDto>[]> {
     const albumGenres = await this.genreAlbumRepository.findAll({

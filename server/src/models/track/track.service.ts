@@ -92,16 +92,7 @@ export class TrackService {
         process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH_DEFAULT;
     } else track.picture_url = pictureUrl;
 
-    const genreIds = await this.parseComma(dto.genres);
-    genreIds.map(async (genreId) => {
-      await this.genreTrackService.create(genreId, track.id);
-    });
-
-    const tagTitles = await this.parseComma(dto.tags);
-    tagTitles.map(async (tagTitle) => {
-      const tag = await this.tagService.createTagByTitle(tagTitle);
-      await this.tagTrackService.createOne(tag.id, track.id);
-    });
+    await this.trackTagGenreHandler(dto, track.id);
 
     await track.save();
 
@@ -113,6 +104,19 @@ export class TrackService {
       title: track.title,
       user_id: track.user_id,
     };
+  }
+
+  async trackTagGenreHandler(dto, trackId: string) {
+    const genreIds = await this.parseComma(dto.genres);
+    genreIds.map(async (genreId) => {
+      await this.genreTrackService.create(genreId, trackId);
+    });
+
+    const tagTitles = await this.parseComma(dto.tags);
+    tagTitles.map(async (tagTitle) => {
+      const tag = await this.tagService.createTagByTitle(tagTitle);
+      await this.tagTrackService.createOne(tag.id, trackId);
+    });
   }
 
   // WIP
