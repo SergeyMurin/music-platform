@@ -20,8 +20,46 @@ export class PlaylistService {
     private readonly playlistTrackService: PlaylistTrackService,
   ) {}
 
-  async getById(id: string) {
-    return await this.playlistRepository.findByPk(id);
+  async getById(playlistId: string) {
+    return await this.playlistRepository.findByPk(playlistId);
+  }
+
+  async getPlaylistById(playlistId: string) {
+    const playlist = await this.getById(playlistId);
+    if (!playlist) {
+      throw new HttpException(
+        `Cannot find album with id ${playlistId}`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return {
+      id: playlist.id,
+      title: playlist.title,
+      picture_url: playlist.picture_url,
+      track_count: playlist.tracks_count,
+      user_id: playlist.user_id,
+    };
+  }
+
+  async getUserPlaylists(userId: string) {
+    const playlists = await this.playlistRepository.findAll({
+      where: {
+        user_id: userId,
+      },
+    });
+
+    if (!playlists) {
+      throw new HttpException(
+        `Cannot find any playlists for user ${userId}`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    return await Promise.all(
+      playlists.map(async (playlist) => {
+        return await this.getPlaylistById(playlist.id);
+      }),
+    );
   }
 
   async create(token, files, dto) {

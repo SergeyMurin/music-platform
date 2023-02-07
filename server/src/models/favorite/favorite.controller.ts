@@ -15,7 +15,6 @@ import { FavoriteService } from './favorite.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { RemoveFavoriteDto } from './dto/remove.favorite.dto';
-import { GetFavoritesDto } from './dto/get.favorites.dto';
 
 @Controller('favorite')
 export class FavoriteController {

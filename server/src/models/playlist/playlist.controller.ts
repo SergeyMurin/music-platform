@@ -19,18 +19,27 @@ import { AuthGuard } from '@nestjs/passport';
 import { CreatePlaylistDto } from './dto/create.playlist.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { AddTrackDto } from './dto/add.track.dto';
+import { GetPlaylistDto } from './dto/get.playlist.dto';
 
 @Controller('playlist')
 export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService) {}
 
-  //getPlaylist
   //getPlaylistTracks
   //removeTrackFromPlaylist
   //removePlaylist
 
   @Get()
-  async getPlaylist(@Query('id') id: string) {}
+  @UsePipes(new ValidationPipe())
+  async getPlaylist(@Query() dto: GetPlaylistDto) {
+    return await this.playlistService.getPlaylistById(dto.id);
+  }
+
+  @Get('/user')
+  @UsePipes(new ValidationPipe())
+  async getUserPlaylists(@Query() dto: GetPlaylistDto) {
+    return await this.playlistService.getUserPlaylists(dto.id);
+  }
 
   @Post()
   @ApiBearerAuth()
