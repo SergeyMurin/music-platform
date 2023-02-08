@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsUUID } from 'class-validator';
 
-export class CreateFavoriteTrackDto {
+export class CreateFavoriteAlbumDto {
   @ApiProperty()
   @IsUUID(4)
-  track_id: string;
+  album_id: string;
 }

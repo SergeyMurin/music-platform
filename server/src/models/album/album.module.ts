@@ -13,6 +13,7 @@ import { TagAlbumModule } from '../tag/tag.album/tag.album.module';
 import { AlbumTrackModule } from './album.track/album.track.module';
 import { FavoriteTrackModule } from '../favorite/favorite.track/favorite.track.module';
 import { FavoriteAlbumModule } from '../favorite/favorite.album/favorite.album.module';
+import { TrackService } from '../track/track.service';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import { FavoriteAlbumModule } from '../favorite/favorite.album/favorite.album.m
     FavoriteTrackModule,
   ],
   controllers: [AlbumController],
-  providers: [AlbumService, ...albumProviders],
+  providers: [AlbumService, ...albumProviders, TrackService],
   exports: [AlbumService, ...albumProviders],
 })
 export class AlbumModule {}
