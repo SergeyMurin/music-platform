@@ -13,12 +13,15 @@ import { CreateCommentDto } from './dto/create.comment.dto';
 import { RemoveCommentDto } from './dto/remove.comment.dto';
 import { UserRoleService } from '../user/user.role/user.role.service';
 import { GetTrackCommentsDto } from './dto/get.track.comments.dto';
+import { Track } from '../track/track.entity';
 
 @Injectable()
 export class CommentService {
   constructor(
     @Inject('COMMENT_REPOSITORY')
     private commentRepository: typeof Comment,
+    @Inject('TRACK_REPOSITORY')
+    private trackRepository: typeof Track,
     private readonly authService: AuthService,
     private readonly trackService: TrackService,
     private readonly userRoleService: UserRoleService,
@@ -87,5 +90,19 @@ export class CommentService {
         user_id,
       },
     });
+  }
+
+  async removeTrackComments(track_id: string) {
+    const comments = await this.commentRepository.findAll({
+      where: { track_id },
+    });
+
+    if (comments.length) {
+      await Promise.all(
+        comments.map(async (comment) => {
+          await comment.destroy();
+        }),
+      );
+    }
   }
 }

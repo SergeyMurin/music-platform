@@ -3,13 +3,10 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
   Patch,
   Post,
-  Put,
   Query,
   Req,
-  Res,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -17,22 +14,18 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { TrackService } from './track.service';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateTrackDto } from './dto/create.track.dto';
 import { PlayTrackDto } from './dto/play.track.dto';
-import { RemoveTrackDto } from './dto/remove.track.dto';
 import { EditTrackDto } from './dto/edit.track.dto';
 import { GetTrackDto } from './dto/get.track.dto';
 
 @Controller('track')
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}
-
-  //removetrack count--
-  //change pic
 
   @Get()
   @UsePipes(new ValidationPipe())
