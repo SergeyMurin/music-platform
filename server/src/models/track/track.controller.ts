@@ -71,18 +71,19 @@ export class TrackController {
     return await this.trackService.play(dto.track_id);
   }
 
-  @Delete()
-  @UseGuards(AuthGuard('jwt'))
-  @UsePipes(new ValidationPipe())
-  async remove(@Body() dto: RemoveTrackDto) {
-    return await this.trackService.remove(dto.track_id);
-  }
-
   @Patch()
   @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe())
   async edit(@Req() request, @Body() dto: EditTrackDto) {
     const token = request.headers.authorization.replace('Bearer ', '');
     return await this.trackService.edit(token, dto);
+  }
+
+  @Delete()
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe())
+  async remove(@Req() request, @Body() dto: GetTrackDto) {
+    const token = request.headers.authorization.replace('Bearer ', '');
+    return await this.trackService.remove(token, dto.id);
   }
 }

@@ -9,6 +9,6 @@ import { AlbumModule } from '../album.module';
   imports: [DatabaseModule, forwardRef(() => AlbumModule)],
   controllers: [AlbumTrackController],
   providers: [AlbumTrackService, ...albumTrackProviders],
-  exports: [AlbumTrackService],
+  exports: [AlbumTrackService, ...albumTrackProviders],
 })
 export class AlbumTrackModule {}

@@ -22,6 +22,9 @@ import { AuthService } from '../user/auth/auth.service';
 import { UserService } from '../user/user.service';
 import { TagTrack } from '../tag/tag.track/tag.track.entity';
 import { EditTrackDto } from './dto/edit.track.dto';
+import { AlbumTrackService } from '../album/album.track/album.track.service';
+import { AlbumService } from '../album/album.service';
+import { AlbumTrack } from '../album/album.track/album.track.entity';
 
 dotenv.config();
 
@@ -38,8 +41,12 @@ export class TrackService {
     private readonly tagTrackService: TagTrackService,
     private readonly tagService: TagService,
     private readonly genreTrackService: GenreTrackService,
+    private readonly albumTrackService: AlbumTrackService,
     private readonly authService: AuthService,
+    private readonly albumService: AlbumService,
     private readonly userService: UserService,
+    @Inject('ALBUM_TRACK_REPOSITORY')
+    private readonly albumTrackRepository: typeof AlbumTrack,
   ) {}
 
   async getTrackById(id): Promise<Track> {
@@ -62,6 +69,7 @@ export class TrackService {
       plays: track.plays,
       user_id: track.user_id,
       album_id: track.album_id,
+      created_at: track.createdAt,
     };
   }
 
@@ -69,6 +77,7 @@ export class TrackService {
     const user = await this.userService.getById(userId);
     const tracks = await this.trackRepository.findAll({
       where: { user_id: user.id },
+      order: [['createdAt', 'DESC']],
     });
     if (!tracks) {
       return [];
@@ -86,6 +95,7 @@ export class TrackService {
           plays: track.plays,
           user_id: track.user_id,
           album_id: track.album_id,
+          created_at: track.createdAt,
         };
       }),
     );
@@ -164,32 +174,53 @@ export class TrackService {
     });
   }
 
-  // WIP
-  async remove(track_id: string) {
+  async remove(token: string, track_id: string) {
+    const jwtPayload = await this.authService.verifyToken(token);
+    const user = await this.userService.getById(jwtPayload.user_id);
+
+    const albumTrack = await this.albumTrackRepository.findOne({
+      where: { track_id },
+    });
     const track = await this.getTrackById(track_id);
-    if (!track) {
-      throw new NotFoundException();
-    }
 
-    const removeTrackFile = await this.digitalOceanService.removeFile(
-      process.env.DIGITAL_OCEAN_BUCKET_TRACK_PATH,
-      track.id,
-    );
-
-    if (
-      !(
-        process.env.DIGITAL_OCEAN_HREF +
-          '/' +
-          process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH_DEFAULT ===
-        track.picture_url
-      )
-    ) {
-      const removePictureFile = await this.digitalOceanService.removeFile(
-        process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH,
-        track.id,
+    if (albumTrack) {
+      throw new HttpException(
+        `Track ${track.id} is a part of album. Use "DELETE album/track"`,
+        HttpStatus.BAD_REQUEST,
       );
     }
+
+    if (user.id !== track.user_id) {
+      throw new HttpException(
+        `User ${user.id} is not owner of track ${track.id}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    await this.digitalOceanService.removeFile(
+      track.id,
+      process.env.DIGITAL_OCEAN_BUCKET_TRACK_PATH,
+    );
+
+    await this.clearTrackTags(track.id);
+    await this.clearTrackGenres(track.id);
+
     await track.destroy();
+    user.tracks_count--;
+    await user.save();
+
+    if (
+      track.picture_url.split(
+        process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH,
+      )[1] === 'default'
+    ) {
+      return;
+    }
+
+    await this.digitalOceanService.removeFile(
+      track.id,
+      process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH,
+    );
   }
 
   async clearTrackTags(id) {

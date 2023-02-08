@@ -14,16 +14,15 @@ import { AlbumTrackModule } from './album.track/album.track.module';
 
 @Module({
   imports: [
+    forwardRef(() => TrackModule),
+    forwardRef(() => AlbumTrackModule),
     DatabaseModule,
-    TrackModule,
     DigitalOceanModule,
-    TrackModule,
     TagModule,
     TagAlbumModule,
     GenreAlbumModule,
     UserModule,
     AuthModule,
-    forwardRef(() => AlbumTrackModule),
   ],
   controllers: [AlbumController],
   providers: [AlbumService, ...albumProviders],

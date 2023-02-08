@@ -9,6 +9,8 @@ import { GenreTrackModule } from '../genre/genre.track/genre.track.module';
 import { DigitalOceanModule } from '../../digtal.ocean/digita.ocean.module';
 import { TagModule } from '../tag/tag.module';
 import { UserModule } from '../user/user.module';
+import { AlbumTrackModule } from '../album/album.track/album.track.module';
+import { AlbumModule } from '../album/album.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { UserModule } from '../user/user.module';
     TagModule,
     UserModule,
     forwardRef(() => GenreTrackModule),
+    AlbumTrackModule,
+    AlbumModule,
   ],
   controllers: [TrackController],
   providers: [TrackService, ...trackProviders],
