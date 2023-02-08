@@ -26,6 +26,8 @@ import { EditAlbumDto } from './dto/edit.album.dto';
 import { TagAlbum } from '../tag/tag.album/tag.album.entity';
 import { GenreAlbum } from '../genre/genre.album/genre.album.entity';
 import { RemoveTrackFromAlbumDto } from './dto/remove.track.from.album.dto';
+import { FavoriteAlbumService } from '../favorite/favorite.album/favorite.album.service';
+import { FavoriteTrackService } from '../favorite/favorite.track/favorite.track.service';
 
 dotenv.config();
 
@@ -49,6 +51,8 @@ export class AlbumService {
     private readonly userService: UserService,
     private readonly albumTrackService: AlbumTrackService,
     private readonly tagAlbumService: TagAlbumService,
+    private readonly favoriteAlbumService: FavoriteAlbumService,
+    private readonly favoriteTrackService: FavoriteTrackService,
   ) {}
 
   async getById(id: string) {
@@ -374,6 +378,8 @@ export class AlbumService {
         await this.albumTrackService.remove(album.id, track.id);
         await this.trackService.clearTrackTags(track.id);
         await this.trackService.clearTrackGenres(track.id);
+        await this.favoriteAlbumService.removeAlbumFavorites(album.id);
+        await this.favoriteTrackService.removeTrackFavorites(track.id);
 
         await track.destroy();
 

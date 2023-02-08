@@ -11,6 +11,8 @@ import { UserModule } from '../user/user.module';
 import { AuthModule } from '../user/auth/auth.module';
 import { TagAlbumModule } from '../tag/tag.album/tag.album.module';
 import { AlbumTrackModule } from './album.track/album.track.module';
+import { FavoriteTrackModule } from '../favorite/favorite.track/favorite.track.module';
+import { FavoriteAlbumModule } from '../favorite/favorite.album/favorite.album.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { AlbumTrackModule } from './album.track/album.track.module';
     GenreAlbumModule,
     UserModule,
     AuthModule,
+    FavoriteAlbumModule,
+    FavoriteTrackModule,
   ],
   controllers: [AlbumController],
   providers: [AlbumService, ...albumProviders],
