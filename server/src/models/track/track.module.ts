@@ -13,6 +13,7 @@ import { AlbumTrackModule } from '../album/album.track/album.track.module';
 import { AlbumModule } from '../album/album.module';
 import { CommentModule } from '../comment/comment.module';
 import { FavoriteTrackModule } from '../favorite/favorite.track/favorite.track.module';
+import { RepostModule } from '../repost/repost.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { FavoriteTrackModule } from '../favorite/favorite.track/favorite.track.m
     CommentModule,
     FavoriteTrackModule,
     GenreTrackModule,
+    RepostModule,
   ],
   controllers: [TrackController],
   providers: [TrackService, ...trackProviders],

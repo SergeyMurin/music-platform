@@ -17,6 +17,7 @@ import { TrackService } from '../track/track.service';
 import { TagTrackModule } from '../tag/tag.track/tag.track.module';
 import { GenreTrackModule } from '../genre/genre.track/genre.track.module';
 import { CommentModule } from '../comment/comment.module';
+import { RepostModule } from '../repost/repost.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { CommentModule } from '../comment/comment.module';
     FavoriteAlbumModule,
     FavoriteTrackModule,
     CommentModule,
+    RepostModule,
   ],
   controllers: [AlbumController],
   providers: [AlbumService, ...albumProviders, TrackService],

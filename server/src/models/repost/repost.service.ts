@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 
 import { Repost } from './repost.entity';
 import { CreateTrackRepostDto } from './dto/create.track.repost.dto';
@@ -16,7 +22,9 @@ export class RepostService {
     private repostRepository: typeof Repost,
     private authService: AuthService,
     private userService: UserService,
+    @Inject(forwardRef(() => TrackService))
     private trackService: TrackService,
+    @Inject(forwardRef(() => AlbumService))
     private albumService: AlbumService,
   ) {}
 
@@ -141,6 +149,30 @@ export class RepostService {
           created_at: repost.createdAt,
           updated_at: repost.updatedAt,
         };
+      }),
+    );
+  }
+
+  async removeTrackReposts(id: string) {
+    const reposts = await this.getByTrackId(id);
+    if (!reposts.length) {
+      return;
+    }
+    await Promise.all(
+      reposts.map(async (repost) => {
+        await repost.destroy();
+      }),
+    );
+  }
+
+  async removeAlbumReposts(id: string) {
+    const reposts = await this.getByAlbumId(id);
+    if (!reposts.length) {
+      return;
+    }
+    await Promise.all(
+      reposts.map(async (repost) => {
+        await repost.destroy();
       }),
     );
   }

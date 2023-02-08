@@ -27,6 +27,7 @@ import { AlbumService } from '../album/album.service';
 import { AlbumTrack } from '../album/album.track/album.track.entity';
 import { CommentService } from '../comment/comment.service';
 import { FavoriteTrackService } from '../favorite/favorite.track/favorite.track.service';
+import { RepostService } from '../repost/repost.service';
 
 dotenv.config();
 
@@ -51,6 +52,7 @@ export class TrackService {
     private readonly albumTrackRepository: typeof AlbumTrack,
     private readonly commentService: CommentService,
     private readonly favoriteTrackService: FavoriteTrackService,
+    private readonly repostService: RepostService,
   ) {}
 
   async getTrackById(id): Promise<Track> {
@@ -210,6 +212,7 @@ export class TrackService {
     await this.clearTrackGenres(track.id);
     await this.commentService.removeTrackComments(track.id);
     await this.favoriteTrackService.removeTrackFavorites(track.id);
+    await this.repostService.removeTrackReposts(track.id);
 
     await track.destroy();
     user.tracks_count--;
