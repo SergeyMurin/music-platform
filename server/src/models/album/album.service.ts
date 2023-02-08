@@ -25,6 +25,7 @@ import { AddTrackToAlbumDto } from './dto/add.track.to.album.dto';
 import { EditAlbumDto } from './dto/edit.album.dto';
 import { TagAlbum } from '../tag/tag.album/tag.album.entity';
 import { GenreAlbum } from '../genre/genre.album/genre.album.entity';
+import { RemoveTrackFromAlbumDto } from './dto/remove.track.from.album.dto';
 
 dotenv.config();
 
@@ -87,6 +88,7 @@ export class AlbumService {
    * @param genres
    * @param tags
    * @param pictureUrl
+   * @param albumId
    * @returns {Promise<string>}
    */
   async uploadAlbumTrack(
@@ -130,6 +132,7 @@ export class AlbumService {
    * @param dto
    * @param {string} pictureUrl
    * @param {string} userId
+   * @param {string} albumId
    * @returns {Promise<string[]>}
    */
   async uploadAlbumTracks(
@@ -201,11 +204,16 @@ export class AlbumService {
       user_id: jwtPayload.user_id,
     });
 
-    const albumPictureUrl = await this.uploadAlbumPicture(
-      files.picture[0],
-      album.id,
-    );
-
+    let albumPictureUrl =
+      process.env.DIGITAL_OCEAN_HREF +
+      '/' +
+      process.env.DIGITAL_OCEAN_BUCKET_PICTURE_ALBUM_PATH_DEFAULT;
+    if (files.picture) {
+      albumPictureUrl = await this.uploadAlbumPicture(
+        files.picture[0],
+        album.id,
+      );
+    }
     album.picture_url = albumPictureUrl;
 
     const trackIds = await this.uploadAlbumTracks(
@@ -344,7 +352,7 @@ export class AlbumService {
       );
     }
 
-    const albumTracks = await this.albumTrackService.findByAlbumId(album.id);
+    const albumTracks = await this.albumTrackService.findAllByAlbumId(album.id);
 
     await Promise.all(
       albumTracks.map(async (albumTrack) => {
@@ -353,6 +361,14 @@ export class AlbumService {
           track.id,
           process.env.DIGITAL_OCEAN_BUCKET_TRACK_PATH,
         );
+
+        await this.albumTrackService.remove(album.id, track.id);
+        await this.trackService.clearTrackTags(track.id);
+        await this.trackService.clearTrackGenres(track.id);
+
+        await track.destroy();
+
+        user.tracks_count--;
 
         if (
           track.picture_url.split(
@@ -366,14 +382,6 @@ export class AlbumService {
           track.id,
           process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH,
         );
-
-        await this.albumTrackService.remove(album.id, track.id);
-        await this.trackService.clearTrackTags(track.id);
-        await this.trackService.clearTrackGenres(track.id);
-
-        await track.destroy();
-
-        user.tracks_count--;
       }),
     );
 
@@ -456,6 +464,50 @@ export class AlbumService {
       url: album.picture_url,
       previous_url: previousUrl,
     };
+  }
+
+  async removeAlbumTrack(token: string, dto: RemoveTrackFromAlbumDto) {
+    const jwtPayload = await this.authService.verifyToken(token);
+    const user = await this.userService.getById(jwtPayload.user_id);
+    const albumTrack = await this.albumTrackService.findByTrackId(dto.id);
+    const album = await this.getById(albumTrack.album_id);
+
+    if (user.id !== album.user_id) {
+      throw new HttpException(
+        `User ${user.id} is not owner of album ${album.id}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const track = await this.trackService.getTrackById(albumTrack.track_id);
+    await this.digitalOceanService.removeFile(
+      track.id,
+      process.env.DIGITAL_OCEAN_BUCKET_TRACK_PATH,
+    );
+
+    await this.clearAlbumTags(album.id);
+    await this.clearAlbumGenres(album.id);
+
+    await this.albumTrackService.remove(album.id, track.id);
+    await this.trackService.clearTrackTags(track.id);
+    await this.trackService.clearTrackGenres(track.id);
+
+    await track.destroy();
+    user.tracks_count--;
+    await user.save();
+
+    if (
+      track.picture_url.split(
+        process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH,
+      )[1] === 'default'
+    ) {
+      return;
+    }
+
+    await this.digitalOceanService.removeFile(
+      track.id,
+      process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH,
+    );
   }
 
   /**

@@ -20,14 +20,11 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { AddTrackToAlbumDto } from './dto/add.track.to.album.dto';
 import { EditAlbumDto } from './dto/edit.album.dto';
 import { RemoveAlbumDto } from './dto/remove.album.dto';
+import { RemoveTrackFromAlbumDto } from './dto/remove.track.from.album.dto';
 
 @Controller('album')
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
-
-  //removeTrackFromAlbum
-
-  //edit album picture
 
   @Post()
   @ApiBearerAuth()
@@ -92,5 +89,14 @@ export class AlbumController {
   ) {
     const token = request.headers.authorization.replace('Bearer ', '');
     return await this.albumService.changePicture(token, files.picture[0], dto);
+  }
+
+  @Delete('/track')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe())
+  async removeAlbumTrack(@Req() request, @Body() dto: RemoveTrackFromAlbumDto) {
+    const token = request.headers.authorization.replace('Bearer ', '');
+    return await this.albumService.removeAlbumTrack(token, dto);
   }
 }
