@@ -46,6 +46,20 @@ export class PlaylistTrackService {
     await playlistTrack.destroy();
   }
 
+  async removeAll(id: string) {
+    const playlistTracks = await this.playlistTrackRepository.findAll({
+      where: { id },
+    });
+    if (!playlistTracks.length) {
+      return;
+    }
+    return await Promise.all(
+      playlistTracks.map(async (playlistTrack) => {
+        await playlistTrack.destroy();
+      }),
+    );
+  }
+
   async getAllTrackIds(id: string) {
     const playlistTracks = await this.playlistTrackRepository.findAll({
       where: { id },

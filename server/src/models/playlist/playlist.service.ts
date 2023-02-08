@@ -208,4 +208,20 @@ export class PlaylistService {
       previous_url: previousUrl,
     };
   }
+
+  async removePlaylist(token: string, id: string) {
+    const jwtPayload = await this.authService.verifyToken(token);
+    const user = await this.userService.getById(jwtPayload.user_id);
+    const playlist = await this.getById(id);
+
+    if (user.id !== playlist.user_id) {
+      throw new HttpException(
+        `User ${user.id} is not playlist ${playlist.id} owner`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    await this.playlistTrackService.removeAll(playlist.id);
+    await playlist.destroy();
+  }
 }

@@ -23,6 +23,7 @@ import { GetPlaylistDto } from './dto/get.playlist.dto';
 import { RemoveTrackFromPlaylistDto } from './dto/remove.track.from.playlist.dto';
 import { EditPlaylistDto } from './dto/edit.playlist.dto';
 import { ChangePlaylistPictureDto } from './dto/change.playlist.picture.dto';
+import { RemovePlaylistDto } from './dto/remove.playlist.dto';
 
 @Controller('playlist')
 export class PlaylistController {
@@ -69,6 +70,15 @@ export class PlaylistController {
   async addTrack(@Req() request, @Body() dto: AddTrackToPlaylistDto) {
     const token = request.headers.authorization.replace('Bearer ', '');
     return await this.playlistService.addTrack(token, dto);
+  }
+
+  @Delete('/track')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe())
+  async removePlaylist(@Req() request, @Body() dto: RemovePlaylistDto) {
+    const token = request.headers.authorization.replace('Bearer ', '');
+    return await this.playlistService.removePlaylist(token, dto.id);
   }
 
   @Delete('/track')
