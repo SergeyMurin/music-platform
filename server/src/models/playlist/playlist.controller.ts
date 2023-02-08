@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Patch,
   Post,
   Query,
   Req,
@@ -20,6 +21,7 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { AddTrackToPlaylistDto } from './dto/add.track.to.playlist.dto';
 import { GetPlaylistDto } from './dto/get.playlist.dto';
 import { RemoveTrackFromPlaylistDto } from './dto/remove.track.from.playlist.dto';
+import { EditPlaylistDto } from './dto/edit.playlist.dto';
 
 @Controller('playlist')
 export class PlaylistController {
@@ -77,5 +79,14 @@ export class PlaylistController {
   async removeTrack(@Req() request, @Body() dto: RemoveTrackFromPlaylistDto) {
     const token = request.headers.authorization.replace('Bearer ', '');
     return await this.playlistService.removeTrack(token, dto);
+  }
+
+  @Patch()
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe())
+  async edit(@Req() request, @Body() dto: EditPlaylistDto) {
+    const token = request.headers.authorization.replace('Bearer ', '');
+    return await this.playlistService.editPlaylist(token, dto);
   }
 }

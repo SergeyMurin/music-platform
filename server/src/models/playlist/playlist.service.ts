@@ -8,6 +8,7 @@ import process from 'process';
 import { AddTrackToPlaylistDto } from './dto/add.track.to.playlist.dto';
 import { RemoveTrackFromPlaylistDto } from './dto/remove.track.from.playlist.dto';
 import { UserService } from '../user/user.service';
+import { EditPlaylistDto } from './dto/edit.playlist.dto';
 
 @Injectable()
 export class PlaylistService {
@@ -153,6 +154,21 @@ export class PlaylistService {
 
     await this.playlistTrackService.remove(playlist.id, dto.track_id);
     playlist.tracks_count--;
+    await playlist.save();
+  }
+
+  async editPlaylist(token, dto: EditPlaylistDto) {
+    const jwtPayload = await this.authService.verifyToken(token);
+    const user = await this.userService.getById(jwtPayload.user_id);
+    const playlist = await this.getById(dto.id);
+
+    if (user.id !== playlist.user_id) {
+      throw new HttpException(
+        `User ${user.id} is not playlist ${playlist.id} owner`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    playlist.title = dto.title;
     await playlist.save();
   }
 }
