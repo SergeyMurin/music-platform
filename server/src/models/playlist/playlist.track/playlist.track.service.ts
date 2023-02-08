@@ -45,4 +45,18 @@ export class PlaylistTrackService {
     const playlistTrack = await this.findOne(playlist_id, track_id);
     await playlistTrack.destroy();
   }
+
+  async getAllTrackIds(id: string) {
+    const playlistTracks = await this.playlistTrackRepository.findAll({
+      where: { id },
+    });
+    if (!playlistTracks.length) {
+      return [];
+    }
+    return await Promise.all(
+      playlistTracks.map(async (playlistTrack) => {
+        return playlistTrack.id;
+      }),
+    );
+  }
 }

@@ -15,7 +15,6 @@ export class PlaylistService {
     @Inject('PLAYLIST_REPOSITORY')
     private playlistRepository: typeof Playlist,
     private readonly trackService: TrackService,
-    private readonly playlistTracksService: PlaylistTrackService,
     private readonly authService: AuthService,
     private readonly digitalOceanService: DigitalOceanService,
     private readonly playlistTrackService: PlaylistTrackService,
@@ -69,6 +68,11 @@ export class PlaylistService {
         return await this.getPlaylistById(playlist.id);
       }),
     );
+  }
+
+  async getPlaylistTracks(playlist_id) {
+    const playlist = await this.playlistRepository.findByPk(playlist_id);
+    return await this.playlistTrackService.getAllTrackIds(playlist.id);
   }
 
   async create(token, files, dto) {
@@ -147,7 +151,7 @@ export class PlaylistService {
       );
     }
 
-    await this.playlistTracksService.remove(playlist.id, dto.track_id);
+    await this.playlistTrackService.remove(playlist.id, dto.track_id);
     playlist.tracks_count--;
     await playlist.save();
   }

@@ -25,7 +25,6 @@ import { RemoveTrackFromPlaylistDto } from './dto/remove.track.from.playlist.dto
 export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService) {}
 
-  //getPlaylistTracks
   //editPlaylist
   //change playlist picture
   //removePlaylist
@@ -40,6 +39,12 @@ export class PlaylistController {
   @UsePipes(new ValidationPipe())
   async getUserPlaylists(@Query() dto: GetPlaylistDto) {
     return await this.playlistService.getUserPlaylists(dto.id);
+  }
+
+  @Get('/track')
+  @UsePipes(new ValidationPipe())
+  async getPlaylistTracks(@Query() dto: GetPlaylistDto) {
+    return await this.playlistService.getPlaylistTracks(dto.id);
   }
 
   @Post()
