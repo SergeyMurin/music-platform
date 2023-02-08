@@ -1,12 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Post,
-  Put,
   Query,
   Req,
-  Res,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -18,8 +17,9 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { CreatePlaylistDto } from './dto/create.playlist.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { AddTrackDto } from './dto/add.track.dto';
+import { AddTrackToPlaylistDto } from './dto/add.track.to.playlist.dto';
 import { GetPlaylistDto } from './dto/get.playlist.dto';
+import { RemoveTrackFromPlaylistDto } from './dto/remove.track.from.playlist.dto';
 
 @Controller('playlist')
 export class PlaylistController {
@@ -27,7 +27,7 @@ export class PlaylistController {
 
   //getPlaylistTracks
   //editPlaylist
-  //removeTrackFromPlaylist
+  //change playlist picture
   //removePlaylist
 
   @Get()
@@ -60,13 +60,17 @@ export class PlaylistController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe())
-  @UseInterceptors(FileFieldsInterceptor([{ name: 'track', maxCount: 1 }]))
-  async addTrack(
-    @UploadedFiles() files,
-    @Req() request,
-    @Body() dto: AddTrackDto,
-  ) {
+  async addTrack(@Req() request, @Body() dto: AddTrackToPlaylistDto) {
     const token = request.headers.authorization.replace('Bearer ', '');
-    return await this.playlistService.addTrack(token, files, dto);
+    return await this.playlistService.addTrack(token, dto);
+  }
+
+  @Delete('/track')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe())
+  async removeTrack(@Req() request, @Body() dto: RemoveTrackFromPlaylistDto) {
+    const token = request.headers.authorization.replace('Bearer ', '');
+    return await this.playlistService.removeTrack(token, dto);
   }
 }

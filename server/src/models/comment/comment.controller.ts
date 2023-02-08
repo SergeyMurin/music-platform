@@ -6,20 +6,15 @@ import {
   Post,
   Query,
   Req,
-  Res,
   UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { Request } from 'express';
 import { CommentService } from './comment.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateCommentDto } from './dto/create.comment.dto';
-import { AuthService } from '../user/auth/auth.service';
-import { RemoveTrackDto } from '../track/dto/remove.track.dto';
 import { RemoveCommentDto } from './dto/remove.comment.dto';
-import { GetTrackCommentsDto } from './dto/get.track.comments.dto';
 
 @Controller('comment')
 export class CommentController {

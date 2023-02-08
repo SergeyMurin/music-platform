@@ -1,4 +1,5 @@
 import {
+  HttpException,
   HttpStatus,
   Inject,
   Injectable,
@@ -13,6 +14,22 @@ export class PlaylistTrackService {
     private playlistTrackRepository: typeof PlaylistTrack,
   ) {}
 
+  async findOne(playlist_id, track_id) {
+    const playlistTrack = await this.playlistTrackRepository.findOne({
+      where: {
+        playlist_id,
+        track_id,
+      },
+    });
+    if (!playlistTrack) {
+      throw new HttpException(
+        `Cannot find track ${track_id} in playlist ${playlist_id}`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return playlistTrack;
+  }
+
   async create(playlist_id, track_id) {
     try {
       await PlaylistTrack.create({
@@ -22,5 +39,10 @@ export class PlaylistTrackService {
     } catch (error) {
       throw new InternalServerErrorException('Failed to create PlaylistTrack');
     }
+  }
+
+  async remove(playlist_id, track_id) {
+    const playlistTrack = await this.findOne(playlist_id, track_id);
+    await playlistTrack.destroy();
   }
 }

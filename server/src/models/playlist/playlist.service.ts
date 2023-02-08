@@ -2,11 +2,12 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Playlist } from './playlist.entity';
 import { PlaylistTrackService } from './playlist.track/playlist.track.service';
 import { TrackService } from '../track/track.service';
-import { Track } from '../track/track.entity';
 import { AuthService } from '../user/auth/auth.service';
 import { DigitalOceanService } from '../../digtal.ocean/digital.ocean.service';
 import process from 'process';
-import { AddTrackDto } from './dto/add.track.dto';
+import { AddTrackToPlaylistDto } from './dto/add.track.to.playlist.dto';
+import { RemoveTrackFromPlaylistDto } from './dto/remove.track.from.playlist.dto';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class PlaylistService {
@@ -18,10 +19,18 @@ export class PlaylistService {
     private readonly authService: AuthService,
     private readonly digitalOceanService: DigitalOceanService,
     private readonly playlistTrackService: PlaylistTrackService,
+    private readonly userService: UserService,
   ) {}
 
   async getById(playlistId: string) {
-    return await this.playlistRepository.findByPk(playlistId);
+    const playlist = await this.playlistRepository.findByPk(playlistId);
+    if (!playlist) {
+      throw new HttpException(
+        `Cannot found playlist ${playlistId}`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return playlist;
   }
 
   async getPlaylistById(playlistId: string) {
@@ -93,7 +102,7 @@ export class PlaylistService {
     };
   }
 
-  async addTrack(token, files, dto: AddTrackDto) {
+  async addTrack(token, dto: AddTrackToPlaylistDto) {
     const jwtPayload = await this.authService.verifyToken(token);
 
     const playlist = await this.getById(dto.playlist_id);
@@ -124,5 +133,22 @@ export class PlaylistService {
       track_id: track.id,
       user_id: jwtPayload.user_id,
     };
+  }
+
+  async removeTrack(token: string, dto: RemoveTrackFromPlaylistDto) {
+    const jwtPayload = await this.authService.verifyToken(token);
+    const user = await this.userService.getById(jwtPayload.user_id);
+    const playlist = await this.getById(dto.id);
+
+    if (user.id !== playlist.user_id) {
+      throw new HttpException(
+        `User ${user.id} is not playlist ${playlist.id} owner`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    await this.playlistTracksService.remove(playlist.id, dto.track_id);
+    playlist.tracks_count--;
+    await playlist.save();
   }
 }
