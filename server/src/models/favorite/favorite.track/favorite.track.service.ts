@@ -68,4 +68,23 @@ export class FavoriteTrackService {
       user_id: favorite.user_id,
     };
   }
+
+  async removeTrackFavorites(track_id: string) {
+    const trackFavorites = await this.favoriteTrackRepository.findAll({
+      where: { track_id },
+    });
+    if (trackFavorites.length) {
+      await Promise.all(
+        trackFavorites.map(async (trackFavorite) => {
+          const favorite = await this.favoriteRepository.findByPk(
+            trackFavorite.id,
+          );
+          const user = await this.userService.getById(favorite.user_id);
+          user.favorites_count--;
+          await favorite.destroy();
+          await trackFavorite.destroy();
+        }),
+      );
+    }
+  }
 }

@@ -25,6 +25,8 @@ import { EditTrackDto } from './dto/edit.track.dto';
 import { AlbumTrackService } from '../album/album.track/album.track.service';
 import { AlbumService } from '../album/album.service';
 import { AlbumTrack } from '../album/album.track/album.track.entity';
+import { CommentService } from '../comment/comment.service';
+import { FavoriteTrackService } from '../favorite/favorite.track/favorite.track.service';
 
 dotenv.config();
 
@@ -47,6 +49,8 @@ export class TrackService {
     private readonly userService: UserService,
     @Inject('ALBUM_TRACK_REPOSITORY')
     private readonly albumTrackRepository: typeof AlbumTrack,
+    private readonly commentService: CommentService,
+    private readonly favoriteTrackService: FavoriteTrackService,
   ) {}
 
   async getTrackById(id): Promise<Track> {
@@ -204,6 +208,8 @@ export class TrackService {
 
     await this.clearTrackTags(track.id);
     await this.clearTrackGenres(track.id);
+    await this.commentService.removeTrackComments(track.id);
+    await this.favoriteTrackService.removeTrackFavorites(track.id);
 
     await track.destroy();
     user.tracks_count--;

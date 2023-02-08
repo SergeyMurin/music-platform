@@ -11,6 +11,8 @@ import { TagModule } from '../tag/tag.module';
 import { UserModule } from '../user/user.module';
 import { AlbumTrackModule } from '../album/album.track/album.track.module';
 import { AlbumModule } from '../album/album.module';
+import { CommentModule } from '../comment/comment.module';
+import { FavoriteTrackModule } from '../favorite/favorite.track/favorite.track.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { AlbumModule } from '../album/album.module';
     forwardRef(() => GenreTrackModule),
     AlbumTrackModule,
     AlbumModule,
+    CommentModule,
+    FavoriteTrackModule,
   ],
   controllers: [TrackController],
   providers: [TrackService, ...trackProviders],
