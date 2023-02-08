@@ -171,4 +171,41 @@ export class PlaylistService {
     playlist.title = dto.title;
     await playlist.save();
   }
+
+  async changePicture(token, picture, dto) {
+    const jwtPayload = await this.authService.verifyToken(token);
+    const user = await this.userService.getById(jwtPayload.user_id);
+    const playlist = await this.getById(dto.id);
+    const previousUrl = playlist.picture_url;
+
+    if (user.id !== playlist.user_id) {
+      throw new HttpException(
+        `User ${user.id} is not owner of playlist ${playlist.id}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (
+      playlist.picture_url.split(
+        process.env.DIGITAL_OCEAN_BUCKET_PICTURE_PLAYLIST_PATH,
+      )[1] !== 'default'
+    ) {
+      await this.digitalOceanService.removeFile(
+        playlist.id,
+        process.env.DIGITAL_OCEAN_BUCKET_PICTURE_PLAYLIST_PATH,
+      );
+    }
+
+    playlist.picture_url = await this.digitalOceanService.uploadFile(
+      picture.buffer,
+      playlist.id,
+      process.env.DIGITAL_OCEAN_BUCKET_PICTURE_PLAYLIST_PATH,
+    );
+
+    await playlist.save();
+    return {
+      url: playlist.picture_url,
+      previous_url: previousUrl,
+    };
+  }
 }

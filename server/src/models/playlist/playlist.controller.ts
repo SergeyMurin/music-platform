@@ -22,13 +22,12 @@ import { AddTrackToPlaylistDto } from './dto/add.track.to.playlist.dto';
 import { GetPlaylistDto } from './dto/get.playlist.dto';
 import { RemoveTrackFromPlaylistDto } from './dto/remove.track.from.playlist.dto';
 import { EditPlaylistDto } from './dto/edit.playlist.dto';
+import { ChangePlaylistPictureDto } from './dto/change.playlist.picture.dto';
 
 @Controller('playlist')
 export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService) {}
 
-  //editPlaylist
-  //change playlist picture
   //removePlaylist
 
   @Get()
@@ -88,5 +87,23 @@ export class PlaylistController {
   async edit(@Req() request, @Body() dto: EditPlaylistDto) {
     const token = request.headers.authorization.replace('Bearer ', '');
     return await this.playlistService.editPlaylist(token, dto);
+  }
+
+  @Patch('/picture')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe())
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'picture', maxCount: 1 }]))
+  async changePicture(
+    @UploadedFiles() files,
+    @Req() request,
+    @Body() dto: ChangePlaylistPictureDto,
+  ) {
+    const token = request.headers.authorization.replace('Bearer ', '');
+    return await this.playlistService.changePicture(
+      token,
+      files.picture[0],
+      dto,
+    );
   }
 }
