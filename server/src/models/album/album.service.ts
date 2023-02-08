@@ -351,7 +351,7 @@ export class AlbumService {
         const track = await this.trackService.getTrackById(albumTrack.track_id);
         await this.digitalOceanService.removeFile(
           track.id,
-          process.env.DIGITAL_OCEAN_BUCKET_TRACK_PATH + track.id,
+          process.env.DIGITAL_OCEAN_BUCKET_TRACK_PATH,
         );
 
         if (
@@ -388,6 +388,8 @@ export class AlbumService {
     await album.destroy();
     user.albums_count--;
     await user.save();
+
+    throw new HttpException('Successfully deleted', HttpStatus.NO_CONTENT);
   }
 
   async clearAlbumTags(id) {
@@ -417,6 +419,43 @@ export class AlbumService {
         await genreAlbum.destroy();
       }),
     );
+  }
+
+  async changePicture(token, picture, dto) {
+    const jwtPayload = await this.authService.verifyToken(token);
+    const user = await this.userService.getById(jwtPayload.user_id);
+    const album = await this.getById(dto.id);
+    const previousUrl = album.picture_url;
+
+    if (user.id !== album.user_id) {
+      throw new HttpException(
+        `User ${user.id} is not owner of album ${album.id}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (
+      album.picture_url.split(
+        process.env.DIGITAL_OCEAN_BUCKET_PICTURE_ALBUM_PATH,
+      )[1] !== 'default'
+    ) {
+      await this.digitalOceanService.removeFile(
+        album.id,
+        process.env.DIGITAL_OCEAN_BUCKET_PICTURE_ALBUM_PATH,
+      );
+    }
+
+    album.picture_url = await this.digitalOceanService.uploadFile(
+      picture.buffer,
+      album.id,
+      process.env.DIGITAL_OCEAN_BUCKET_PICTURE_ALBUM_PATH,
+    );
+
+    await album.save();
+    return {
+      url: album.picture_url,
+      previous_url: previousUrl,
+    };
   }
 
   /**

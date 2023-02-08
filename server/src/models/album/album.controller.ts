@@ -26,7 +26,7 @@ export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
 
   //removeTrackFromAlbum
-  //removeAlbum count--
+
   //edit album picture
 
   @Post()
@@ -78,5 +78,19 @@ export class AlbumController {
   async remove(@Req() request, @Body() dto: RemoveAlbumDto) {
     const token = request.headers.authorization.replace('Bearer ', '');
     return await this.albumService.remove(token, dto);
+  }
+
+  @Put('/picture')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe())
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'picture', maxCount: 1 }]))
+  async changePicture(
+    @UploadedFiles() files,
+    @Req() request,
+    @Body() dto: RemoveAlbumDto,
+  ) {
+    const token = request.headers.authorization.replace('Bearer ', '');
+    return await this.albumService.changePicture(token, files.picture[0], dto);
   }
 }
