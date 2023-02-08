@@ -86,4 +86,22 @@ export class TrackController {
     const token = request.headers.authorization.replace('Bearer ', '');
     return await this.trackService.remove(token, dto.id);
   }
+
+  @Patch('/picture')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe())
+  @UseInterceptors(FileFieldsInterceptor([{ name: 'picture', maxCount: 1 }]))
+  async changePicture(
+    @UploadedFiles() files,
+    @Req() request,
+    @Body() dto: GetTrackDto,
+  ) {
+    const token = request.headers.authorization.replace('Bearer ', '');
+    return await this.trackService.changePicture(
+      token,
+      files.picture[0],
+      dto.id,
+    );
+  }
 }

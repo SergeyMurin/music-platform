@@ -474,6 +474,17 @@ export class AlbumService {
       process.env.DIGITAL_OCEAN_BUCKET_PICTURE_ALBUM_PATH,
     );
 
+    const albumTracks = await this.trackRepository.findAll({
+      where: { album_id: album.id },
+    });
+    if (albumTracks.length) {
+      await Promise.all(
+        albumTracks.map(async (albumTrack) => {
+          albumTrack.picture_url = album.picture_url;
+        }),
+      );
+    }
+
     await album.save();
     return {
       url: album.picture_url,

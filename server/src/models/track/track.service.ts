@@ -314,6 +314,55 @@ export class TrackService {
     throw new HttpException('Updated', HttpStatus.OK);
   }
 
+  async changePicture(token, picture, track_id: string) {
+    const jwtPayload = await this.authService.verifyToken(token);
+    const user = await this.userService.getById(jwtPayload.user_id);
+
+    const albumTrack = await this.albumTrackRepository.findOne({
+      where: { track_id },
+    });
+    const track = await this.getTrackById(track_id);
+
+    if (albumTrack) {
+      throw new HttpException(
+        `Track ${track.id} is a part of album. Use "PATCH album/picture"`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const previousUrl = track.picture_url;
+
+    if (user.id !== track.user_id) {
+      throw new HttpException(
+        `User ${user.id} is not owner of album ${track.id}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (
+      track.picture_url.split(
+        process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH,
+      )[1] !== 'default'
+    ) {
+      await this.digitalOceanService.removeFile(
+        track.id,
+        process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH,
+      );
+    }
+
+    track.picture_url = await this.digitalOceanService.uploadFile(
+      picture.buffer,
+      track.id,
+      process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH,
+    );
+
+    await track.save();
+    return {
+      url: track.picture_url,
+      previous_url: previousUrl,
+    };
+  }
+
   async parseComma(str: string): Promise<string[]> {
     return str.split(',');
   }
