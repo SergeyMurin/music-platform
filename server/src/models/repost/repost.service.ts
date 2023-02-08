@@ -28,6 +28,30 @@ export class RepostService {
     return repost;
   }
 
+  async getByTrackId(id: string): Promise<Repost[]> {
+    const repost = await this.repostRepository.findAll({
+      where: {
+        track_id: id,
+      },
+    });
+    if (!repost.length) {
+      return [];
+    }
+    return repost;
+  }
+
+  async getByAlbumId(id: string): Promise<Repost[]> {
+    const repost = await this.repostRepository.findAll({
+      where: {
+        album_id: id,
+      },
+    });
+    if (!repost.length) {
+      return [];
+    }
+    return repost;
+  }
+
   async createTrackRepost(token: string, dto: CreateTrackRepostDto) {
     const jwtPayload = await this.authService.verifyToken(token);
     const user = await this.userService.getById(jwtPayload.user_id);
@@ -71,7 +95,7 @@ export class RepostService {
       id: repost.id,
       user_id: repost.user_id,
       author_user_id: repost.author_user_id,
-      album_id: repost.track_id,
+      album_id: repost.album_id,
       type: 'album',
       created_at: repost.createdAt,
       updated_at: repost.updatedAt,
@@ -93,5 +117,31 @@ export class RepostService {
     user.reposts_count--;
     await user.save();
     await repost.destroy();
+  }
+
+  async getUserReposts(id: string) {
+    const user = await this.userService.getById(id);
+    const reposts = await this.repostRepository.findAll({
+      where: {
+        user_id: user.id,
+      },
+    });
+    if (!reposts.length) {
+      return [];
+    }
+    return await Promise.all(
+      reposts.map(async (repost) => {
+        return {
+          id: repost.id,
+          user_id: repost.user_id,
+          author_user_id: repost.author_user_id,
+          album_id: repost.album_id ? repost.album_id : null,
+          track_id: repost.track_id ? repost.track_id : null,
+          type: repost.album_id ? 'album' : 'track',
+          created_at: repost.createdAt,
+          updated_at: repost.updatedAt,
+        };
+      }),
+    );
   }
 }

@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Post,
+  Query,
   Req,
   Res,
   UseGuards,
@@ -19,17 +20,16 @@ import { AddTrackToPlaylistDto } from '../playlist/dto/add.track.to.playlist.dto
 import { CreateTrackRepostDto } from './dto/create.track.repost.dto';
 import { CreateAlbumRepostDto } from './dto/create.album.repost.dto';
 import { RemoveRepostDto } from './dto/remove.repost.dto';
+import { GetUserRepostsDto } from './dto/get.user.reposts.dto';
 
 @Controller('repost')
 export class RepostController {
   constructor(private readonly repostService: RepostService) {}
 
-  //getRepost
-  //getReposts
-  //remove count--
-  @Get()
-  getAll(@Req() request: Request, @Res() response) {
-    return null;
+  @Get('/all')
+  @UsePipes(new ValidationPipe())
+  async getUserReposts(@Query() dto: GetUserRepostsDto) {
+    return await this.repostService.getUserReposts(dto.id);
   }
 
   @Post('/track')
@@ -55,6 +55,7 @@ export class RepostController {
   @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe())
   async removeRepost(@Req() request, @Body() dto: RemoveRepostDto) {
+    const token = request.headers.authorization.replace('Bearer ', '');
     return await this.repostService.remove(token, dto);
   }
 }
