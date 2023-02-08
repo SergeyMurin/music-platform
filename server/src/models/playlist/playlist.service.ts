@@ -73,6 +73,12 @@ export class PlaylistService {
 
   async getPlaylistTracks(playlist_id) {
     const playlist = await this.playlistRepository.findByPk(playlist_id);
+    if (!playlist) {
+      throw new HttpException(
+        `Cannot find playlist ${playlist_id}`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
     return await this.playlistTrackService.getAllTrackIds(playlist.id);
   }
 
@@ -170,6 +176,10 @@ export class PlaylistService {
     }
     playlist.title = dto.title;
     await playlist.save();
+    return {
+      id: playlist.id,
+      title: playlist.title,
+    };
   }
 
   async changePicture(token, picture, dto) {
@@ -204,6 +214,7 @@ export class PlaylistService {
 
     await playlist.save();
     return {
+      id: playlist.id,
       url: playlist.picture_url,
       previous_url: previousUrl,
     };
@@ -222,6 +233,8 @@ export class PlaylistService {
     }
 
     await this.playlistTrackService.removeAll(playlist.id);
+    user.playlists_count--;
+    await user.save();
     await playlist.destroy();
   }
 }

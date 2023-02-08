@@ -48,7 +48,7 @@ export class PlaylistTrackService {
 
   async removeAll(id: string) {
     const playlistTracks = await this.playlistTrackRepository.findAll({
-      where: { id },
+      where: { playlist_id: id },
     });
     if (!playlistTracks.length) {
       return;
@@ -62,7 +62,7 @@ export class PlaylistTrackService {
 
   async getAllTrackIds(id: string) {
     const playlistTracks = await this.playlistTrackRepository.findAll({
-      where: { id },
+      where: { playlist_id: id },
     });
     if (!playlistTracks.length) {
       return [];

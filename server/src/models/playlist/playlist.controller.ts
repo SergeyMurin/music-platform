@@ -29,8 +29,6 @@ import { RemovePlaylistDto } from './dto/remove.playlist.dto';
 export class PlaylistController {
   constructor(private readonly playlistService: PlaylistService) {}
 
-  //removePlaylist
-
   @Get()
   @UsePipes(new ValidationPipe())
   async getPlaylist(@Query() dto: GetPlaylistDto) {
@@ -72,7 +70,7 @@ export class PlaylistController {
     return await this.playlistService.addTrack(token, dto);
   }
 
-  @Delete('/track')
+  @Delete('')
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe())

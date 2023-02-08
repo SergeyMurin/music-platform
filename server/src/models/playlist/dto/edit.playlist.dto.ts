@@ -4,7 +4,7 @@ import { IsString, IsUUID } from 'class-validator';
 export class EditPlaylistDto {
   @ApiProperty()
   @IsUUID(4)
-  id: string;
+  readonly id: string;
 
   @ApiProperty()
   @IsString()
