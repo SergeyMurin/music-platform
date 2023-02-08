@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 
 import { Repost } from './repost.entity';
 import { CreateTrackRepostDto } from './dto/create.track.repost.dto';
@@ -7,6 +7,7 @@ import { UserService } from '../user/user.service';
 import { TrackService } from '../track/track.service';
 import { AlbumService } from '../album/album.service';
 import { CreateAlbumRepostDto } from './dto/create.album.repost.dto';
+import { RemoveRepostDto } from './dto/remove.repost.dto';
 
 @Injectable()
 export class RepostService {
@@ -18,6 +19,14 @@ export class RepostService {
     private trackService: TrackService,
     private albumService: AlbumService,
   ) {}
+
+  async getById(id: string): Promise<Repost> {
+    const repost = await this.repostRepository.findByPk(id);
+    if (!repost) {
+      throw new HttpException(`Cannot find repost ${id}`, HttpStatus.NOT_FOUND);
+    }
+    return repost;
+  }
 
   async createTrackRepost(token: string, dto: CreateTrackRepostDto) {
     const jwtPayload = await this.authService.verifyToken(token);
@@ -67,5 +76,22 @@ export class RepostService {
       created_at: repost.createdAt,
       updated_at: repost.updatedAt,
     };
+  }
+
+  async remove(token: any, dto: RemoveRepostDto) {
+    const jwtPayload = await this.authService.verifyToken(token);
+    const user = await this.userService.getById(jwtPayload.user_id);
+    const repost = await this.getById(dto.id);
+
+    if (user.id === repost.id) {
+      throw new HttpException(
+        `User ${user.id} is not repost ${repost.id} owner`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    user.reposts_count--;
+    await user.save();
+    await repost.destroy();
   }
 }

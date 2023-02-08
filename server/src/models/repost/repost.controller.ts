@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Post,
   Req,
@@ -17,6 +18,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { AddTrackToPlaylistDto } from '../playlist/dto/add.track.to.playlist.dto';
 import { CreateTrackRepostDto } from './dto/create.track.repost.dto';
 import { CreateAlbumRepostDto } from './dto/create.album.repost.dto';
+import { RemoveRepostDto } from './dto/remove.repost.dto';
 
 @Controller('repost')
 export class RepostController {
@@ -24,7 +26,6 @@ export class RepostController {
 
   //getRepost
   //getReposts
-  //create count++
   //remove count--
   @Get()
   getAll(@Req() request: Request, @Res() response) {
@@ -47,5 +48,13 @@ export class RepostController {
   async createAlbumRepost(@Req() request, @Body() dto: CreateAlbumRepostDto) {
     const token = request.headers.authorization.replace('Bearer ', '');
     return await this.repostService.createAlbumRepost(token, dto);
+  }
+
+  @Delete()
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe())
+  async removeRepost(@Req() request, @Body() dto: RemoveRepostDto) {
+    return await this.repostService.remove(token, dto);
   }
 }
