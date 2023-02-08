@@ -20,6 +20,7 @@ import validator from 'validator';
 import toBoolean = validator.toBoolean;
 import { AuthService } from '../user/auth/auth.service';
 import { UserService } from '../user/user.service';
+import { TagTrack } from '../tag/tag.track/tag.track.entity';
 
 dotenv.config();
 
@@ -28,6 +29,10 @@ export class TrackService {
   constructor(
     @Inject('TRACK_REPOSITORY')
     private trackRepository: typeof Track,
+    @Inject('TAG_TRACK_REPOSITORY')
+    private tagTrackRepository: typeof TagTrack,
+    @Inject('GENRE_TRACK_REPOSITORY')
+    private genreTrackRepository: typeof GenreTrack,
     private readonly digitalOceanService: DigitalOceanService,
     private readonly tagTrackService: TagTrackService,
     private readonly tagService: TagService,
@@ -36,8 +41,12 @@ export class TrackService {
     private readonly userService: UserService,
   ) {}
 
-  async getTrackById(id) {
-    return await this.trackRepository.findByPk(id);
+  async getTrackById(id): Promise<Track> {
+    const track = await this.trackRepository.findByPk(id);
+    if (!track) {
+      throw new HttpException(`Cannot find track ${id}`, HttpStatus.NOT_FOUND);
+    }
+    return track;
   }
 
   async findAll(request, response): Promise<Track[]> {
@@ -145,6 +154,35 @@ export class TrackService {
       );
     }
     await track.destroy();
+  }
+
+  async clearTrackTags(id) {
+    const tagsTrack = await this.tagTrackRepository.findAll({
+      where: {
+        track_id: id,
+      },
+    });
+    await Promise.all(
+      tagsTrack.map(async (tagTrack) => {
+        const tag = await this.tagService.getTagById(tagTrack.tag_id);
+        await tagTrack.destroy();
+        tag.amount--;
+        await tag.save();
+      }),
+    );
+  }
+
+  async clearTrackGenres(id) {
+    const genresTrack = await this.genreTrackRepository.findAll({
+      where: {
+        track_id: id,
+      },
+    });
+    await Promise.all(
+      genresTrack.map(async (genreTrack) => {
+        await genreTrack.destroy();
+      }),
+    );
   }
 
   async play(track_id: string) {

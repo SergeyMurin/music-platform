@@ -7,19 +7,17 @@ import {
 } from '@nestjs/common';
 
 import { Album } from './album.entity';
-import { isArray } from 'class-validator';
 import { Track } from '../track/track.entity';
 import { CreateAlbumDto } from './dto/create.album.dto';
 import { DigitalOceanService } from '../../digtal.ocean/digital.ocean.service';
 import { TrackService } from '../track/track.service';
 import { TagService } from '../tag/tag.service';
 import { GenreAlbumService } from '../genre/genre.album/genre.album.service';
-
 import * as dotenv from 'dotenv';
 import * as process from 'process';
 import { AuthService } from '../user/auth/auth.service';
 import { UserService } from '../user/user.service';
-import { AlbumTrackService } from './album.track.entity/album.track.service';
+import { AlbumTrackService } from './album.track/album.track.service';
 import validator from 'validator';
 import toBoolean = validator.toBoolean;
 import { TagAlbumService } from '../tag/tag.album/tag.album.service';
@@ -100,12 +98,14 @@ export class AlbumService {
     genres,
     tags,
     pictureUrl,
+    albumId,
   ) {
     const track = await this.trackRepository.create({
       user_id: userId,
       title: title,
       explicit: toBoolean(explicit),
       lyrics: lyrics,
+      album_id: albumId,
     });
 
     const trackUrl = await this.digitalOceanService.uploadFile(
@@ -137,6 +137,7 @@ export class AlbumService {
     dto: CreateAlbumDto | any,
     pictureUrl: string,
     userId: string,
+    albumId: string,
   ): Promise<string[]> {
     return await Promise.all(
       trackFiles.map(async (trackFile, index) => {
@@ -150,6 +151,7 @@ export class AlbumService {
               dto.tracks[index].genres,
               dto.tracks[index].tags,
               pictureUrl,
+              albumId,
             )
           : await this.uploadAlbumTrack(
               trackFile,
@@ -160,6 +162,7 @@ export class AlbumService {
               dto.genres,
               dto.tags,
               pictureUrl,
+              albumId,
             );
       }),
     );
@@ -210,6 +213,7 @@ export class AlbumService {
       dto,
       albumPictureUrl,
       user.id,
+      album.id,
     );
 
     await Promise.all(
@@ -276,6 +280,7 @@ export class AlbumService {
       dto,
       album.picture_url,
       user.id,
+      album.id,
     );
     await this.albumTrackService.create(album.id, trackId[0]);
     await this.albumTagGenreHandler(dto, album.id);
@@ -307,16 +312,7 @@ export class AlbumService {
     }
 
     const genreIds = await this.parseComma(dto.genres);
-    const genresAlbum = await this.genreAlbumRepository.findAll({
-      where: {
-        album_id: album.id,
-      },
-    });
-    await Promise.all(
-      genresAlbum.map(async (genreAlbum) => {
-        await genreAlbum.destroy();
-      }),
-    );
+    await this.clearAlbumGenres(album.id);
     await Promise.all(
       genreIds.map(async (genreId) => {
         await this.genreAlbumService.create(genreId, album.id);
@@ -324,9 +320,80 @@ export class AlbumService {
     );
 
     const tagTitles = await this.parseComma(dto.tags);
+    await this.clearAlbumTags(album.id);
+    await Promise.all(
+      tagTitles.map(async (tagTitle) => {
+        const tag = await this.tagService.createTagByTitle(tagTitle);
+        await this.tagAlbumService.createOne(tag.id, album.id);
+      }),
+    );
+
+    album.title = dto.title;
+    await album.save();
+  }
+
+  async remove(token, dto) {
+    const jwtPayload = await this.authService.verifyToken(token);
+    const user = await this.userService.getById(jwtPayload.user_id);
+    const album = await this.getById(dto.id);
+
+    if (user.id !== album.user_id) {
+      throw new HttpException(
+        `User ${user.id} is not owner of album ${album.id}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const albumTracks = await this.albumTrackService.findByAlbumId(album.id);
+
+    await Promise.all(
+      albumTracks.map(async (albumTrack) => {
+        const track = await this.trackService.getTrackById(albumTrack.track_id);
+        await this.digitalOceanService.removeFile(
+          track.id,
+          process.env.DIGITAL_OCEAN_BUCKET_TRACK_PATH + track.id,
+        );
+
+        if (
+          track.picture_url.split(
+            process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH,
+          )[1] === 'default'
+        ) {
+          return;
+        }
+
+        await this.digitalOceanService.removeFile(
+          track.id,
+          process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH,
+        );
+
+        await this.albumTrackService.remove(album.id, track.id);
+        await this.trackService.clearTrackTags(track.id);
+        await this.trackService.clearTrackGenres(track.id);
+
+        await track.destroy();
+
+        user.tracks_count--;
+      }),
+    );
+
+    await this.digitalOceanService.removeFile(
+      album.id,
+      process.env.DIGITAL_OCEAN_BUCKET_PICTURE_ALBUM_PATH,
+    );
+
+    await this.clearAlbumTags(album.id);
+    await this.clearAlbumGenres(album.id);
+
+    await album.destroy();
+    user.albums_count--;
+    await user.save();
+  }
+
+  async clearAlbumTags(id) {
     const tagsAlbum = await this.tagAlbumRepository.findAll({
       where: {
-        album_id: album.id,
+        album_id: id,
       },
     });
     await Promise.all(
@@ -337,15 +404,19 @@ export class AlbumService {
         await tag.save();
       }),
     );
+  }
+
+  async clearAlbumGenres(id) {
+    const genresAlbum = await this.genreAlbumRepository.findAll({
+      where: {
+        album_id: id,
+      },
+    });
     await Promise.all(
-      tagTitles.map(async (tagTitle) => {
-        const tag = await this.tagService.createTagByTitle(tagTitle);
-        await this.tagAlbumService.createOne(tag.id, album.id);
+      genresAlbum.map(async (genreAlbum) => {
+        await genreAlbum.destroy();
       }),
     );
-
-    album.title = dto.title;
-    await album.save();
   }
 
   /**

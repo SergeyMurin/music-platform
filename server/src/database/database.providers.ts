@@ -19,7 +19,7 @@ import { GenreAlbum } from '../models/genre/genre.album/genre.album.entity';
 import { GenreTrack } from '../models/genre/genre.track/genre.track.entity';
 import { FavoriteAlbum } from '../models/favorite/favorite.album/favorite.album.entity';
 import { FavoriteTrack } from '../models/favorite/favorite.track/favorite.track.entity';
-import { AlbumTrack } from '../models/album/album.track.entity/album.track.entity';
+import { AlbumTrack } from '../models/album/album.track/album.track.entity';
 import { ConfigService } from '../shared/config/config.service';
 import { UserToken } from '../models/user/user.token/user.token.entity';
 

@@ -10,7 +10,7 @@ import { GenreAlbumModule } from '../genre/genre.album/genre.album.module';
 import { UserModule } from '../user/user.module';
 import { AuthModule } from '../user/auth/auth.module';
 import { TagAlbumModule } from '../tag/tag.album/tag.album.module';
-import { AlbumTrackModule } from './album.track.entity/album.track.module';
+import { AlbumTrackModule } from './album.track/album.track.module';
 
 @Module({
   imports: [
@@ -21,9 +21,9 @@ import { AlbumTrackModule } from './album.track.entity/album.track.module';
     TagModule,
     TagAlbumModule,
     GenreAlbumModule,
-    AlbumTrackModule,
     UserModule,
     AuthModule,
+    forwardRef(() => AlbumTrackModule),
   ],
   controllers: [AlbumController],
   providers: [AlbumService, ...albumProviders],

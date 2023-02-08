@@ -18,7 +18,7 @@ import { FavoriteModule } from './models/favorite/favorite.module';
 import { FavoriteAlbumModule } from './models/favorite/favorite.album/favorite.album.module';
 import { FavoriteTrackModule } from './models/favorite/favorite.track/favorite.track.module';
 import { RepostModule } from './models/repost/repost.module';
-import { AlbumTrackModule } from './models/album/album.track.entity/album.track.module';
+import { AlbumTrackModule } from './models/album/album.track/album.track.module';
 import { SharedModule } from './shared/shared.module';
 import { DigitalOceanModule } from './digtal.ocean/digita.ocean.module';
 import { UserTokenModule } from './models/user/user.token/user.token.module';

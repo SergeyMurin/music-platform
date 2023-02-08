@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Post,
   Put,
   Req,
@@ -16,9 +17,9 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateAlbumDto } from './dto/create.album.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { CreateAlbumTrackDto } from './dto/create.album.track.dto';
 import { AddTrackToAlbumDto } from './dto/add.track.to.album.dto';
 import { EditAlbumDto } from './dto/edit.album.dto';
+import { RemoveAlbumDto } from './dto/remove.album.dto';
 
 @Controller('album')
 export class AlbumController {
@@ -68,5 +69,14 @@ export class AlbumController {
   async edit(@Req() request, @Body() dto: EditAlbumDto) {
     const token = request.headers.authorization.replace('Bearer ', '');
     return await this.albumService.edit(token, dto);
+  }
+
+  @Delete()
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe())
+  async remove(@Req() request, @Body() dto: RemoveAlbumDto) {
+    const token = request.headers.authorization.replace('Bearer ', '');
+    return await this.albumService.remove(token, dto);
   }
 }
