@@ -14,7 +14,7 @@ import { Album } from '../album/album.entity';
 import { Track } from '../track/track.entity';
 
 @Table
-export class Repost extends Model {
+export class Repost extends Model<Repost> {
   @PrimaryKey
   @IsUUID(4)
   @Default(DataType.UUIDV4)
@@ -39,7 +39,7 @@ export class Repost extends Model {
     type: DataType.UUID,
     allowNull: false,
   })
-  repost_author_user_id: string;
+  author_user_id: string;
 
   @ForeignKey(() => Album)
   @Column({
