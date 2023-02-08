@@ -50,10 +50,45 @@ export class TrackService {
     return track;
   }
 
-  async findAll(request, response): Promise<Track[]> {
-    const trackEntities = await this.trackRepository.findAll<Track>();
-    const data = trackEntities.map((trackEntity) => trackEntity.dataValues);
-    return response.status(HttpStatus.OK).send({ data: data });
+  async getTrackInfoById(id: string) {
+    const track = await this.getTrackById(id);
+    return {
+      id: track.id,
+      title: track.title,
+      url: track.url,
+      picture_url: track.picture_url,
+      explicit: track.explicit,
+      lyrics: track.lyrics,
+      plays: track.plays,
+      user_id: track.user_id,
+      album_id: track.album_id,
+    };
+  }
+
+  async getUserTracks(userId: string) {
+    const user = await this.userService.getById(userId);
+    const tracks = await this.trackRepository.findAll({
+      where: { user_id: user.id },
+    });
+    if (!tracks) {
+      return [];
+    }
+
+    return await Promise.all(
+      tracks.map(async (track) => {
+        return {
+          id: track.id,
+          title: track.title,
+          url: track.url,
+          picture_url: track.picture_url,
+          explicit: track.explicit,
+          lyrics: track.lyrics,
+          plays: track.plays,
+          user_id: track.user_id,
+          album_id: track.album_id,
+        };
+      }),
+    );
   }
 
   async uploadTrack(token, files, dto) {

@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Patch,
   Post,
   Put,
   Req,
@@ -59,7 +60,7 @@ export class AlbumController {
     return await this.albumService.addTrackToAlbum(token, files, dto);
   }
 
-  @Put()
+  @Patch()
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe())
@@ -77,7 +78,7 @@ export class AlbumController {
     return await this.albumService.remove(token, dto);
   }
 
-  @Put('/picture')
+  @Patch('/picture')
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe())

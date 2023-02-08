@@ -4,8 +4,10 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
+  Query,
   Req,
   Res,
   UploadedFiles,
@@ -23,15 +25,26 @@ import { CreateTrackDto } from './dto/create.track.dto';
 import { PlayTrackDto } from './dto/play.track.dto';
 import { RemoveTrackDto } from './dto/remove.track.dto';
 import { EditTrackDto } from './dto/edit.track.dto';
+import { GetTrackDto } from './dto/get.track.dto';
 
 @Controller('track')
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}
 
-  //editTrack
-  //getTrack
-  //getTracks
   //removetrack count--
+  //change pic
+
+  @Get()
+  @UsePipes(new ValidationPipe())
+  async getTrackById(@Query() dto: GetTrackDto) {
+    return await this.trackService.getTrackInfoById(dto.id);
+  }
+
+  @Get('/all')
+  @UsePipes(new ValidationPipe())
+  async getUserTracks(@Query() dto: GetTrackDto) {
+    return await this.trackService.getUserTracks(dto.id);
+  }
 
   @Post()
   @ApiBearerAuth()
@@ -52,7 +65,7 @@ export class TrackController {
     return await this.trackService.uploadTrack(token, files, dto);
   }
 
-  @Post('/play')
+  @Patch('/play')
   @UsePipes(new ValidationPipe())
   async play(@Body() dto: PlayTrackDto) {
     return await this.trackService.play(dto.track_id);
@@ -65,7 +78,7 @@ export class TrackController {
     return await this.trackService.remove(dto.track_id);
   }
 
-  @Put()
+  @Patch()
   @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe())
   async edit(@Req() request, @Body() dto: EditTrackDto) {
