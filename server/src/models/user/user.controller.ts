@@ -1,20 +1,33 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 
 import { UserService } from './user.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUserDto } from './dto/get.user.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-  //getUser
+
   //editUser
   //search
   //changeAvatar
-  @Get('test')
+  @Get()
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
-  async test(@Req() req): Promise<any> {
-    return 'auth test success!';
+  @UsePipes(new ValidationPipe())
+  async getUserById(@Req() request, @Query() dto: GetUserDto) {
+    const token = request.headers.authorization.replace('Bearer ', '');
+    return this.userService.getUserById(token, dto);
   }
 }
