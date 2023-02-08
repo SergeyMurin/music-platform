@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  forwardRef,
   HttpException,
   HttpStatus,
   Inject,
@@ -23,7 +24,7 @@ export class CommentService {
     @Inject('TRACK_REPOSITORY')
     private trackRepository: typeof Track,
     private readonly authService: AuthService,
-    @Inject('TRACK_SERVICE')
+    @Inject(forwardRef(() => TrackService))
     private readonly trackService: TrackService,
     private readonly userRoleService: UserRoleService,
   ) {}

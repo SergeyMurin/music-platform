@@ -1,4 +1,5 @@
 import {
+  forwardRef,
   HttpException,
   HttpStatus,
   Inject,
@@ -43,7 +44,8 @@ export class AlbumService {
     @Inject('GENRE_ALBUM_REPOSITORY')
     private genreAlbumRepository: typeof GenreAlbum,
     private readonly digitalOceanService: DigitalOceanService,
-    private trackService: TrackService,
+    @Inject(forwardRef(() => TrackService))
+    private readonly trackService: TrackService,
     private readonly tagService: TagService,
     private readonly genreAlbumService: GenreAlbumService,
     private readonly authService: AuthService,

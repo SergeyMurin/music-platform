@@ -14,20 +14,26 @@ import { AlbumTrackModule } from './album.track/album.track.module';
 import { FavoriteTrackModule } from '../favorite/favorite.track/favorite.track.module';
 import { FavoriteAlbumModule } from '../favorite/favorite.album/favorite.album.module';
 import { TrackService } from '../track/track.service';
+import { TagTrackModule } from '../tag/tag.track/tag.track.module';
+import { GenreTrackModule } from '../genre/genre.track/genre.track.module';
+import { CommentModule } from '../comment/comment.module';
 
 @Module({
   imports: [
-    forwardRef(() => TrackModule),
     forwardRef(() => AlbumTrackModule),
+    forwardRef(() => TrackModule),
     DatabaseModule,
     DigitalOceanModule,
     TagModule,
     TagAlbumModule,
+    TagTrackModule,
+    GenreTrackModule,
     GenreAlbumModule,
     UserModule,
     AuthModule,
     FavoriteAlbumModule,
     FavoriteTrackModule,
+    CommentModule,
   ],
   controllers: [AlbumController],
   providers: [AlbumService, ...albumProviders, TrackService],

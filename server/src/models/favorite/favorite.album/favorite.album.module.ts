@@ -12,9 +12,9 @@ import { AuthModule } from '../../user/auth/auth.module';
 @Module({
   imports: [
     DatabaseModule,
-    forwardRef(() => FavoriteModule),
     AuthModule,
     UserModule,
+    forwardRef(() => FavoriteModule),
     forwardRef(() => AlbumModule),
   ],
   controllers: [FavoriteAlbumController],

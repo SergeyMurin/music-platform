@@ -34,11 +34,11 @@ dotenv.config();
 export class TrackService {
   constructor(
     @Inject('TRACK_REPOSITORY')
-    private trackRepository: typeof Track,
+    private readonly trackRepository: typeof Track,
     @Inject('TAG_TRACK_REPOSITORY')
-    private tagTrackRepository: typeof TagTrack,
+    private readonly tagTrackRepository: typeof TagTrack,
     @Inject('GENRE_TRACK_REPOSITORY')
-    private genreTrackRepository: typeof GenreTrack,
+    private readonly genreTrackRepository: typeof GenreTrack,
     private readonly digitalOceanService: DigitalOceanService,
     private readonly tagTrackService: TagTrackService,
     private readonly tagService: TagService,

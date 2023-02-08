@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 
 import { FavoriteTrack } from './favorite.track.entity';
 import { CreateFavoriteTrackDto } from './dto/create.favorite.track.dto';
@@ -16,6 +21,7 @@ export class FavoriteTrackService {
     private favoriteRepository: typeof Favorite,
     private readonly authService: AuthService,
     private readonly userService: UserService,
+    @Inject(forwardRef(() => TrackService))
     private readonly trackService: TrackService,
   ) {}
 
