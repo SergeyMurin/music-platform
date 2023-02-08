@@ -22,10 +22,12 @@ import { AuthGuard } from '@nestjs/passport';
 import { CreateTrackDto } from './dto/create.track.dto';
 import { PlayTrackDto } from './dto/play.track.dto';
 import { RemoveTrackDto } from './dto/remove.track.dto';
+import { EditTrackDto } from './dto/edit.track.dto';
 
 @Controller('track')
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}
+
   //editTrack
   //getTrack
   //getTracks
@@ -61,5 +63,13 @@ export class TrackController {
   @UsePipes(new ValidationPipe())
   async remove(@Body() dto: RemoveTrackDto) {
     return await this.trackService.remove(dto.track_id);
+  }
+
+  @Put()
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe())
+  async edit(@Req() request, @Body() dto: EditTrackDto) {
+    const token = request.headers.authorization.replace('Bearer ', '');
+    return await this.trackService.edit(token, dto);
   }
 }

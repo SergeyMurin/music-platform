@@ -21,6 +21,7 @@ import toBoolean = validator.toBoolean;
 import { AuthService } from '../user/auth/auth.service';
 import { UserService } from '../user/user.service';
 import { TagTrack } from '../tag/tag.track/tag.track.entity';
+import { EditTrackDto } from './dto/edit.track.dto';
 
 dotenv.config();
 
@@ -162,6 +163,9 @@ export class TrackService {
         track_id: id,
       },
     });
+    if (!tagsTrack.length) {
+      return;
+    }
     await Promise.all(
       tagsTrack.map(async (tagTrack) => {
         const tag = await this.tagService.getTagById(tagTrack.tag_id);
@@ -178,11 +182,60 @@ export class TrackService {
         track_id: id,
       },
     });
+    if (!genresTrack.length) {
+      return;
+    }
     await Promise.all(
       genresTrack.map(async (genreTrack) => {
         await genreTrack.destroy();
       }),
     );
+  }
+
+  async edit(token: string, dto: EditTrackDto) {
+    const jwtPayload = await this.authService.verifyToken(token);
+    const user = await this.userService.getById(jwtPayload.user_id);
+    const track = await this.getTrackById(dto.id);
+
+    if (track.user_id !== user.id) {
+      throw new HttpException(
+        `User ${user.id} is not owner of track ${track.id} `,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const genreIds = await this.parseComma(dto.genres);
+    if (genreIds) {
+      await this.clearTrackGenres(track.id);
+      await Promise.all(
+        genreIds.map(async (genreId) => {
+          await this.genreTrackService.create(genreId, track.id);
+        }),
+      );
+    }
+
+    const tagTitles = await this.parseComma(dto.tags);
+    if (tagTitles) {
+      await this.clearTrackTags(track.id);
+      await Promise.all(
+        tagTitles.map(async (tagTitle) => {
+          const tag = await this.tagService.createTagByTitle(tagTitle);
+          await this.tagTrackService.createOne(tag.id, track.id);
+        }),
+      );
+    }
+
+    track.title = dto.title;
+    track.explicit = toBoolean(dto.explicit);
+    track.lyrics = dto.lyrics;
+
+    await track.save();
+    return {
+      id: track.id,
+      title: track.title,
+      explicit: track.explicit,
+      lyrics: track.lyrics,
+    };
   }
 
   async play(track_id: string) {

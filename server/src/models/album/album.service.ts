@@ -320,24 +320,32 @@ export class AlbumService {
     }
 
     const genreIds = await this.parseComma(dto.genres);
-    await this.clearAlbumGenres(album.id);
-    await Promise.all(
-      genreIds.map(async (genreId) => {
-        await this.genreAlbumService.create(genreId, album.id);
-      }),
-    );
+    if (genreIds) {
+      await this.clearAlbumGenres(album.id);
+      await Promise.all(
+        genreIds.map(async (genreId) => {
+          await this.genreAlbumService.create(genreId, album.id);
+        }),
+      );
+    }
 
     const tagTitles = await this.parseComma(dto.tags);
-    await this.clearAlbumTags(album.id);
-    await Promise.all(
-      tagTitles.map(async (tagTitle) => {
-        const tag = await this.tagService.createTagByTitle(tagTitle);
-        await this.tagAlbumService.createOne(tag.id, album.id);
-      }),
-    );
+    if (tagTitles) {
+      await this.clearAlbumTags(album.id);
+      await Promise.all(
+        tagTitles.map(async (tagTitle) => {
+          const tag = await this.tagService.createTagByTitle(tagTitle);
+          await this.tagAlbumService.createOne(tag.id, album.id);
+        }),
+      );
+    }
 
     album.title = dto.title;
     await album.save();
+    return {
+      id: album.id,
+      title: album.title,
+    };
   }
 
   async remove(token, dto) {
@@ -406,6 +414,9 @@ export class AlbumService {
         album_id: id,
       },
     });
+    if (!tagsAlbum.length) {
+      return;
+    }
     await Promise.all(
       tagsAlbum.map(async (tagAlbum) => {
         const tag = await this.tagService.getTagById(tagAlbum.tag_id);
@@ -422,6 +433,9 @@ export class AlbumService {
         album_id: id,
       },
     });
+    if (!genresAlbum.length) {
+      return;
+    }
     await Promise.all(
       genresAlbum.map(async (genreAlbum) => {
         await genreAlbum.destroy();
