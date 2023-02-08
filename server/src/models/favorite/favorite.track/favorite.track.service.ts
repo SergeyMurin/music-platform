@@ -16,6 +16,7 @@ export class FavoriteTrackService {
     private favoriteRepository: typeof Favorite,
     private readonly authService: AuthService,
     private readonly userService: UserService,
+    @Inject('TRACK_SERVICE')
     private readonly trackService: TrackService,
   ) {}
 

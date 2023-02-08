@@ -15,7 +15,7 @@ import { TrackModule } from '../../track/track.module';
     forwardRef(() => FavoriteModule),
     AuthModule,
     UserModule,
-    TrackModule,
+    forwardRef(() => TrackModule),
   ],
   controllers: [FavoriteTrackController],
   providers: [FavoriteTrackService, ...favoriteTrackProviders],

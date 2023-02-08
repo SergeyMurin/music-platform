@@ -23,6 +23,7 @@ export class CommentService {
     @Inject('TRACK_REPOSITORY')
     private trackRepository: typeof Track,
     private readonly authService: AuthService,
+    @Inject('TRACK_SERVICE')
     private readonly trackService: TrackService,
     private readonly userRoleService: UserRoleService,
   ) {}

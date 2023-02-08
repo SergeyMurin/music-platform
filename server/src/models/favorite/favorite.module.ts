@@ -15,7 +15,7 @@ import { FavoriteAlbumModule } from './favorite.album/favorite.album.module';
     DatabaseModule,
     AuthModule,
     UserModule,
-    TrackModule,
+    forwardRef(() => TrackModule),
     forwardRef(() => FavoriteTrackModule),
     forwardRef(() => FavoriteAlbumModule),
   ],
