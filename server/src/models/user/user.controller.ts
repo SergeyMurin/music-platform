@@ -18,12 +18,12 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUserDto } from './dto/get.user.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { EditUserDto } from './dto/edit.user.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  //editUser
   //search
   @Get()
   @ApiBearerAuth()
@@ -42,5 +42,14 @@ export class UserController {
   async changeProfilePicture(@UploadedFiles() files, @Req() request) {
     const token = request.headers.authorization.replace('Bearer ', '');
     return await this.userService.changeProfilePicture(token, files.picture[0]);
+  }
+
+  @Post()
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe())
+  async edit(@Req() request, @Body() dto: EditUserDto) {
+    const token = request.headers.authorization.replace('Bearer ', '');
+    return await this.userService.edit(token, dto);
   }
 }

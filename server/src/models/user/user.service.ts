@@ -11,6 +11,7 @@ import { AuthService } from './auth/auth.service';
 import process from 'process';
 import dotenv from 'dotenv';
 import { DigitalOceanService } from '../../digtal.ocean/digital.ocean.service';
+import { EditUserDto } from './dto/edit.user.dto';
 
 dotenv.config();
 
@@ -95,6 +96,19 @@ export class UserService {
       url: user.picture_url,
       previous_url: previousUrl,
       id: user.id,
+    };
+  }
+
+  async edit(token: string, dto: EditUserDto) {
+    const jwtPayload = await this.authService.verifyToken(token);
+    const user = await this.getById(jwtPayload.user_id);
+    user.bio = dto.bio;
+    user.username = dto.username;
+    await user.save();
+    return {
+      id: user.id,
+      username: user.username,
+      bio: user.bio,
     };
   }
 }
