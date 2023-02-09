@@ -13,6 +13,8 @@ import { AuthService } from '../user/auth/auth.service';
 import { FavoriteTrack } from './favorite.track/favorite.track.entity';
 import { FavoriteAlbum } from './favorite.album/favorite.album.entity';
 import { UserService } from '../user/user.service';
+import { TrackService } from '../track/track.service';
+import { AlbumService } from '../album/album.service';
 
 @Injectable()
 export class FavoriteService {
@@ -27,6 +29,10 @@ export class FavoriteService {
     private readonly authService: AuthService,
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
+    @Inject(forwardRef(() => TrackService))
+    private readonly trackService: TrackService,
+    @Inject(forwardRef(() => AlbumService))
+    private readonly albumService: AlbumService,
   ) {}
 
   async getFavorite(token: string, favoriteId: string) {
@@ -123,9 +129,14 @@ export class FavoriteService {
       favorite.id,
     );
     if (favoriteTrack) {
+      const track = await this.trackService.getTrackById(
+        favoriteTrack.track_id,
+      );
       await favoriteTrack.destroy();
       await favorite.destroy();
       user.favorites_count--;
+      track.likes--;
+      await track.save();
       await user.save();
       throw new HttpException('Track deleted', HttpStatus.OK);
     }
@@ -134,9 +145,11 @@ export class FavoriteService {
       favorite.id,
     );
     if (favoriteAlbum) {
+      const album = await this.albumService.getById(favoriteAlbum.album_id);
       await favoriteAlbum.destroy();
       await favorite.destroy();
       user.favorites_count--;
+      album.likes--;
       await user.save();
       throw new HttpException('Album deleted', HttpStatus.OK);
     }

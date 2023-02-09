@@ -2,9 +2,11 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Patch,
   Post,
   Put,
+  Query,
   Req,
   Res,
   UploadedFiles,
@@ -22,10 +24,31 @@ import { AddTrackToAlbumDto } from './dto/add.track.to.album.dto';
 import { EditAlbumDto } from './dto/edit.album.dto';
 import { RemoveAlbumDto } from './dto/remove.album.dto';
 import { RemoveTrackFromAlbumDto } from './dto/remove.track.from.album.dto';
+import { GetAlbumDto } from './dto/get.album.dto';
+import { GetUserAlbumsDto } from './dto/get.user.albums.dto';
 
 @Controller('album')
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
+
+  //getAlbum
+  //getUseralbums
+  //getAlbumTracks
+
+  @Get()
+  async getAlbum(@Query() dto: GetAlbumDto) {
+    return await this.albumService.getAlbumById(dto.id);
+  }
+
+  @Get()
+  async getUserAlbums(@Query() dto: GetUserAlbumsDto) {
+    return await this.albumService.getUserAlbums(dto.id, dto.user_id);
+  }
+
+  @Get()
+  async getAlbumTracks(@Query() dto: GetAlbumDto) {
+    return await this.albumService.getAlbumTracks(dto.id);
+  }
 
   @Post()
   @ApiBearerAuth()

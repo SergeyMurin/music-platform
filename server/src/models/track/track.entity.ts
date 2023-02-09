@@ -47,6 +47,9 @@ export class Track extends Model<Track> {
   @Column({ defaultValue: 0 })
   plays: number;
 
+  @Column({ defaultValue: 0 })
+  likes: number;
+
   @Column({ allowNull: false, defaultValue: '' })
   lyrics: string;
 

@@ -69,6 +69,8 @@ export class FavoriteTrackService {
       track_id: track.id,
     });
     user.favorites_count++;
+    track.likes++;
+    await track.save();
     await user.save();
     return {
       id: favoriteTrack.id,
@@ -84,11 +86,16 @@ export class FavoriteTrackService {
     if (trackFavorites.length) {
       await Promise.all(
         trackFavorites.map(async (trackFavorite) => {
+          const track = await this.trackService.getTrackById(
+            trackFavorite.track_id,
+          );
           const favorite = await this.favoriteRepository.findByPk(
             trackFavorite.id,
           );
           const user = await this.userService.getById(favorite.user_id);
           user.favorites_count--;
+          track.likes--;
+          await user.save();
           await favorite.destroy();
           await trackFavorite.destroy();
         }),

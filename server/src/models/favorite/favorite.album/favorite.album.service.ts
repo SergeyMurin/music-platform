@@ -10,8 +10,6 @@ import {
 import { FavoriteAlbum } from './favorite.album.entity';
 import { Favorite } from '../favorite.entity';
 import { UserService } from '../../user/user.service';
-import { FavoriteTrack } from '../favorite.track/favorite.track.entity';
-import { CreateFavoriteTrackDto } from '../favorite.track/dto/create.favorite.track.dto';
 import { CreateFavoriteAlbumDto } from './dto/create.favorite.album.dto';
 import { AuthService } from '../../user/auth/auth.service';
 import { AlbumService } from '../../album/album.service';
@@ -38,11 +36,15 @@ export class FavoriteAlbumService {
     if (albumFavorites.length) {
       await Promise.all(
         albumFavorites.map(async (albumFavorite) => {
+          const album = await this.albumService.getById(albumFavorite.album_id);
           const favorite = await this.favoriteRepository.findByPk(
             albumFavorite.id,
           );
           const user = await this.userService.getById(favorite.user_id);
           user.favorites_count--;
+          album.likes--;
+          await album.save();
+          await user.save();
           await favorite.destroy();
           await albumFavorite.destroy();
         }),
@@ -100,6 +102,8 @@ export class FavoriteAlbumService {
       album_id: album.id,
     });
     user.favorites_count++;
+    album.likes++;
+    await album.save();
     await user.save();
     return {
       id: favoriteAlbum.id,

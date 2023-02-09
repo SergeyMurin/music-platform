@@ -28,6 +28,7 @@ import { AlbumTrack } from '../album/album.track/album.track.entity';
 import { CommentService } from '../comment/comment.service';
 import { FavoriteTrackService } from '../favorite/favorite.track/favorite.track.service';
 import { RepostService } from '../repost/repost.service';
+import { Op } from 'sequelize';
 
 dotenv.config();
 
@@ -72,6 +73,7 @@ export class TrackService {
       picture_url: track.picture_url,
       explicit: track.explicit,
       lyrics: track.lyrics,
+      likes: track.likes,
       plays: track.plays,
       user_id: track.user_id,
       album_id: track.album_id,
@@ -98,6 +100,7 @@ export class TrackService {
           picture_url: track.picture_url,
           explicit: track.explicit,
           lyrics: track.lyrics,
+          likes: track.likes,
           plays: track.plays,
           user_id: track.user_id,
           album_id: track.album_id,
@@ -370,6 +373,36 @@ export class TrackService {
       url: track.picture_url,
       previous_url: previousUrl,
     };
+  }
+
+  async searchByTerm(term: string) {
+    const searchTitle = '%' + term.replace(' ', '%') + '%';
+    const searchedTracks = await this.trackRepository.findAll({
+      where: {
+        title: {
+          [Op.iLike]: searchTitle,
+        },
+      },
+      order: [['likes', 'DESC']],
+    });
+
+    return await Promise.all(
+      searchedTracks.map(async (track) => {
+        return {
+          id: track.id,
+          title: track.title,
+          url: track.url,
+          picture_url: track.picture_url,
+          likes: track.likes,
+          explicit: track.explicit,
+          lyrics: track.lyrics,
+          plays: track.plays,
+          user_id: track.user_id,
+          album_id: track.album_id,
+          created_at: track.createdAt,
+        };
+      }),
+    );
   }
 
   async parseComma(str: string): Promise<string[]> {

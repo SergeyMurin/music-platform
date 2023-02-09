@@ -70,6 +70,73 @@ export class AlbumService {
     } else return album;
   }
 
+  async getAlbumById(id: string) {
+    const album = await this.getById(id);
+    return {
+      id: album.id,
+      title: album.title,
+      picture_url: album.picture_url,
+      likes: album.likes,
+      tracks_count: album.tracks_count,
+      user_id: album.user_id,
+    };
+  }
+
+  async getUserAlbums(id: string, user_id: string) {
+    const user = await this.userService.getById(user_id);
+    const albums = await this.albumRepository.findAll({
+      where: {
+        user_id: user.id,
+      },
+    });
+    if (!albums.length) {
+      return [];
+    }
+
+    return await Promise.all(
+      albums.map(async (album) => {
+        return {
+          id: album.id,
+          title: album.title,
+          picture_url: album.picture_url,
+          likes: album.likes,
+          tracks_count: album.tracks_count,
+          user_id: album.user_id,
+        };
+      }),
+    );
+  }
+
+  async getAlbumTracks(id: string) {
+    const album = await this.getById(id);
+    const tracks = await this.trackRepository.findAll({
+      where: {
+        album_id: album.id,
+      },
+    });
+    if (!tracks.length) {
+      return [];
+    }
+
+    return await Promise.all(
+      tracks.map(async (track) => {
+        return {
+          id: track.id,
+          title: track.title,
+          url: track.url,
+          picture_url: track.picture_url,
+          likes: track.likes,
+          explicit: track.explicit,
+          lyrics: track.lyrics,
+          plays: track.plays,
+          user_id: track.user_id,
+          album_id: track.album_id,
+          created_at: track.createdAt,
+        };
+      }),
+    );
+  }
+
   async uploadAlbumPicture(pictureFile: any, albumId: string): Promise<string> {
     let pictureUrl = null;
     if (pictureFile) {

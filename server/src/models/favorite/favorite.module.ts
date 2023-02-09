@@ -9,6 +9,7 @@ import { UserModule } from '../user/user.module';
 import { TrackModule } from '../track/track.module';
 import { FavoriteTrackModule } from './favorite.track/favorite.track.module';
 import { FavoriteAlbumModule } from './favorite.album/favorite.album.module';
+import { AlbumModule } from '../album/album.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { FavoriteAlbumModule } from './favorite.album/favorite.album.module';
     forwardRef(() => AuthModule),
     forwardRef(() => UserModule),
     forwardRef(() => TrackModule),
+    forwardRef(() => AlbumModule),
     forwardRef(() => FavoriteTrackModule),
     forwardRef(() => FavoriteAlbumModule),
   ],

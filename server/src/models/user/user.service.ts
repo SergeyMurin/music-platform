@@ -124,9 +124,10 @@ export class UserService {
       dto.type = dto.type.toUpperCase();
       await this.validateEnum(dto.type, searchType);
     }
+    const tracks = await this.trackService.searchByTerm(dto.term);
 
     return {
-      tracks: '',
+      tracks: tracks,
       albums: '',
       users: '',
     };

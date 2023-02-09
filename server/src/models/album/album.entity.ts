@@ -36,6 +36,9 @@ export class Album extends Model<Album> {
   picture_url: string;
 
   @Column({ defaultValue: 0 })
+  likes: number;
+
+  @Column({ defaultValue: 0 })
   tracks_count: number;
 
   @HasMany(() => Track)
