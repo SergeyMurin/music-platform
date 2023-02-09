@@ -15,6 +15,7 @@ import { EditUserDto } from './dto/edit.user.dto';
 import { SearchDto, searchType } from './dto/search.dto';
 import { TrackService } from '../track/track.service';
 import { AlbumService } from '../album/album.service';
+import { Op } from 'sequelize';
 
 dotenv.config();
 
@@ -124,16 +125,66 @@ export class UserService {
       dto.type = dto.type.toUpperCase();
       await this.validateEnum(dto.type, searchType);
     }
-    const tracks = await this.trackService.searchByTerm(dto.term);
 
-    return {
-      tracks: tracks,
-      albums: '',
-      users: '',
-    };
+    switch (dto.type) {
+      case searchType.ALL: {
+        const tracks = await this.trackService.searchByTerm(dto.term);
+        const albums = await this.albumService.searchByTerm(dto.term);
+        const users = await this.searchByTerm(dto.term);
+        return {
+          tracks: tracks ? tracks : [],
+          albums: albums ? albums : [],
+          users: users ? users : [],
+        };
+      }
+
+      case searchType.TRACK: {
+        const tracks = await this.trackService.searchByTerm(dto.term);
+        return tracks ? tracks : [];
+      }
+
+      case searchType.ALBUM: {
+        const albums = await this.albumService.searchByTerm(dto.term);
+        return albums ? albums : [];
+      }
+
+      case searchType.USER: {
+        const users = await this.searchByTerm(dto.term);
+        return users ? users : [];
+      }
+    }
   }
 
-  //async searchAll(dto: SearchDto) {}
+  async searchByTerm(term: string) {
+    const searchTitle = '%' + term.replace(' ', '%') + '%';
+    const searchedUsers = await this.userRepository.findAll({
+      where: {
+        username: {
+          [Op.iLike]: searchTitle,
+        },
+      },
+      order: [['subscribers_count', 'DESC']],
+    });
+
+    return await Promise.all(
+      searchedUsers.map(async (user) => {
+        return {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          email_confirmed: user.email_confirmed,
+          bio: user.bio,
+          subscribers_count: user.subscribers_count,
+          subscriptions_count: user.subscriptions_count,
+          favorites_count: user.favorites_count,
+          reposts_count: user.reposts_count,
+          tracks_count: user.tracks_count,
+          albums_count: user.albums_count,
+          playlists_count: user.playlists_count,
+        };
+      }),
+    );
+  }
 
   async validateEnum(value, enumObj) {
     for (const e in enumObj) {

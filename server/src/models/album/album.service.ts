@@ -30,6 +30,7 @@ import { RemoveTrackFromAlbumDto } from './dto/remove.track.from.album.dto';
 import { FavoriteAlbumService } from '../favorite/favorite.album/favorite.album.service';
 import { FavoriteTrackService } from '../favorite/favorite.track/favorite.track.service';
 import { RepostService } from '../repost/repost.service';
+import { Op } from 'sequelize';
 
 dotenv.config();
 
@@ -613,6 +614,31 @@ export class AlbumService {
     await this.digitalOceanService.removeFile(
       track.id,
       process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH,
+    );
+  }
+
+  async searchByTerm(term: string) {
+    const searchTitle = '%' + term.replace(' ', '%') + '%';
+    const searchedAlbums = await this.albumRepository.findAll({
+      where: {
+        title: {
+          [Op.iLike]: searchTitle,
+        },
+      },
+      order: [['likes', 'DESC']],
+    });
+
+    return await Promise.all(
+      searchedAlbums.map(async (album) => {
+        return {
+          id: album.id,
+          title: album.title,
+          picture_url: album.picture_url,
+          likes: album.likes,
+          tracks_count: album.tracks_count,
+          user_id: album.user_id,
+        };
+      }),
     );
   }
 
