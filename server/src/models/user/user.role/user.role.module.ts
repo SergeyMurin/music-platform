@@ -11,7 +11,12 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { UserTokenModule } from '../user.token/user.token.module';
 
 @Module({
-  imports: [UserTokenModule, DatabaseModule, UserModule, RoleModule],
+  imports: [
+    UserTokenModule,
+    DatabaseModule,
+    forwardRef(() => UserModule),
+    forwardRef(() => RoleModule),
+  ],
   controllers: [UserRoleController],
   providers: [UserRoleService, ...userRoleProviders, JwtStrategy, JwtService],
   exports: [UserRoleService, ...userRoleProviders],

@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  forwardRef,
   HttpException,
   HttpStatus,
   Inject,
@@ -22,7 +23,9 @@ export class FavoriteService {
     private favoriteTrackRepository: typeof FavoriteTrack,
     @Inject('FAVORITE_ALBUM_REPOSITORY')
     private favoriteAlbumRepository: typeof FavoriteAlbum,
+    @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
   ) {}
 

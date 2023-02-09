@@ -13,8 +13,8 @@ import { TrackModule } from '../../track/track.module';
   imports: [
     DatabaseModule,
     forwardRef(() => FavoriteModule),
-    AuthModule,
-    UserModule,
+    forwardRef(() => AuthModule),
+    forwardRef(() => UserModule),
     forwardRef(() => TrackModule),
   ],
   controllers: [FavoriteTrackController],

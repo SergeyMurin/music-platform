@@ -19,7 +19,9 @@ export class FavoriteTrackService {
     private favoriteTrackRepository: typeof FavoriteTrack,
     @Inject('FAVORITE_REPOSITORY')
     private favoriteRepository: typeof Favorite,
+    @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     @Inject(forwardRef(() => TrackService))
     private readonly trackService: TrackService,

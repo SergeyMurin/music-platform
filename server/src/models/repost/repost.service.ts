@@ -20,7 +20,9 @@ export class RepostService {
   constructor(
     @Inject('REPOST_REPOSITORY')
     private repostRepository: typeof Repost,
+    @Inject(forwardRef(() => AuthService))
     private authService: AuthService,
+    @Inject(forwardRef(() => UserService))
     private userService: UserService,
     @Inject(forwardRef(() => TrackService))
     private trackService: TrackService,

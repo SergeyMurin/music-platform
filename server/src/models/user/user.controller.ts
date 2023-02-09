@@ -19,6 +19,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUserDto } from './dto/get.user.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { EditUserDto } from './dto/edit.user.dto';
+import { SearchDto, searchType } from './dto/search.dto';
 
 @Controller('user')
 export class UserController {
@@ -51,5 +52,17 @@ export class UserController {
   async edit(@Req() request, @Body() dto: EditUserDto) {
     const token = request.headers.authorization.replace('Bearer ', '');
     return await this.userService.edit(token, dto);
+  }
+
+  @Get('/search')
+  async search(@Req() request, @Query() dto: SearchDto) {
+    return await this.userService.search(dto);
+  }
+
+  @Get('/search/config')
+  async searchConfig() {
+    return {
+      type: searchType,
+    };
   }
 }

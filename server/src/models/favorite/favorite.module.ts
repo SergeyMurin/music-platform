@@ -13,8 +13,8 @@ import { FavoriteAlbumModule } from './favorite.album/favorite.album.module';
 @Module({
   imports: [
     DatabaseModule,
-    AuthModule,
-    UserModule,
+    forwardRef(() => AuthModule),
+    forwardRef(() => UserModule),
     forwardRef(() => TrackModule),
     forwardRef(() => FavoriteTrackModule),
     forwardRef(() => FavoriteAlbumModule),

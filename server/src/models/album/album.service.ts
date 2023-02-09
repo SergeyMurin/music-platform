@@ -49,7 +49,9 @@ export class AlbumService {
     private readonly trackService: TrackService,
     private readonly tagService: TagService,
     private readonly genreAlbumService: GenreAlbumService,
+    @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     private readonly albumTrackService: AlbumTrackService,
     private readonly tagAlbumService: TagAlbumService,

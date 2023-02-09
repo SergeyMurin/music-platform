@@ -12,8 +12,8 @@ import { AlbumModule } from '../album/album.module';
 @Module({
   imports: [
     DatabaseModule,
-    AuthModule,
-    UserModule,
+    forwardRef(() => AuthModule),
+    forwardRef(() => UserModule),
     forwardRef(() => TrackModule),
     forwardRef(() => AlbumModule),
   ],

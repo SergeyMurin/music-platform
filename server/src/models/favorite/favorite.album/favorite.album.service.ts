@@ -23,7 +23,9 @@ export class FavoriteAlbumService {
     private favoriteAlbumRepository: typeof FavoriteAlbum,
     @Inject('FAVORITE_REPOSITORY')
     private favoriteRepository: typeof Favorite,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
+    @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
     @Inject(forwardRef(() => AlbumService))
     private readonly albumService: AlbumService,

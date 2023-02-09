@@ -11,7 +11,7 @@ import { TrackModule } from '../track/track.module';
 @Module({
   imports: [
     DatabaseModule,
-    AuthModule,
+    forwardRef(() => AuthModule),
     UserRoleModule,
     forwardRef(() => TrackModule),
   ],

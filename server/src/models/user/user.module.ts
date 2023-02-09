@@ -5,9 +5,17 @@ import { userProviders } from './user.providers';
 import { UserController } from './user.controller';
 import { AuthModule } from './auth/auth.module';
 import { DigitalOceanModule } from '../../digtal.ocean/digita.ocean.module';
+import { TrackModule } from '../track/track.module';
+import { AlbumModule } from '../album/album.module';
 
 @Module({
-  imports: [DatabaseModule, forwardRef(() => AuthModule), DigitalOceanModule],
+  imports: [
+    DatabaseModule,
+    forwardRef(() => AuthModule),
+    DigitalOceanModule,
+    forwardRef(() => TrackModule),
+    forwardRef(() => AlbumModule),
+  ],
   controllers: [UserController],
   providers: [UserService, ...userProviders],
   exports: [UserService, ...userProviders],

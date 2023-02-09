@@ -12,6 +12,9 @@ import process from 'process';
 import dotenv from 'dotenv';
 import { DigitalOceanService } from '../../digtal.ocean/digital.ocean.service';
 import { EditUserDto } from './dto/edit.user.dto';
+import { SearchDto, searchType } from './dto/search.dto';
+import { TrackService } from '../track/track.service';
+import { AlbumService } from '../album/album.service';
 
 dotenv.config();
 
@@ -19,10 +22,14 @@ dotenv.config();
 export class UserService {
   constructor(
     @Inject('USER_REPOSITORY')
-    private userRepository: typeof User,
+    private readonly userRepository: typeof User,
     @Inject(forwardRef(() => AuthService))
-    private authService: AuthService,
-    private digitalOceanService: DigitalOceanService,
+    private readonly authService: AuthService,
+    private readonly digitalOceanService: DigitalOceanService,
+    @Inject(forwardRef(() => TrackService))
+    private readonly trackService: TrackService,
+    @Inject(forwardRef(() => AlbumService))
+    private readonly albumService: AlbumService,
   ) {}
 
   async getById(id: string) {
@@ -110,5 +117,32 @@ export class UserService {
       username: user.username,
       bio: user.bio,
     };
+  }
+
+  async search(dto: SearchDto) {
+    if (dto.type) {
+      dto.type = dto.type.toUpperCase();
+      await this.validateEnum(dto.type, searchType);
+    }
+
+    return {
+      tracks: '',
+      albums: '',
+      users: '',
+    };
+  }
+
+  //async searchAll(dto: SearchDto) {}
+
+  async validateEnum(value, enumObj) {
+    for (const e in enumObj) {
+      if (enumObj[e] === value) {
+        return;
+      }
+    }
+    throw new HttpException(
+      `Value '${value}' is not valid`,
+      HttpStatus.BAD_REQUEST,
+    );
   }
 }
