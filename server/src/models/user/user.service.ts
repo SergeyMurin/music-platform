@@ -45,10 +45,13 @@ export class UserService {
     } else return user;
   }
 
-  async getByEmail(email: string) {
+  async getByEmail(email: string, validate?) {
     const user = await this.userRepository.findOne<User>({
       where: { email },
     });
+    if (!validate) {
+      return;
+    }
     if (!user) {
       throw new HttpException(
         `User with email ${email} not found`,

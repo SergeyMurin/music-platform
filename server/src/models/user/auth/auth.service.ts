@@ -19,6 +19,7 @@ import { ForgotPasswordDto } from './dto/forgot.password.dto';
 import { ResetPasswordDto } from './dto/reset.password.dto';
 import { UserRoleService } from '../user.role/user.role.service';
 import { RoleTitleEnum } from '../../../shared/enum/role.title.enum';
+import { DigitalOceanService } from '../../../digtal.ocean/digital.ocean.service';
 
 dotenv.config();
 
@@ -62,7 +63,10 @@ export class AuthService {
       if (!payload) {
         return;
       }
-      const existingUser = await this.userService.getByEmail(payload.email);
+      const existingUser = await this.userService.getByEmail(
+        payload.email,
+        false,
+      );
       if (existingUser) {
         const token = await this.signToken(existingUser);
         await this.tokenService.update(existingUser.id, token);
@@ -98,6 +102,10 @@ export class AuthService {
       const salt = await genSalt(10);
       const password = await hash(dto.password, salt);
       const user = await this.userRepository.create({ ...dto, password });
+      user.picture_url =
+        process.env.DIGITAL_OCEAN_HREF +
+        '/' +
+        process.env.DIGITAL_OCEAN_BUCKET_PICTURE_USER_PATH_DEFAULT;
 
       const token = await this.signToken(user);
       await this.tokenService.create(user.id, token);
