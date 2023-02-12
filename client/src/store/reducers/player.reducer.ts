@@ -7,7 +7,6 @@ import {
 const initialState: PlayerState = {
   current_time: 0,
   duration: 0,
-  active: null,
   volume: 50,
   pause: true,
 };
@@ -27,8 +26,6 @@ export const playerReducer = (
       return { ...state, volume: action.payload };
     case PlayerActionTypes.SET_DURATION:
       return { ...state, duration: action.payload };
-    case PlayerActionTypes.SET_ACTIVE:
-      return { ...state, active: action.payload, duration: 0, current_time: 0 };
     default:
       return state;
   }

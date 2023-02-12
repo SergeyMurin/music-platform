@@ -13,7 +13,7 @@ export interface ITrack {
   picture_url: string;
   track_url: string;
   album_id: string;
-  comments: IComment[];
+  //comments: IComment[];
 }
 
 export interface TrackState {

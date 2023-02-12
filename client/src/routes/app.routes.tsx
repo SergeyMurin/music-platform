@@ -26,12 +26,11 @@ export const AppRoutes: React.FC = () => {
 
         <Route path={"admin"} element={<AdminPage />} />
 
-        <Route path={"album"} element={<AlbumPage />} />
-        <Route path={"playlist"} element={<PlaylistPage />} />
-        <Route path={"profile"} element={<ProfilePage />} />
+        <Route path={"album/:id"} element={<AlbumPage />} />
+        <Route path={"playlist/:id"} element={<PlaylistPage />} />
+        <Route path={"profile/:id"} element={<ProfilePage />} />
         <Route path={"search"} element={<SearchPage />} />
-        <Route path={"track"} element={<TrackPage />} />
-
+        <Route path={"track/:id"} element={<TrackPage />} />
       </Route>
     </Routes>
   );

@@ -27,12 +27,9 @@ export class UserController {
 
   //search
   @Get()
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe())
   async getUserById(@Req() request, @Query() dto: GetUserDto) {
-    const token = request.headers.authorization.replace('Bearer ', '');
-    return await this.userService.getUserById(token, dto);
+    return await this.userService.getUserById(dto);
   }
 
   @Patch()

@@ -50,7 +50,7 @@ export class UserService {
       where: { email },
     });
     if (!validate) {
-      return;
+      return user;
     }
     if (!user) {
       throw new HttpException(
@@ -60,8 +60,7 @@ export class UserService {
     } else return user;
   }
 
-  async getUserById(token: string, dto: GetUserDto) {
-    await this.authService.verifyToken(token);
+  async getUserById(dto: GetUserDto) {
     const user = await this.getById(dto.id);
     return {
       id: user.id,

@@ -6,6 +6,12 @@ import {
   BsFillSkipStartCircleFill,
 } from "react-icons/bs";
 
+import playIcon from "../../assets/player/play-icon.svg";
+import pauseIcon from "../../assets/player/pause-icon.svg";
+import nextIcon from "../../assets/player/next-icon.svg";
+import previousIcon from "../../assets/player/previous-icon.svg";
+import repeatIcon from "../../assets/player/repeat-icon.svg";
+
 type Props = {
   tracks: any;
   setTracks: any;
@@ -71,44 +77,63 @@ export const PlayerElement: React.FC<Props> = ({
   return (
     <div className={"player-element"}>
       <div className="player_container">
-        <div className="title">
-          <p>{currentTrack.title}</p>
-        </div>
-        <div className="navigation">
-          <span>
-            {convertToTime(currentTrack.progress, currentTrack.length)}
-          </span>
-          /<span>{convertToTime(100, currentTrack.length)}</span>
-          <div
-            className="navigation_wrapper"
-            onClick={checkWidth}
-            ref={clickRef}
-          >
-            <div
-              className="seek_bar"
-              style={{ width: `${currentTrack.progress + "%"}` }}
-            ></div>
+        <div className={"player__track-info"}>
+          <div className="title">
+            <p>{currentTrack.title}</p>
           </div>
         </div>
-        <div className="controls">
-          <BsFillSkipStartCircleFill
-            className="btn_action"
-            onClick={skipBack}
-          />
-          {isPlaying ? (
-            <BsFillPauseCircleFill
-              className="btn_action pp"
-              onClick={PlayPause}
+        <div className="navigation">
+          <div className="controls">
+            <img
+              src={previousIcon}
+              className="btn_action"
+              onClick={skipBack}
+              alt={"previous"}
             />
-          ) : (
-            <BsFillPlayCircleFill
-              className="btn_action pp"
-              onClick={PlayPause}
+            {isPlaying ? (
+              <img
+                src={pauseIcon}
+                className="btn_action pp"
+                onClick={PlayPause}
+                alt={"pause"}
+              />
+            ) : (
+              <img
+                src={playIcon.toString()}
+                className="btn_action pp"
+                onClick={PlayPause}
+                alt={"play"}
+              />
+            )}
+            <img
+              src={nextIcon}
+              className="btn_action"
+              onClick={skipToNext}
+              alt={"next"}
             />
-          )}
-          <BsFillSkipEndCircleFill
+          </div>
+
+          <div className={"player__timer"}>
+            <span>
+              {convertToTime(currentTrack.progress, currentTrack.length)}
+            </span>
+            <div
+              className="navigation_wrapper"
+              onClick={checkWidth}
+              ref={clickRef}
+            >
+              <div
+                className="seek_bar"
+                style={{ width: `${currentTrack.progress + "%"}` }}
+              ></div>
+            </div>
+            <span>{convertToTime(100, currentTrack.length)}</span>
+          </div>
+          <img
+            src={repeatIcon}
             className="btn_action"
             onClick={skipToNext}
+            alt={"repeat"}
           />
         </div>
       </div>

@@ -98,32 +98,31 @@ export class AuthService {
    * @returns {Promise<UserSignInResponseDto>}
    */
   async signUp(dto: UserSignInRequestDto): Promise<UserSignInResponseDto> {
-    try {
-      const salt = await genSalt(10);
-      const password = await hash(dto.password, salt);
-      const user = await this.userRepository.create({ ...dto, password });
-      user.picture_url =
-        process.env.DIGITAL_OCEAN_HREF +
-        '/' +
-        process.env.DIGITAL_OCEAN_BUCKET_PICTURE_USER_PATH_DEFAULT;
-
-      const token = await this.signToken(user);
-      await this.tokenService.create(user.id, token);
-      await this.userRoleService.create(user.id, RoleTitleEnum.USER);
-
-      await this.sendConfirmation(user);
-
-      return new UserSignInResponseDto(user, token);
-    } catch (error) {
-      if (error.name === 'SequelizeUniqueConstraintError') {
-        throw new HttpException(error.errors[0], HttpStatus.CONFLICT);
-      }
-
-      throw new HttpException(
-        error.errors[0],
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+    const salt = await genSalt(10);
+    const password = await hash(dto.password, salt);
+    if (await this.userRepository.findOne({ where: { email: dto.email } })) {
+      throw new HttpException('Email must be unique', HttpStatus.BAD_REQUEST);
     }
+
+    const user = await this.userRepository.create({
+      ...dto,
+      password,
+      username: dto.email.split('@')[0],
+    });
+    user.picture_url =
+      process.env.DIGITAL_OCEAN_HREF +
+      '/' +
+      process.env.DIGITAL_OCEAN_BUCKET_PICTURE_USER_PATH_DEFAULT;
+
+    await user.save();
+
+    const token = await this.signToken(user);
+    await this.tokenService.create(user.id, token);
+    await this.userRoleService.create(user.id, RoleTitleEnum.USER);
+
+    await this.sendConfirmation(user);
+
+    return new UserSignInResponseDto(user, token);
   }
 
   /**
