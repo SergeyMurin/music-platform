@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   BsFillPauseCircleFill,
   BsFillPlayCircleFill,
@@ -31,7 +31,18 @@ export const PlayerElement: React.FC<Props> = ({
   currentTrack,
   setCurrentTrack,
 }) => {
+  const [progress, setProgress] = useState(currentTrack.progress);
   const clickRef: any = useRef();
+
+  setInterval(() => {
+    setProgress(currentTrack.progress);
+  }, 1000);
+
+  useEffect(() => {
+    if (currentTrack.progress === 100) {
+      skipToNext();
+    }
+  }, [progress]);
 
   const PlayPause = () => {
     setIsPlaying(!isPlaying);

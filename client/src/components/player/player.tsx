@@ -34,6 +34,7 @@ export const Player: React.FC = () => {
 
   useEffect(() => {
     if (isPlaying) {
+      console.log("play");
       audioElem.current.play();
     } else {
       audioElem.current.pause();

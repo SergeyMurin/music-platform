@@ -6,6 +6,8 @@ import axios from "axios";
 import { AppRoutes } from "./routes/app.routes";
 import { useActions } from "./hooks/useActions";
 import { useTypedSelector } from "./hooks/useTypedSelector";
+import Marquee from "./components/player/marquee";
+import MyMarquee from "./components/player/marquee";
 
 function App() {
   const { isAuth } = useTypedSelector((state) => state.user);
@@ -23,7 +25,7 @@ function App() {
   return (
     <div className="App">
       <AppRoutes />
-      {isAuth && <div>authorized</div>}
+      <MyMarquee />
     </div>
   );
 }
