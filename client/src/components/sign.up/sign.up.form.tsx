@@ -3,6 +3,7 @@ import { Field, Form, FormikErrors, FormikProps, withFormik } from "formik";
 import axios from "axios";
 import { useActions } from "../../hooks/useActions";
 import { fetchUser } from "../../store/action.creators/user.actions";
+import { Link } from "react-router-dom";
 
 interface FormValues {
   email: string;
@@ -16,7 +17,7 @@ interface OtherProps {
 }
 
 const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
-  const { touched, errors, isSubmitting, validateOnChange, error } = props;
+  const { touched, errors, isSubmitting, error } = props;
 
   return (
     <Form>
@@ -29,7 +30,8 @@ const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
         <div>{errors.repeatPassword}</div>
       )}
       {error && <div>{error}</div>}
-      <button type="submit" disabled={isSubmitting}>
+      <Link to={"./forgot"}>Forgot password?</Link>
+      <button type="submit" disabled={!error && !!errors && isSubmitting}>
         Sign Up
       </button>
     </Form>
@@ -108,7 +110,7 @@ export const SignUpForm: React.FC = () => {
   );
 };
 
-const validateEmail = (email: string) => {
+export const validateEmail = (email: string) => {
   return String(email)
     .toLowerCase()
     .match(
@@ -116,6 +118,6 @@ const validateEmail = (email: string) => {
     );
 };
 
-const validatePassword = (password: string) => {
+export const validatePassword = (password: string) => {
   return password.length >= 8;
 };

@@ -219,7 +219,7 @@ export class AuthService {
       throw new HttpException('Invalid email', HttpStatus.BAD_REQUEST);
     }
     const token = await this.tokenService.find(user.id);
-    const resetLink = `${process.env.CLIENT_URI}/auth/reset-password?token=${token.token}`;
+    const resetLink = `${process.env.CLIENT_URI}/password/reset?token=${token.token}`;
 
     await this.mailService.sendResetPasswordEmail(
       user.email,

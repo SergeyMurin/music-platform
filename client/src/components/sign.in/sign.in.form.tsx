@@ -14,7 +14,7 @@ interface OtherProps {
 }
 
 const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
-  const { touched, errors, isSubmitting, message } = props;
+  const { touched, errors, isSubmitting, error } = props;
 
   return (
     <Form>
@@ -22,7 +22,8 @@ const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
       {touched.email && errors.email && <div>{errors.email}</div>}
       <Field type="password" name="password" />
       {touched.password && errors.password && <div>{errors.password}</div>}
-      <button type="submit" disabled={isSubmitting}>
+      {error && <div>{error}</div>}
+      <button type="submit" disabled={!error && !!errors && isSubmitting}>
         Sign In
       </button>
     </Form>
@@ -82,7 +83,9 @@ export const SignInForm: React.FC = () => {
         localStorage.setItem("id", response.data.id);
         localStorage.setItem("token", response.data.token);
       })
-      .catch((error) => setSignInError(error.response.data.message));
+      .catch((error) => {
+        setSignInError(error.response.data.message);
+      });
   };
 
   return (
