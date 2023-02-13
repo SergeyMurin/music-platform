@@ -16,14 +16,30 @@ export interface ITrack {
   //comments: IComment[];
 }
 
+export interface ITag {
+  id: string;
+  title: string;
+  amount: number;
+}
+
+export interface IGenre {
+  id: string;
+  title: string;
+}
+
 export interface TrackState {
   tracks: ITrack[];
+  genres: IGenre[] | null;
+  tags: ITag[] | null;
   error: string;
 }
 
 export enum TrackActionTypes {
   FETCH_TRACKS = "FETCH_TRACKS",
+  SET_TRACKS = "SET_TRACKS",
   FETCH_TRACKS_ERROR = "FETCH_TRACKS_ERROR",
+  FETCH_GENRES = "FETCH_GENRES",
+  FETCH_TAGS = "FETCH_TAGS",
 }
 
 interface FetchTracksAction {
@@ -36,4 +52,24 @@ interface FetchTracksErrorAction {
   payload: string;
 }
 
-export type TrackAction = FetchTracksAction | FetchTracksErrorAction;
+interface ISetTracks {
+  type: TrackActionTypes.SET_TRACKS;
+  payload: ITrack[];
+}
+
+interface IFetchGenres {
+  type: TrackActionTypes.FETCH_GENRES;
+  payload: IGenre[];
+}
+
+interface IFetchTags {
+  type: TrackActionTypes.FETCH_TAGS;
+  payload: ITag[];
+}
+
+export type TrackAction =
+  | FetchTracksAction
+  | FetchTracksErrorAction
+  | IFetchGenres
+  | IFetchTags
+  | ISetTracks;

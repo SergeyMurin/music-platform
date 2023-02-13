@@ -31,8 +31,6 @@ export class FavoriteController {
   }
 
   @Get('/all')
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe())
   async getFavorites(@Query() dto: IdDto) {
     return await this.favoriteService.getFavorites(dto.id);

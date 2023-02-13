@@ -2,6 +2,9 @@ export interface UserState {
   user: IUser | null;
   isAuth: boolean;
   token: string | null;
+  subscriptions: string[] | null;
+  subscribers: string[] | null;
+  favorites: any[] | null;
 }
 
 export interface IUser {
@@ -24,6 +27,9 @@ export enum UserActionTypes {
   SET_TOKEN = "SET_TOKEN",
   SET_AUTH = "SET_AUTH",
   FETCH_USER = "FETCH_USER",
+  FETCH_FAVORITES = "FETCH_FAVORITES",
+  FETCH_SUBSCRIPTIONS = "FETCH_SUBSCRIPTIONS",
+  FETCH_SUBSCRIBERS = "FETCH_SUBSCRIBERS",
   FETCH_USER_ERROR = "FETCH_USER_ERROR",
 }
 
@@ -47,6 +53,21 @@ interface IFetchUserAction {
   payload: IUser;
 }
 
+interface IFetchSubscriptions {
+  type: UserActionTypes.FETCH_SUBSCRIPTIONS;
+  payload: string[] | null;
+}
+
+interface IFetchFavorites {
+  type: UserActionTypes.FETCH_FAVORITES;
+  payload: any[] | null;
+}
+
+interface IFetchSubscribers {
+  type: UserActionTypes.FETCH_SUBSCRIBERS;
+  payload: any[] | null;
+}
+
 interface IFetchUserErrorAction {
   type: UserActionTypes.FETCH_USER_ERROR;
   payload: string;
@@ -56,4 +77,7 @@ export type UserAction =
   | ISetUserAction
   | ISetTokenAction
   | ISetAuthAction
+  | IFetchSubscriptions
+  | IFetchFavorites
+  | IFetchSubscribers
   | IFetchUserAction;

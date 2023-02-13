@@ -30,10 +30,9 @@ export class SubscriberService {
     });
   }
 
-  async getAllSubscriptions(token) {
-    const jwtPayload = await this.authService.verifyToken(token);
+  async getAllSubscriptions(id: string) {
     const subscribers = await this.subscriberRepository.findAll({
-      where: { who_user_id: jwtPayload.user_id },
+      where: { who_user_id: id },
       order: [['createdAt', 'DESC']],
     });
 
@@ -42,10 +41,9 @@ export class SubscriberService {
     });
   }
 
-  async getAllSubscribers(token) {
-    const jwtPayload = await this.authService.verifyToken(token);
+  async getAllSubscribers(id: string) {
     const subscribers = await this.subscriberRepository.findAll({
-      where: { on_whom_user_id: jwtPayload.user_id },
+      where: { on_whom_user_id: id },
       order: [['createdAt', 'DESC']],
     });
 

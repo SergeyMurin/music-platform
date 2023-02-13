@@ -11,7 +11,15 @@ import MyMarquee from "./components/player/marquee";
 
 function App() {
   const { isAuth } = useTypedSelector((state) => state.user);
-  const { fetchUser, setToken } = useActions();
+  const {
+    fetchUser,
+    setToken,
+    fetchTags,
+    fetchUserFavorites,
+    fetchUserSubscribers,
+    fetchUserSubscriptions,
+    fetchGenres,
+  } = useActions();
 
   useEffect(() => {
     const id: string | null = localStorage.getItem("id");
@@ -20,6 +28,11 @@ function App() {
     if (id && token) {
       fetchUser(id);
       setToken(token);
+      fetchUserFavorites(id, token);
+      fetchUserSubscribers(id);
+      fetchUserSubscriptions(id);
+      fetchTags();
+      fetchGenres();
     }
   }, []);
   return (
