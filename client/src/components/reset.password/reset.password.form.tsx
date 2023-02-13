@@ -1,32 +1,15 @@
 import React from "react";
-import { useForm, Resolver } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Resolver, useForm } from "react-hook-form";
 
 type FormValues = {
-  email: string;
   password: string;
   repeatPassword: string;
 };
 
 const resolver: Resolver<FormValues> = async (values) => {
   return {
-    values:
-      values.email && values.password && values.repeatPassword ? values : {},
-    errors: !values.email
-      ? {
-          email: {
-            type: "required",
-            message: "Email is required",
-          },
-        }
-      : !validateEmail(values.email)
-      ? {
-          email: {
-            type: "onBlur",
-            message: "Email not valid",
-          },
-        }
-      : !values.password
+    values: values.password && values.repeatPassword ? values : {},
+    errors: !values.password
       ? {
           password: {
             type: "required",
@@ -60,10 +43,10 @@ const resolver: Resolver<FormValues> = async (values) => {
 
 type Props = {
   error: string;
-
   submit: (values: any) => void;
 };
-export const SignUpForm: React.FC<Props> = ({ error, submit }) => {
+
+export const ResetPasswordForm: React.FC<Props> = ({ error, submit }) => {
   const {
     register,
     handleSubmit,
@@ -73,9 +56,6 @@ export const SignUpForm: React.FC<Props> = ({ error, submit }) => {
 
   return (
     <form onSubmit={onSubmit}>
-      <input type={"email"} {...register("email")} />
-      {errors?.email && <p>{errors.email.message}</p>}
-
       <input type={"password"} {...register("password")} />
       {errors?.password && <p>{errors.password.message}</p>}
 
@@ -83,23 +63,12 @@ export const SignUpForm: React.FC<Props> = ({ error, submit }) => {
       {errors?.repeatPassword && <p>{errors.repeatPassword.message}</p>}
 
       {error && <p>{error}</p>}
-      <Link to={"../password/forgot"}>Forgot password?</Link>
       <button
         type="submit"
-        disabled={
-          !!errors.email || !!errors.password || !!errors.repeatPassword
-        }
+        disabled={!!errors.password && !!errors.repeatPassword}
       >
-        Sign Up
+        Reset password
       </button>
     </form>
   );
-};
-
-export const validateEmail = (email: string) => {
-  return String(email)
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
 };

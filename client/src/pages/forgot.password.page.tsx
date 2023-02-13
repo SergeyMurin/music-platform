@@ -1,3 +1,4 @@
+/*
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Field, Form, FormikErrors, FormikProps, withFormik } from "formik";
@@ -84,6 +85,18 @@ export const ForgotPasswordPage: React.FC = () => {
       <MyForm onSubmit={onSubmit} error={error} />
       {!isSent && isSubmit && <div>Sending link to your email</div>}{" "}
       {isSent && isSubmit && <div>Reset link has been sent to your email</div>}
+    </>
+  );
+};
+*/
+
+import { ForgotPassword } from "../components/forgot.password/forgot.password";
+import React from "react";
+
+export const ForgotPasswordPage: React.FC = () => {
+  return (
+    <>
+      <ForgotPassword />
     </>
   );
 };

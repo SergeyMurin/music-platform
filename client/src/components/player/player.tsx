@@ -34,12 +34,11 @@ export const Player: React.FC = () => {
 
   useEffect(() => {
     if (isPlaying) {
-      console.log("play");
       audioElem.current.play();
     } else {
       audioElem.current.pause();
     }
-  }, [isPlaying]);
+  }, [isPlaying, currentTrack]);
 
   const onPlaying = () => {
     const duration = audioElem.current.duration;

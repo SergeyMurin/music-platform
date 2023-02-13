@@ -31,7 +31,7 @@ export const AppRoutes: React.FC = () => {
         <Route path={"email/confirm"} element={<EmailConfirmPage />} />
         {/*?token*/}
 
-        <Route path={"sign-up/forgot"} element={<ForgotPasswordPage />} />
+        <Route path={"password/forgot"} element={<ForgotPasswordPage />} />
         <Route path={"password/reset"} element={<ResetPasswordPage />} />
         {/*?token*/}
 

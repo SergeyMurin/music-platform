@@ -1,11 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  BsFillPauseCircleFill,
-  BsFillPlayCircleFill,
-  BsFillSkipEndCircleFill,
-  BsFillSkipStartCircleFill,
-} from "react-icons/bs";
-
 import playIcon from "../../assets/player/play-icon.svg";
 import pauseIcon from "../../assets/player/pause-icon.svg";
 import nextIcon from "../../assets/player/next-icon.svg";
@@ -31,18 +24,14 @@ export const PlayerElement: React.FC<Props> = ({
   currentTrack,
   setCurrentTrack,
 }) => {
-  const [progress, setProgress] = useState(currentTrack.progress);
   const clickRef: any = useRef();
-
-  setInterval(() => {
-    setProgress(currentTrack.progress);
-  }, 1000);
 
   useEffect(() => {
     if (currentTrack.progress === 100) {
       skipToNext();
+      setIsPlaying(isPlaying);
     }
-  }, [progress]);
+  }, [currentTrack.progress]);
 
   const PlayPause = () => {
     setIsPlaying(!isPlaying);
