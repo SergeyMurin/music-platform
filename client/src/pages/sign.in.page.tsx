@@ -7,8 +7,8 @@ export const SignInPage: React.FC = () => {
   const { isAuth } = useTypedSelector((state) => state.user);
   return (
     <div>
-      <SignIn />
       {isAuth && <Navigate to={"../"} />}
+      <SignIn />
     </div>
   );
 };

@@ -162,7 +162,8 @@ export class AuthService {
 
       if (user && !user.email_confirmed) {
         user.email_confirmed = true;
-        return await user.save();
+        await user.save();
+        return;
       }
       new HttpException('Confirmation error', HttpStatus.BAD_REQUEST);
     } catch (error) {
@@ -185,7 +186,7 @@ export class AuthService {
       );
     }
 
-    const confirmLink = `${process.env.CLIENT_URI}/auth/confirm?token=${userToken.token}`;
+    const confirmLink = `${process.env.CLIENT_URI}/email/confirm?token=${userToken.token}`;
     await this.mailService.sendConfirmationEmail(
       user.email,
       'Confirm Your Email',

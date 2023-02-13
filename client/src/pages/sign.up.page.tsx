@@ -4,11 +4,12 @@ import { useTypedSelector } from "../hooks/useTypedSelector";
 import { Navigate } from "react-router-dom";
 
 export const SignUpPage: React.FC = () => {
-  const { isAuth } = useTypedSelector((state) => state.user);
+  const { isAuth, user } = useTypedSelector((state) => state.user);
   return (
     <div>
+      {isAuth && user?.email_confirmed && <Navigate to={"../"} />}
+      {isAuth && !user?.email_confirmed && <Navigate to={"../email"} />}
       <SignUp />
-      {isAuth && <Navigate to={"../"} />}
     </div>
   );
 };

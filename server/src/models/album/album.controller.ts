@@ -31,10 +31,6 @@ import { GetUserAlbumsDto } from './dto/get.user.albums.dto';
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
 
-  //getAlbum
-  //getUseralbums
-  //getAlbumTracks
-
   @Get()
   async getAlbum(@Query() dto: GetAlbumDto) {
     return await this.albumService.getAlbumById(dto.id);

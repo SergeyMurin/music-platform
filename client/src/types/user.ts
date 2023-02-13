@@ -1,5 +1,5 @@
 export interface UserState {
-  user: {} | null;
+  user: IUser | null;
   isAuth: boolean;
   token: string | null;
 }

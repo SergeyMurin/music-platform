@@ -12,6 +12,7 @@ import { PlaylistPage } from "../pages/playlist.page";
 import { ProfilePage } from "../pages/profile.page";
 import { SearchPage } from "../pages/search.page";
 import { TrackPage } from "../pages/track.page";
+import { EmailConfirmPage } from "../pages/email.confirm.page";
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -19,13 +20,11 @@ export const AppRoutes: React.FC = () => {
       <Route path={"/"} element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path={"*"} element={<NotFoundPage />} />
-
         <Route path={"sign-in"} element={<SignInPage />} />
         <Route path={"sign-up"} element={<SignUpPage />} />
         <Route path={"email"} element={<EmailPage />} />
-
+        <Route path={"email/confirm"} element={<EmailConfirmPage />} />{" "}
         <Route path={"admin"} element={<AdminPage />} />
-
         <Route path={"album/:id"} element={<AlbumPage />} />
         <Route path={"playlist/:id"} element={<PlaylistPage />} />
         <Route path={"profile/:id"} element={<ProfilePage />} />
