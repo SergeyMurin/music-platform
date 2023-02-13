@@ -9,7 +9,8 @@ type FormValues = {
   title: string;
   picture: File[];
   track: File[];
-  genre: [];
+  lyrics: string;
+  explicit: boolean;
 };
 
 const resolver: Resolver<FormValues> = async (values) => {
@@ -38,23 +39,16 @@ const resolver: Resolver<FormValues> = async (values) => {
         }
       : !values?.track[0]
       ? {
-          picture: {
+          track: {
             type: "required",
-            message: "Picture is required",
+            message: "Track is required",
           },
         }
       : !values?.track[0]?.type?.startsWith("audio/")
       ? {
-          picture: {
+          track: {
             type: "onChange",
-            message: "Invalid type of picture",
-          },
-        }
-      : !values.genre
-      ? {
-          genre: {
-            type: "required",
-            message: "Genre is required",
+            message: "Invalid type of track",
           },
         }
       : {},
@@ -73,14 +67,22 @@ export const TrackUploadForm: React.FC<Props> = ({ error, onsubmit }) => {
   const [genreOptionSelected, setGenreSelected] = useState<Option[] | null>(
     null
   );
+  const [genreError, setGenreError] = useState<boolean>(false);
+
   const handleGenreChange = (selected: Option[]) => {
     if (selected.length <= genresLimit) {
       setGenreSelected(selected);
     }
   };
 
-  const [tagOptionSelected, setTagSelected] = useState<Option[] | null>(null);
-  const handleTagChange = (selected: Option[]) => {
+  const [newTags, setNewTags] = useState<string[]>([]);
+  const [newTagInputValue, setNewTagInputValue] = useState("");
+  const [tagOptionSelected, setTagSelected] = useState<Option[] | any | null>(
+    null
+  );
+  const [tagError, setTagError] = useState<boolean>(false);
+
+  const handleTagChange = (selected: Option[] | any) => {
     if (selected.length <= tagsLimit) {
       setTagSelected(selected);
     }
@@ -91,13 +93,47 @@ export const TrackUploadForm: React.FC<Props> = ({ error, onsubmit }) => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({ resolver });
-  const onSubmit = handleSubmit((data) => console.log(data));
+
+  const onSubmit = handleSubmit((data) => {
+    if (!tagOptionSelected) {
+      setTagError(true);
+    } else setTagError(false);
+
+    if (!genreOptionSelected) {
+      setGenreError(true);
+    } else setGenreError(false);
+
+    const dataValues = {
+      ...data,
+      explicit: data.explicit.toString(),
+      tags: formatTags(tagOptionSelected, newTags),
+      genres: formatGenres(genreOptionSelected),
+    };
+
+    onsubmit(dataValues);
+  });
 
   return (
     <form onSubmit={onSubmit}>
+      {/*TITLE*/}
+      <label>Title: </label>
       <input type={"text"} {...register("title")} />
       {errors?.title && <p>{errors.title.message}</p>}
 
+      {/*PICTURE*/}
+
+      <label>Soundtrack picture: </label>
+      <input type={"file"} {...register("picture")} />
+      {errors?.picture && <p>{errors.picture.message}</p>}
+
+      {/*TRACK*/}
+      <label>Soundtrack: </label>
+      <input type={"file"} {...register("track")} />
+      {errors?.track && <p>{errors.track.message}</p>}
+
+      {/*GENRES*/}
+      <label>Genres: </label>
+      <article>Genres limit: {genresLimit}</article>
       <MultiSelect
         key="genre"
         options={generateGenreOptions(genres)}
@@ -106,8 +142,11 @@ export const TrackUploadForm: React.FC<Props> = ({ error, onsubmit }) => {
         isSelectAll={true}
         menuPlacement={"bottom"}
       />
-      {errors?.genre && <p>{errors.genre.message}</p>}
+      {genreError && <p>Genre is required</p>}
 
+      {/*TAGS*/}
+
+      <label>Tags:</label>
       <MultiSelect
         key="tag"
         options={generateTagOptions(tags)}
@@ -117,16 +156,56 @@ export const TrackUploadForm: React.FC<Props> = ({ error, onsubmit }) => {
         menuPlacement={"bottom"}
       />
 
-      <input type={"file"} {...register("picture")} />
-      {errors?.picture && <p>{errors.picture.message}</p>}
+      {/*NEW TAGS*/}
 
-      <input type={"file"} {...register("track")} />
-      {errors?.track && <p>{errors.track.message}</p>}
-
+      <label>New tags: {newTags && newTags.map((nt: any) => `#${nt} `)}</label>
+      <button
+        onClick={() => {
+          setNewTags([]);
+          setNewTagInputValue("");
+        }}
+      >
+        Clear
+      </button>
       <input
-        type="submit"
-        disabled={!!errors.track || !!errors.picture || !!errors.title}
+        type={"text"}
+        value={newTagInputValue}
+        onChange={(e) => setNewTagInputValue(e.target.value)}
       />
+      <button
+        onClick={() => {
+          const tags = newTags;
+          if (tags.find((t) => t === newTagInputValue)) {
+            return;
+          }
+          tags.push(newTagInputValue);
+          setNewTags(tags);
+          setNewTagInputValue("");
+        }}
+      >
+        Add
+      </button>
+      <article>
+        (Optional) Select tags or add new tags using commas. Example:tag1,tag2.
+        Tags limit from select bar: {tagsLimit}
+      </article>
+
+      {/*EXPLICIT*/}
+      <label>Explicit</label>
+      <input type={"checkbox"} {...register("explicit")} />
+
+      {/*LYRICS*/}
+      <textarea {...register("lyrics")} />
+
+      {error && <p>{error}</p>}
+      <button
+        type="submit"
+        disabled={
+          !!errors.track || !!errors.picture || !!errors.title || genreError
+        }
+      >
+        Upload track
+      </button>
     </form>
   );
 };
@@ -149,8 +228,52 @@ export const generateTagOptions = (tags: ITag[] | null) => {
   }
   return tags.map((tag) => {
     return {
-      value: tag.id,
+      value: tag.title,
       label: `#${tag.title} - ${tag.amount}`,
     };
   });
+};
+
+export const formatTags = (fromSelect: Option[], newTags: any, limit = 10) => {
+  let output = "";
+  let count = 0;
+
+  for (const tagSelect of fromSelect) {
+    if (count > limit) {
+      output = output.replace(/\s+/g, ",").replace(/,+/g, ",").trim();
+      if (output.endsWith(",")) {
+        output = output.slice(0, -1);
+      }
+      return output;
+    }
+    output += (tagSelect.value as string) + " ";
+    count++;
+  }
+
+  for (const newTag of newTags) {
+    if (count > limit) {
+      output = output.replace(/\s+/g, ",").replace(/,+/g, ",").trim();
+      if (output.endsWith(",")) {
+        output = output.slice(0, -1);
+      }
+      return output;
+    }
+    output += newTag + " ";
+    count++;
+  }
+  output = output.replace(/\s+/g, ",").replace(/,+/g, ",").trim();
+  if (output.endsWith(",")) {
+    output = output.slice(0, -1);
+  }
+  return output;
+};
+
+export const formatGenres = (fromSelect: Option[] | null) => {
+  let output = "";
+  fromSelect?.map((genre) => (output += genre.value + " "));
+  output = output.replace(/\s+/g, ",").replace(/,+/g, ",").trim();
+  if (output.endsWith(",")) {
+    output = output.slice(0, -1);
+  }
+  return output;
 };
