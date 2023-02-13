@@ -15,6 +15,9 @@ import { TrackPage } from "../pages/track.page";
 import { EmailConfirmPage } from "../pages/email.confirm.page";
 import { ForgotPasswordPage } from "../pages/forgot.password.page";
 import { ResetPasswordPage } from "../pages/reset.password.page";
+import { Upload } from "../components/upload/upload";
+import { TrackUpload } from "../components/upload/track.upload";
+import { AlbumUpload } from "../components/upload/album.upload";
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -38,6 +41,10 @@ export const AppRoutes: React.FC = () => {
         <Route path={"profile/:id"} element={<ProfilePage />} />
         <Route path={"search"} element={<SearchPage />} />
         <Route path={"track/:id"} element={<TrackPage />} />
+
+        <Route path={"upload"} element={<Upload />} />
+        <Route path={"upload/track"} element={<TrackUpload />} />
+        <Route path={"upload/album"} element={<AlbumUpload />} />
       </Route>
     </Routes>
   );
