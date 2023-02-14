@@ -10,7 +10,7 @@ export const Player: React.FC = () => {
   const { queue, currentTrack, isPlaying } = useTypedSelector(
     (state) => state.player
   );
-  const { setTracks, setCurrentTrack, setIsPlaying } = useActions();
+  const { setCurrentTrack, setIsPlaying } = useActions();
 
   useEffect(() => {
     if (isPlaying) {
@@ -42,7 +42,6 @@ export const Player: React.FC = () => {
           />
           <PlayerElement
             tracks={queue}
-            setTracks={setTracks}
             isPlaying={isPlaying}
             setIsPlaying={setIsPlaying}
             audioElem={audioElem}

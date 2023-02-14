@@ -6,6 +6,7 @@ export interface PlayerState {
   currentTime: number;
   duration: number;
   volume: number;
+  progress: number;
   isPlaying: boolean;
   isShuffled: boolean;
   onRepeat: boolean;
@@ -20,6 +21,7 @@ export enum PlayerActionTypes {
   SET_VOLUME = "SET_VOLUME",
   SET_IS_SHUFFLED = "SET_IS_SHUFFLED",
   SET_ON_REPEAT = "SET_ON_REPEAT",
+  SET_PROGRESS = "SET_PROGRESS",
 }
 
 interface SetQueueAction {
@@ -62,6 +64,11 @@ interface SetOnRepeatAction {
   payload: boolean;
 }
 
+interface SetProgressAction {
+  type: PlayerActionTypes.SET_PROGRESS;
+  payload: number;
+}
+
 export type PlayerAction =
   | SetOnRepeatAction
   | SetIsShuffledAction
@@ -70,4 +77,5 @@ export type PlayerAction =
   | SetCurrentTrackAction
   | SetDurationAction
   | SetVolumeAction
+  | SetProgressAction
   | SetCurrentTimeAction;

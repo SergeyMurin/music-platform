@@ -9,7 +9,8 @@ const initialState: PlayerState = {
   currentTrack: null,
   currentTime: 0,
   duration: 0,
-  volume: 50,
+  volume: 0.5,
+  progress: 0,
   isPlaying: false,
   isShuffled: false,
   onRepeat: false,
@@ -36,6 +37,8 @@ export const playerReducer = (
       return { ...state, isShuffled: action.payload };
     case PlayerActionTypes.SET_ON_REPEAT:
       return { ...state, onRepeat: action.payload };
+    case PlayerActionTypes.SET_PROGRESS:
+      return { ...state, progress: action.payload };
     default:
       return state;
   }

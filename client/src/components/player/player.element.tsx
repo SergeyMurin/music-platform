@@ -7,7 +7,7 @@ import repeatIcon from "../../assets/player/repeat-icon.svg";
 
 type Props = {
   tracks: any;
-  setTracks: any;
+
   isPlaying: any;
   setIsPlaying: any;
   audioElem: any;
@@ -17,7 +17,6 @@ type Props = {
 
 export const PlayerElement: React.FC<Props> = ({
   tracks,
-  setTracks,
   isPlaying,
   setIsPlaying,
   audioElem,
@@ -30,6 +29,8 @@ export const PlayerElement: React.FC<Props> = ({
   const [volume, setVolumeState] = useState(
     audioElem?.current?.volume ? audioElem?.current?.volume : 1
   );
+
+  useEffect(() => {});
 
   useEffect(() => {
     if (currentTrack.progress === 100) {
@@ -47,16 +48,21 @@ export const PlayerElement: React.FC<Props> = ({
     const offset = e.nativeEvent.offsetX;
 
     const divProgress = (offset / width) * 100;
-    audioElem.current.currentTime = (divProgress / 100) * currentTrack.length;
+    audioElem.current.currentTime =
+      (divProgress > 100 ? 100 : divProgress / 100) * currentTrack.length;
   };
 
   const setVolume = (e: any) => {
     let width = volumeRef.current.clientWidth;
     const offset = e.nativeEvent.offsetX;
 
-    const volume = (offset / width) * 100;
-    audioElem.current.volume = volume / 100;
-    setVolumeState(volume / 100);
+    let volume = (offset / width) * 100;
+    if (volume < 0) {
+      volume = 0;
+    }
+
+    audioElem.current.volume = volume > 100 ? 1 : volume / 100;
+    setVolumeState(volume > 100 ? 1 : volume / 100);
   };
 
   const skipBack = () => {
@@ -81,6 +87,8 @@ export const PlayerElement: React.FC<Props> = ({
   };
 
   const convertToTime = (progress: any, totalTime: any) => {
+    progress = progress ? progress : 0;
+    totalTime = totalTime ? totalTime : 0;
     const timeInSeconds = (progress / 100) * totalTime;
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = Math.floor(timeInSeconds % 60);
