@@ -25,6 +25,9 @@ export const PlayerElement: React.FC<Props> = ({
   setCurrentTrack,
 }) => {
   const clickRef: any = useRef();
+  const volumeRef: any = useRef();
+
+  const [volume, setVolumeState] = useState(audioElem?.current?.volume);
 
   useEffect(() => {
     if (currentTrack.progress === 100) {
@@ -43,6 +46,16 @@ export const PlayerElement: React.FC<Props> = ({
 
     const divProgress = (offset / width) * 100;
     audioElem.current.currentTime = (divProgress / 100) * currentTrack.length;
+  };
+
+  const setVolume = (e: any) => {
+    debugger;
+    let width = volumeRef.current.clientWidth;
+    const offset = e.nativeEvent.offsetX;
+
+    const volume = (offset / width) * 100;
+    audioElem.current.volume = volume / 100;
+    setVolumeState(volume / 100);
   };
 
   const skipBack = () => {
@@ -128,6 +141,10 @@ export const PlayerElement: React.FC<Props> = ({
               ></div>
             </div>
             <span>{convertToTime(100, currentTrack.length)}</span>
+          </div>
+
+          <div className="volume_bar" onClick={setVolume} ref={volumeRef}>
+            <div className="volume" style={{ width: `${volume * 100}%` }}></div>
           </div>
           <img
             src={repeatIcon}
