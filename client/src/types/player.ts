@@ -1,26 +1,40 @@
 import { ITrack } from "./track";
 
 export interface PlayerState {
-  volume: number;
+  queue: ITrack[] | null | any;
+  currentTrack: ITrack | null | any;
+  currentTime: number;
   duration: number;
-  current_time: number;
-  pause: boolean;
+  volume: number;
+  isPlaying: boolean;
+  isShuffled: boolean;
+  onRepeat: boolean;
 }
 
 export enum PlayerActionTypes {
-  PLAY = "PLAY",
-  PAUSE = "PAUSE",
+  SET_IS_PLAYING = "SET_IS_PLAYING",
+  SET_QUEUE = "SET_QUEUE",
+  SET_CURRENT_TRACK = "SET_CURRENT_TRACK",
   SET_DURATION = "SET_DURATION",
   SET_CURRENT_TIME = "SET_CURRENT_TIME",
   SET_VOLUME = "SET_VOLUME",
+  SET_IS_SHUFFLED = "SET_IS_SHUFFLED",
+  SET_ON_REPEAT = "SET_ON_REPEAT",
 }
 
-interface PlayAction {
-  type: PlayerActionTypes.PLAY;
+interface SetQueueAction {
+  type: PlayerActionTypes.SET_QUEUE;
+  payload: ITrack[] | null | any;
 }
 
-interface PauseAction {
-  type: PlayerActionTypes.PAUSE;
+interface SetCurrentTrackAction {
+  type: PlayerActionTypes.SET_CURRENT_TRACK;
+  payload: ITrack | null | any;
+}
+
+interface SetIsPlayingAction {
+  type: PlayerActionTypes.SET_IS_PLAYING;
+  payload: boolean;
 }
 
 interface SetDurationAction {
@@ -38,9 +52,22 @@ interface SetCurrentTimeAction {
   payload: number;
 }
 
+interface SetIsShuffledAction {
+  type: PlayerActionTypes.SET_IS_SHUFFLED;
+  payload: boolean;
+}
+
+interface SetOnRepeatAction {
+  type: PlayerActionTypes.SET_ON_REPEAT;
+  payload: boolean;
+}
+
 export type PlayerAction =
-  | PlayAction
-  | PauseAction
+  | SetOnRepeatAction
+  | SetIsShuffledAction
+  | SetIsPlayingAction
+  | SetQueueAction
+  | SetCurrentTrackAction
   | SetDurationAction
   | SetVolumeAction
   | SetCurrentTimeAction;

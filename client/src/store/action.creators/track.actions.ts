@@ -1,8 +1,12 @@
 import { Dispatch } from "react";
-import { TrackAction, TrackActionTypes } from "../../types/track";
+import { ITrack, TrackAction, TrackActionTypes } from "../../types/track";
 import axios from "axios";
 
-export {};
+export const setTracks = (tracks: ITrack[] | null | any) => {
+  return (dispatch: Dispatch<TrackAction>) => {
+    dispatch({ type: TrackActionTypes.SET_TRACKS, payload: tracks });
+  };
+};
 
 export const fetchGenres = () => {
   return async (dispatch: Dispatch<TrackAction>) => {
