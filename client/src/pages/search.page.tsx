@@ -1,5 +1,11 @@
 import React from "react";
+import { SearchContent } from "../components/search/search.content";
 
 export const SearchPage: React.FC = () => {
-  return <div>SearchPage</div>;
+  return (
+    <div>
+      SearchPage
+      <SearchContent />
+    </div>
+  );
 };
