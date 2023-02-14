@@ -67,17 +67,7 @@ export class TrackService {
   async getTrackInfoById(id: string) {
     const track = await this.getTrackById(id);
     return {
-      id: track.id,
-      title: track.title,
-      url: track.url,
-      picture_url: track.picture_url,
-      explicit: track.explicit,
-      lyrics: track.lyrics,
-      likes: track.likes,
-      plays: track.plays,
-      user_id: track.user_id,
-      album_id: track.album_id,
-      created_at: track.createdAt,
+      ...track.dataValues,
     };
   }
 
@@ -94,17 +84,7 @@ export class TrackService {
     return await Promise.all(
       tracks.map(async (track) => {
         return {
-          id: track.id,
-          title: track.title,
-          url: track.url,
-          picture_url: track.picture_url,
-          explicit: track.explicit,
-          lyrics: track.lyrics,
-          likes: track.likes,
-          plays: track.plays,
-          user_id: track.user_id,
-          album_id: track.album_id,
-          created_at: track.createdAt,
+          ...track.dataValues,
         };
       }),
     );
@@ -389,17 +369,7 @@ export class TrackService {
     return await Promise.all(
       searchedTracks.map(async (track) => {
         return {
-          id: track.id,
-          title: track.title,
-          url: track.url,
-          picture_url: track.picture_url,
-          likes: track.likes,
-          explicit: track.explicit,
-          lyrics: track.lyrics,
-          plays: track.plays,
-          user_id: track.user_id,
-          album_id: track.album_id,
-          created_at: track.createdAt,
+          ...track.dataValues,
         };
       }),
     );
@@ -407,5 +377,20 @@ export class TrackService {
 
   async parseComma(str: string): Promise<string[]> {
     return str.split(',');
+  }
+
+  async getPopularTracks(limit: number) {
+    const tracks = await this.trackRepository.findAll({
+      limit,
+      order: [
+        ['likes', 'DESC'],
+        ['createdAt', 'ASC'],
+      ],
+    });
+    return await Promise.all(
+      tracks.map(async (track) => {
+        return { ...track.dataValues };
+      }),
+    );
   }
 }

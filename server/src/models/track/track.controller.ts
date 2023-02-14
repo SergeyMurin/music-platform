@@ -33,6 +33,12 @@ export class TrackController {
     return await this.trackService.getTrackInfoById(dto.id);
   }
 
+  @Get('/all/popular')
+  async getPopularTracks() {
+    const limit = 30;
+    return await this.trackService.getPopularTracks(limit);
+  }
+
   @Get('/all')
   @UsePipes(new ValidationPipe())
   async getUserTracks(@Query() dto: GetTrackDto) {
