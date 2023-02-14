@@ -61,8 +61,13 @@ const tagsLimit = 10;
 type Props = {
   error: string;
   onsubmit: (dataValues: any) => void;
+  success: boolean;
 };
-export const TrackUploadForm: React.FC<Props> = ({ error, onsubmit }) => {
+export const TrackUploadForm: React.FC<Props> = ({
+  error,
+  onsubmit,
+  success,
+}) => {
   const { genres, tags } = useTypedSelector((state) => state.track);
   const [genreOptionSelected, setGenreSelected] = useState<Option[] | null>(
     null
@@ -160,7 +165,8 @@ export const TrackUploadForm: React.FC<Props> = ({ error, onsubmit }) => {
 
       <label>New tags: {newTags && newTags.map((nt: any) => `#${nt} `)}</label>
       <button
-        onClick={() => {
+        onClick={(e) => {
+          e.preventDefault();
           setNewTags([]);
           setNewTagInputValue("");
         }}
@@ -173,7 +179,8 @@ export const TrackUploadForm: React.FC<Props> = ({ error, onsubmit }) => {
         onChange={(e) => setNewTagInputValue(e.target.value)}
       />
       <button
-        onClick={() => {
+        onClick={(e) => {
+          e.preventDefault();
           const tags = newTags;
           if (tags.find((t) => t === newTagInputValue)) {
             return;
@@ -198,6 +205,7 @@ export const TrackUploadForm: React.FC<Props> = ({ error, onsubmit }) => {
       <textarea {...register("lyrics")} />
 
       {error && <p>{error}</p>}
+      {success && <p>Success</p>}
       <button
         type="submit"
         disabled={

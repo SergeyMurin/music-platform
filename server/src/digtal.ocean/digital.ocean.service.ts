@@ -21,26 +21,21 @@ export class DigitalOceanService {
   constructor() {}
 
   async uploadFile(file, title: string, key?: string): Promise<string> {
-    try {
-      const uploadedFile = await digitalOceanClient
-        .putObject(
-          {
-            Bucket: process.env.DIGITAL_OCEAN_BUCKET,
-            ACL: 'public-read',
-            Body: file,
-            Key: key ? key + title : title,
-          },
-          () => console.log(`File ${title} was uploaded`),
-        )
-        .promise();
+    const uploadedFile = await digitalOceanClient
+      .putObject(
+        {
+          Bucket: process.env.DIGITAL_OCEAN_BUCKET,
+          ACL: 'public-read',
+          Body: file,
+          Key: key ? key + title : title,
+        },
+        () => console.log(`File ${title} was uploaded`),
+      )
+      .promise();
 
-      if (uploadedFile.$response.httpResponse.statusCode === 200) {
-        return await this.getUploadedFileURL(uploadedFile);
-      } else return null;
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
+    if (uploadedFile.$response.httpResponse.statusCode === 200) {
+      return await this.getUploadedFileURL(uploadedFile);
+    } else return null;
   }
 
   async getUploadedFileURL(uploadedFile: any) {

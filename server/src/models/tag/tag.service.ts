@@ -21,7 +21,9 @@ export class TagService {
   }
 
   async getAllTags() {
-    const tags: Tag[] = await this.tagRepository.findAll();
+    const tags: Tag[] = await this.tagRepository.findAll({
+      order: [['amount', 'DESC']],
+    });
     return tags.map((tag: Tag) => {
       return {
         id: tag.id,

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TrackUploadForm } from "./track.upload.form";
 import axios from "axios";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
@@ -6,7 +6,14 @@ import { useActions } from "../../hooks/useActions";
 
 export const TrackUpload: React.FC = () => {
   const [uploadTrackError, setUploadTrackError] = useState("");
+  const [uploadSuccess, setUploadSuccess] = useState(false);
   const { token } = useTypedSelector((state) => state.user);
+  const { fetchTags, fetchGenres } = useActions();
+
+  useEffect(() => {
+    fetchTags();
+    fetchGenres();
+  }, []);
   const onSubmit = (dataValues: any) => {
     trackUpload(dataValues).then();
   };
@@ -28,12 +35,23 @@ export const TrackUpload: React.FC = () => {
           "Content-Type": "multipart/form-data",
         },
       })
-      .catch((error) => setUploadTrackError(error.response.data.message));
+      .then((response) => {
+        if (response.status >= 200 && response.status <= 299) {
+          setUploadSuccess(true);
+        }
+      })
+      .catch((error) =>
+        error ? setUploadTrackError(error?.response?.data.message) : null
+      );
   };
 
   return (
     <div>
-      <TrackUploadForm onsubmit={onSubmit} error={uploadTrackError} />
+      <TrackUploadForm
+        onsubmit={onSubmit}
+        error={uploadTrackError}
+        success={uploadSuccess}
+      />
     </div>
   );
 };

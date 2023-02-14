@@ -68,9 +68,8 @@ export class AuthService {
         false,
       );
       if (existingUser) {
-        const token = await this.signToken(existingUser);
-        await this.tokenService.update(existingUser.id, token);
-        return new UserSignInResponseDto(existingUser, token);
+        const token = await this.tokenService.find(existingUser.id);
+        return new UserSignInResponseDto(existingUser, token.token);
       }
 
       const user = await this.userRepository.create({
