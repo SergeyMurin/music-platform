@@ -28,7 +28,7 @@ export interface IGenre {
 }
 
 export interface TrackState {
-  tracks: ITrack[];
+  tracks: ITrack[] | null;
   genres: IGenre[] | null;
   tags: ITag[] | null;
   error: string;
@@ -44,7 +44,7 @@ export enum TrackActionTypes {
 
 interface FetchTracksAction {
   type: TrackActionTypes.FETCH_TRACKS;
-  payload: ITrack[];
+  payload: ITrack[] | null;
 }
 
 interface FetchTracksErrorAction {

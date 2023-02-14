@@ -1,12 +1,8 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
-import axios from "axios";
-
 import { AppRoutes } from "./routes/app.routes";
 import { useActions } from "./hooks/useActions";
 import { useTypedSelector } from "./hooks/useTypedSelector";
-import Marquee from "./components/player/marquee";
 import MyMarquee from "./components/player/marquee";
 
 function App() {
@@ -19,6 +15,7 @@ function App() {
     fetchUserSubscribers,
     fetchUserSubscriptions,
     fetchGenres,
+    fetchTracks,
   } = useActions();
 
   useEffect(() => {
@@ -33,6 +30,7 @@ function App() {
       fetchUserSubscriptions(id);
       fetchTags();
       fetchGenres();
+      fetchTracks();
     }
   }, []);
   return (
