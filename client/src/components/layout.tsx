@@ -1,8 +1,9 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Player } from "./player/player";
 import { useActions } from "../hooks/useActions";
 import { useTypedSelector } from "../hooks/useTypedSelector";
+import { Search } from "./search/search";
 
 export const Layout: React.FC = () => {
   const { setUser, setToken, setAuth } = useActions();
@@ -27,6 +28,8 @@ export const Layout: React.FC = () => {
             Sign Out
           </Link>
         )}
+
+        <Search />
       </header>
       <div className={"page"}>
         <Outlet />

@@ -27,7 +27,9 @@ export const PlayerElement: React.FC<Props> = ({
   const clickRef: any = useRef();
   const volumeRef: any = useRef();
 
-  const [volume, setVolumeState] = useState(audioElem?.current?.volume);
+  const [volume, setVolumeState] = useState(
+    audioElem?.current?.volume ? audioElem?.current?.volume : 1
+  );
 
   useEffect(() => {
     if (currentTrack.progress === 100) {
@@ -49,7 +51,6 @@ export const PlayerElement: React.FC<Props> = ({
   };
 
   const setVolume = (e: any) => {
-    debugger;
     let width = volumeRef.current.clientWidth;
     const offset = e.nativeEvent.offsetX;
 
