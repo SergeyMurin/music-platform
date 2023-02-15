@@ -7,7 +7,9 @@ import { useActions } from "../../hooks/useActions";
 export const Player: React.FC = () => {
   const audioElem: any = useRef();
 
-  const { currentTrack, isPlaying } = useTypedSelector((state) => state.player);
+  const { currentTrack, isPlaying, volume } = useTypedSelector(
+    (state) => state.player
+  );
   const { setDuration, setProgress, setCurrentTime } = useActions();
 
   useEffect(() => {
@@ -21,6 +23,7 @@ export const Player: React.FC = () => {
   const onPlaying = () => {
     const duration = audioElem?.current?.duration;
     const ct = audioElem?.current?.currentTime;
+    audioElem.current.volume = volume;
     setCurrentTime(ct);
     setDuration(duration);
     setProgress(ct, duration);

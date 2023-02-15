@@ -4,6 +4,7 @@ import pauseIcon from "../../assets/player/pause-icon.svg";
 import nextIcon from "../../assets/player/next-icon.svg";
 import previousIcon from "../../assets/player/previous-icon.svg";
 import repeatIcon from "../../assets/player/repeat-icon.svg";
+import repeatOnIcon from "../../assets/player/repeat-on-icon.svg";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 import { ITrack } from "../../types/track";
@@ -30,6 +31,11 @@ export const PlayerElement: React.FC<Props> = ({ audioElem }) => {
 
   useEffect(() => {
     if (progress === 100) {
+      if (onRepeat) {
+        audioElem.current.currentTime = 0;
+        audioElem.current.play();
+        return;
+      }
       skipToNext();
       setIsPlaying(isPlaying);
     }
@@ -62,7 +68,12 @@ export const PlayerElement: React.FC<Props> = ({ audioElem }) => {
   };
 
   const skipBack = () => {
-    const index = queue.findIndex((x: ITrack) => x.id === currentTrack.title);
+    if (onRepeat) {
+      audioElem.current.currentTime = 0;
+      return;
+    }
+
+    const index = queue.findIndex((x: ITrack) => x.id === currentTrack.id);
     if (index === 0) {
       setCurrentTrack(queue[queue.length - 1]);
     } else {
@@ -72,7 +83,12 @@ export const PlayerElement: React.FC<Props> = ({ audioElem }) => {
   };
 
   const skipToNext = () => {
-    const index = queue.findIndex((x: any) => x.title === currentTrack.title);
+    if (onRepeat) {
+      audioElem.current.currentTime = 0;
+      return;
+    }
+
+    const index = queue.findIndex((x: any) => x.id === currentTrack.id);
 
     if (index === queue.length - 1) {
       setCurrentTrack(queue[0]);
@@ -157,12 +173,25 @@ export const PlayerElement: React.FC<Props> = ({ audioElem }) => {
           >
             <div className="volume" style={{ width: `${volume * 100}%` }}></div>
           </div>
-          <img
-            src={repeatIcon}
-            className="btn_action"
-            onClick={repeatHandler}
-            alt={"repeat"}
-          />
+
+          {/*Repeat*/}
+          {!onRepeat && (
+            <img
+              src={repeatIcon}
+              className="btn_action"
+              onClick={repeatHandler}
+              alt={"repeat"}
+            />
+          )}
+
+          {onRepeat && (
+            <img
+              src={repeatOnIcon}
+              className="btn_action"
+              onClick={repeatHandler}
+              alt={"repeat"}
+            />
+          )}
         </div>
       </div>
     </div>
