@@ -31,6 +31,7 @@ function App() {
       fetchUserSubscriptions(id);
       fetchTags();
       fetchGenres();
+      fetchUserFavorites(id, token);
     }
   }, []);
   return (

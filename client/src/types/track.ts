@@ -11,7 +11,7 @@ export interface ITrack {
   lyrics: string;
   plays: number;
   picture_url: string;
-  track_url: string;
+  url: string;
   album_id: string;
   //comments: IComment[];
 }

@@ -31,16 +31,14 @@ export const Player: React.FC = () => {
 
   return (
     <>
-      {currentTrack && (
-        <div className={"player"}>
-          <audio
-            src={currentTrack.url}
-            ref={audioElem}
-            onTimeUpdate={onPlaying}
-          />
-          <PlayerElement audioElem={audioElem} />
-        </div>
-      )}
+      <div className={"player"} hidden={!currentTrack}>
+        <audio
+          src={currentTrack?.url}
+          ref={audioElem}
+          onTimeUpdate={onPlaying}
+        />
+        <PlayerElement audioElem={audioElem} />
+      </div>
     </>
   );
 };

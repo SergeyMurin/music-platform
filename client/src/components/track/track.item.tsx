@@ -3,7 +3,8 @@ import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 import { BiUnderline } from "react-icons/all";
-import { LikeButton } from "../like.button/like.button";
+import { LikeButton } from "../button/like.button";
+import { DownloadButton } from "../button/download.button";
 
 type Props = {
   track: ITrack;
@@ -74,6 +75,7 @@ export const TrackItem: React.FC<Props> = ({ track, tracks }) => {
         isForTrack={true}
         track={isCurrent(track) ? currentTrack : track}
       />
+      <DownloadButton track_id={track.id} fileName={track.title} />
     </div>
   );
 };

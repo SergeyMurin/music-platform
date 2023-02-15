@@ -18,8 +18,6 @@ export const digitalOceanClient = new S3({
 
 @Injectable()
 export class DigitalOceanService {
-  constructor() {}
-
   async uploadFile(file, title: string, key?: string): Promise<string> {
     const uploadedFile = await digitalOceanClient
       .putObject(
@@ -58,6 +56,23 @@ export class DigitalOceanService {
 
   async downloadFileByURL(url: string) {
     await Promise.all([url].map((url) => download(url, 'downloads')));
+  }
+
+  async download(file_id: string) {
+    try {
+      const response = await digitalOceanClient
+        .getObject({
+          Bucket: 'soundtracks',
+          Key: `tracks/${file_id}`,
+        })
+        .promise();
+
+      const fileContent = response.Body as Buffer;
+      return fileContent;
+    } catch (error) {
+      console.log('Error:', error);
+      return null;
+    }
   }
 
   getFileURL(title: string, key?: string) {

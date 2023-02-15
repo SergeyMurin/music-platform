@@ -10,8 +10,9 @@ export const HomePage: React.FC = () => {
     fetchPopularTracks();
   }, []);
   return (
-    <div>
+    <div className={"home-page"}>
       <div>HomePage</div>
+      {!popularTracks?.length && <div>Loading...</div>}
       {popularTracks &&
         popularTracks.map((track) => {
           return (

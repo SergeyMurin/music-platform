@@ -9,7 +9,7 @@ import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 import { ITrack } from "../../types/track";
 import { setQueue } from "../../store/action.creators/player.actions";
-import { LikeButton } from "../like.button/like.button";
+import { LikeButton } from "../button/like.button";
 
 type Props = {
   audioElem: any;
@@ -81,7 +81,7 @@ export const PlayerElement: React.FC<Props> = ({ audioElem }) => {
       return;
     }
 
-    const index = queue.findIndex((x: ITrack) => x.id === currentTrack.id);
+    const index = queue.findIndex((x: ITrack) => x.id === currentTrack?.id);
     if (index === 0) {
       setCurrentTrack(queue[queue.length - 1]);
     } else {
@@ -96,7 +96,7 @@ export const PlayerElement: React.FC<Props> = ({ audioElem }) => {
       return;
     }
 
-    const index = queue.findIndex((x: any) => x.id === currentTrack.id);
+    const index = queue.findIndex((x: any) => x.id === currentTrack?.id);
 
     if (index === queue.length - 1) {
       setCurrentTrack(queue[0]);
@@ -124,10 +124,10 @@ export const PlayerElement: React.FC<Props> = ({ audioElem }) => {
     <div className={"player-element"}>
       <div className="player_container">
         {/*img*/}
-        {/* <img src={currentTrack.picture_url} style={{ width: "20px" }} />*/}
+        {/* <img src={currentTrack?.picture_url} style={{ width: "20px" }} />*/}
         <div className={"player__track-info"}>
           <div className="title">
-            <p>{currentTrack.title}</p>
+            <p>{currentTrack?.title}</p>
           </div>
         </div>
         <div className="navigation">

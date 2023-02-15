@@ -17,11 +17,11 @@ export const LikeButton: React.FC<Props> = ({ isForTrack, track }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteId, setFavoriteId] = useState(null);
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (user && token) {
       fetchUserFavorites(user.id, token);
     }
-  }, []);
+  }, []);*/
 
   useEffect(() => {
     if (isForTrack && favorites) {

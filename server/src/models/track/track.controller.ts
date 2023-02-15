@@ -103,4 +103,12 @@ export class TrackController {
       dto.id,
     );
   }
+
+  @Get('/download')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe())
+  async downloadTrack(@Query() dto: GetTrackDto) {
+    return await this.trackService.download(dto.id);
+  }
 }

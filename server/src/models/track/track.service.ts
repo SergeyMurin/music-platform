@@ -393,4 +393,8 @@ export class TrackService {
       }),
     );
   }
+
+  async download(id: string) {
+    return await this.digitalOceanService.download(id);
+  }
 }
