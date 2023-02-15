@@ -31,8 +31,6 @@ function App() {
       fetchUserSubscriptions(id);
       fetchTags();
       fetchGenres();
-      fetchPopularTracks();
-      fetchTracks(id);
     }
   }, []);
   return (

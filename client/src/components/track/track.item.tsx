@@ -3,6 +3,7 @@ import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 import { BiUnderline } from "react-icons/all";
+import { LikeButton } from "../like.button/like.button";
 
 type Props = {
   track: ITrack;
@@ -14,16 +15,16 @@ export const TrackItem: React.FC<Props> = ({ track, tracks }) => {
   const { setCurrentTrack, setIsPlaying, setQueue } = useActions();
 
   useEffect(() => {
-    if (currentTrack.id === track.id) {
+    if (currentTrack?.id === track.id) {
       setButton(<ButtonPause />);
     }
-    if (currentTrack.id !== track.id) {
+    if (currentTrack?.id !== track.id) {
       setButton(<ButtonPlay />);
     }
-    if (currentTrack.id !== track.id && isPlaying) {
+    if (currentTrack?.id !== track.id && isPlaying) {
       setButton(<ButtonPlay />);
     }
-    if (currentTrack.id === track.id && !isPlaying) {
+    if (currentTrack?.id === track.id && !isPlaying) {
       setButton(<ButtonPlay />);
     }
   }, [currentTrack, isPlaying]);
@@ -65,6 +66,7 @@ export const TrackItem: React.FC<Props> = ({ track, tracks }) => {
       <span>{track.title}</span>
 
       {button}
+      <LikeButton isForTrack={true} track={track} />
     </div>
   );
 };
