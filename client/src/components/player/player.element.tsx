@@ -9,6 +9,7 @@ import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 import { ITrack } from "../../types/track";
 import { setQueue } from "../../store/action.creators/player.actions";
+import { LikeButton } from "../like.button/like.button";
 
 type Props = {
   audioElem: any;
@@ -209,6 +210,8 @@ export const PlayerElement: React.FC<Props> = ({ audioElem }) => {
               alt={"repeat"}
             />
           )}
+
+          <LikeButton isForTrack={true} track={currentTrack} />
         </div>
       </div>
     </div>

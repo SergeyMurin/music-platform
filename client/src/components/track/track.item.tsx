@@ -58,6 +58,10 @@ export const TrackItem: React.FC<Props> = ({ track, tracks }) => {
     );
   };
 
+  const isCurrent = (track: ITrack) => {
+    return track.id === currentTrack?.id;
+  };
+
   const [button, setButton] = useState(<ButtonPlay />);
 
   return (
@@ -66,7 +70,10 @@ export const TrackItem: React.FC<Props> = ({ track, tracks }) => {
       <span>{track.title}</span>
 
       {button}
-      <LikeButton isForTrack={true} track={track} />
+      <LikeButton
+        isForTrack={true}
+        track={isCurrent(track) ? currentTrack : track}
+      />
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { statSync } from "fs";
 import {
   createFavoriteTrackAsync,
   removeFavoriteTrackAsync,
@@ -18,11 +17,11 @@ export const LikeButton: React.FC<Props> = ({ isForTrack, track }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteId, setFavoriteId] = useState(null);
 
-  /*useEffect(() => {
+  useEffect(() => {
     if (user && token) {
       fetchUserFavorites(user.id, token);
     }
-  }, []);*/
+  }, []);
 
   useEffect(() => {
     if (isForTrack && favorites) {
@@ -30,9 +29,9 @@ export const LikeButton: React.FC<Props> = ({ isForTrack, track }) => {
       if (favorite) {
         setIsFavorite(true);
         setFavoriteId(favorite.id);
-      }
+      } else setIsFavorite(false);
     }
-  }, [favorites]);
+  }, [favorites, track]);
 
   const unlikeButtonHandler = () => {
     if (isForTrack && token && favoriteId && user) {
