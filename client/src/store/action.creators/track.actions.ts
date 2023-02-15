@@ -8,14 +8,32 @@ export const setTracks = (tracks: ITrack[] | null | any) => {
   };
 };
 
-export const fetchTracks = () => {
+export const fetchTracks = (id: string) => {
+  return async (dispatch: Dispatch<TrackAction>) => {
+    try {
+      const response = await axios.get("http://localhost:5000/track/all", {
+        params: { id },
+      });
+      dispatch({
+        type: TrackActionTypes.FETCH_TRACKS,
+        payload: response.data,
+      });
+    } catch (e) {}
+  };
+};
+
+export const fetchPopularTracks = () => {
   return async (dispatch: Dispatch<TrackAction>) => {
     try {
       const response = await axios.get(
         "http://localhost:5000/track/all/popular"
       );
       dispatch({
-        type: TrackActionTypes.FETCH_TRACKS,
+        type: TrackActionTypes.FETCH_POPULAR_TRACKS,
+        payload: response.data,
+      });
+      dispatch({
+        type: TrackActionTypes.SET_TRACKS,
         payload: response.data,
       });
     } catch (e) {}

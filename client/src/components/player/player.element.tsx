@@ -8,6 +8,7 @@ import repeatOnIcon from "../../assets/player/repeat-on-icon.svg";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 import { ITrack } from "../../types/track";
+import { setQueue } from "../../store/action.creators/player.actions";
 
 type Props = {
   audioElem: any;
@@ -25,9 +26,15 @@ export const PlayerElement: React.FC<Props> = ({ audioElem }) => {
     duration,
     currentTrack,
     onRepeat,
+    isShuffled,
   } = useTypedSelector((state) => state.player);
-  const { setVolume, setOnRepeat, setIsPlaying, setCurrentTrack } =
-    useActions();
+  const {
+    setVolume,
+    setOnRepeat,
+    setIsPlaying,
+    setCurrentTrack,
+    setIsShuffled,
+  } = useActions();
 
   useEffect(() => {
     if (progress === 100) {
@@ -115,6 +122,8 @@ export const PlayerElement: React.FC<Props> = ({ audioElem }) => {
   return (
     <div className={"player-element"}>
       <div className="player_container">
+        {/*img*/}
+        {/* <img src={currentTrack.picture_url} style={{ width: "20px" }} />*/}
         <div className={"player__track-info"}>
           <div className="title">
             <p>{currentTrack.title}</p>
@@ -125,7 +134,11 @@ export const PlayerElement: React.FC<Props> = ({ audioElem }) => {
             <img
               src={previousIcon}
               className="btn_action"
-              onClick={skipBack}
+              onClick={() => {
+                setTimeout(() => {
+                  skipBack();
+                }, 500);
+              }}
               alt={"previous"}
             />
             {isPlaying ? (
@@ -146,7 +159,11 @@ export const PlayerElement: React.FC<Props> = ({ audioElem }) => {
             <img
               src={nextIcon}
               className="btn_action"
-              onClick={skipToNext}
+              onClick={() => {
+                setTimeout(() => {
+                  skipToNext();
+                }, 500);
+              }}
               alt={"next"}
             />
           </div>

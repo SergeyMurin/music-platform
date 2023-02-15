@@ -1,45 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useTypedSelector } from "../hooks/useTypedSelector";
 import { useActions } from "../hooks/useActions";
+import { TrackItem } from "../components/track/track.item";
 
 export const HomePage: React.FC = () => {
-  const { tracks } = useTypedSelector((state) => state.track);
-  const { currentTrack } = useTypedSelector((state) => state.player);
-  const { setCurrentTrack, setQueue, setIsPlaying } = useActions();
+  const { popularTracks } = useTypedSelector((state) => state.track);
+  const { fetchPopularTracks } = useActions();
+  useEffect(() => {
+    fetchPopularTracks();
+  }, []);
   return (
     <div>
       <div>HomePage</div>
-      {tracks &&
-        tracks.map((track) => {
+      {popularTracks &&
+        popularTracks.map((track) => {
           return (
-            <div key={track.id}>
-              <span>{track.id}</span>
-              <span>{track.title}</span>
-              {currentTrack?.id === track.id && (
-                <button
-                  onClick={() => {
-                    const idx = tracks?.findIndex((x) => x.id === track.id);
-                    setCurrentTrack(tracks[idx]);
-                    setIsPlaying(false);
-                  }}
-                >
-                  Pause
-                </button>
-              )}
-
-              {currentTrack?.id !== track.id && (
-                <button
-                  onClick={() => {
-                    const idx = tracks?.findIndex((x) => x.id === track.id);
-                    setQueue(tracks);
-                    setCurrentTrack(tracks[idx]);
-                    setIsPlaying(true);
-                  }}
-                >
-                  Play
-                </button>
-              )}
-            </div>
+            <TrackItem track={track} tracks={popularTracks} key={track.id} />
           );
         })}
     </div>

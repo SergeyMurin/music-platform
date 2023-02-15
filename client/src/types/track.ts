@@ -29,6 +29,7 @@ export interface IGenre {
 
 export interface TrackState {
   tracks: ITrack[] | null;
+  popularTracks: ITrack[] | null;
   genres: IGenre[] | null;
   tags: ITag[] | null;
   error: string;
@@ -40,6 +41,8 @@ export enum TrackActionTypes {
   FETCH_TRACKS_ERROR = "FETCH_TRACKS_ERROR",
   FETCH_GENRES = "FETCH_GENRES",
   FETCH_TAGS = "FETCH_TAGS",
+
+  FETCH_POPULAR_TRACKS = "FETCH_POPULAR_TRACKS",
 }
 
 interface FetchTracksAction {
@@ -67,9 +70,15 @@ interface IFetchTags {
   payload: ITag[];
 }
 
+interface IFetchPopularTracks {
+  type: TrackActionTypes.FETCH_POPULAR_TRACKS;
+  payload: ITrack[];
+}
+
 export type TrackAction =
   | FetchTracksAction
   | FetchTracksErrorAction
   | IFetchGenres
   | IFetchTags
-  | ISetTracks;
+  | ISetTracks
+  | IFetchPopularTracks;

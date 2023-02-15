@@ -4,6 +4,7 @@ import { AppRoutes } from "./routes/app.routes";
 import { useActions } from "./hooks/useActions";
 import { useTypedSelector } from "./hooks/useTypedSelector";
 import MyMarquee from "./components/player/marquee";
+import { fetchPopularTracks } from "./store/action.creators/track.actions";
 
 function App() {
   const { isAuth } = useTypedSelector((state) => state.user);
@@ -30,7 +31,8 @@ function App() {
       fetchUserSubscriptions(id);
       fetchTags();
       fetchGenres();
-      fetchTracks();
+      fetchPopularTracks();
+      fetchTracks(id);
     }
   }, []);
   return (
