@@ -5,6 +5,8 @@ import { useActions } from "../../hooks/useActions";
 import { BiUnderline } from "react-icons/all";
 import { LikeButton } from "../button/like.button";
 import { DownloadButton } from "../button/download.button";
+import { useNavigate } from "react-router-dom";
+import { PlayPauseButton } from "../button/play.pause.button";
 
 type Props = {
   track: ITrack;
@@ -12,72 +14,45 @@ type Props = {
 };
 
 export const TrackItem: React.FC<Props> = ({ track, tracks }) => {
+  const { isAuth } = useTypedSelector((state) => state.user);
   const { currentTrack, isPlaying } = useTypedSelector((state) => state.player);
   const { setCurrentTrack, setIsPlaying, setQueue } = useActions();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (currentTrack?.id === track.id) {
-      setButton(<ButtonPause />);
-    }
-    if (currentTrack?.id !== track.id) {
-      setButton(<ButtonPlay />);
-    }
-    if (currentTrack?.id !== track.id && isPlaying) {
-      setButton(<ButtonPlay />);
-    }
-    if (currentTrack?.id === track.id && !isPlaying) {
-      setButton(<ButtonPlay />);
-    }
-  }, [currentTrack, isPlaying]);
-
-  const ButtonPlay: React.FC = () => {
-    return (
-      <button
-        onClick={() => {
-          const idx: any = tracks?.findIndex((x) => x.id === track.id);
-          setQueue(tracks);
-          setCurrentTrack(tracks?.[idx]);
-          setIsPlaying(true);
-        }}
-      >
-        Play
-      </button>
-    );
-  };
-
-  const ButtonPause: React.FC = () => {
-    return (
-      <button
-        onClick={() => {
-          const idx = tracks?.findIndex((x) => x.id === track.id);
-          setCurrentTrack(tracks[idx]);
-          setIsPlaying(false);
-        }}
-      >
-        Pause
-      </button>
-    );
+  const trackClickHandler = (e: any) => {
+    e.stopPropagation();
+    e.preventDefault();
+    let href = window.location.href;
+    href = href
+      .split("/")
+      [href.split("/").length - 1].split("?")[0]
+      .split(" ")[0];
+    if (href === "search") {
+      navigate(`../track/${track.id}`);
+    } else navigate(`track/${track.id}`);
   };
 
   const isCurrent = (track: ITrack) => {
     return track.id === currentTrack?.id;
   };
 
-  const [button, setButton] = useState(<ButtonPlay />);
-
   return (
     <div className={"track-item"} key={track.id}>
-      <span>{track.id}</span>
+      <img
+        src={track.picture_url}
+        onClick={trackClickHandler}
+        style={{ width: "100px", height: "100px" }}
+      ></img>
       <span>{track.title}</span>
 
-      {button}
+      <PlayPauseButton track={isCurrent(track) ? currentTrack : track} />
+
       <LikeButton
         isForTrack={true}
         track={isCurrent(track) ? currentTrack : track}
       />
+
       <DownloadButton track_id={track.id} fileName={track.title} />
     </div>
   );
 };
-
-//когда current id === track id и isPlaying отображает pause,
