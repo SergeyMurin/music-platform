@@ -23,7 +23,7 @@ export const setCurrentTime = (time: number) => {
 export const setProgress = (currentTime: number, duration: number) => {
   return (dispatch: Dispatch<PlayerAction>) => {
     dispatch({
-      type: PlayerActionTypes.SET_CURRENT_TIME,
+      type: PlayerActionTypes.SET_PROGRESS,
       payload: (currentTime / duration) * 100,
     });
   };

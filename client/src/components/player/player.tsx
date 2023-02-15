@@ -7,10 +7,8 @@ import { useActions } from "../../hooks/useActions";
 export const Player: React.FC = () => {
   const audioElem: any = useRef();
 
-  const { queue, currentTrack, isPlaying } = useTypedSelector(
-    (state) => state.player
-  );
-  const { setCurrentTrack, setIsPlaying } = useActions();
+  const { currentTrack, isPlaying } = useTypedSelector((state) => state.player);
+  const { setDuration, setProgress, setCurrentTime } = useActions();
 
   useEffect(() => {
     if (isPlaying) {
@@ -23,12 +21,9 @@ export const Player: React.FC = () => {
   const onPlaying = () => {
     const duration = audioElem?.current?.duration;
     const ct = audioElem?.current?.currentTime;
-
-    setCurrentTrack({
-      ...currentTrack,
-      progress: (ct / duration) * 100,
-      length: duration,
-    });
+    setCurrentTime(ct);
+    setDuration(duration);
+    setProgress(ct, duration);
   };
 
   return (
@@ -40,14 +35,7 @@ export const Player: React.FC = () => {
             ref={audioElem}
             onTimeUpdate={onPlaying}
           />
-          <PlayerElement
-            tracks={queue}
-            isPlaying={isPlaying}
-            setIsPlaying={setIsPlaying}
-            audioElem={audioElem}
-            currentTrack={currentTrack}
-            setCurrentTrack={setCurrentTrack}
-          />
+          <PlayerElement audioElem={audioElem} />
         </div>
       )}
     </>

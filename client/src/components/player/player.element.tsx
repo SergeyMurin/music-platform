@@ -4,40 +4,36 @@ import pauseIcon from "../../assets/player/pause-icon.svg";
 import nextIcon from "../../assets/player/next-icon.svg";
 import previousIcon from "../../assets/player/previous-icon.svg";
 import repeatIcon from "../../assets/player/repeat-icon.svg";
+import { useTypedSelector } from "../../hooks/useTypedSelector";
+import { useActions } from "../../hooks/useActions";
+import { ITrack } from "../../types/track";
 
 type Props = {
-  tracks: any;
-
-  isPlaying: any;
-  setIsPlaying: any;
   audioElem: any;
-  currentTrack: any;
-  setCurrentTrack: any;
 };
 
-export const PlayerElement: React.FC<Props> = ({
-  tracks,
-  isPlaying,
-  setIsPlaying,
-  audioElem,
-  currentTrack,
-  setCurrentTrack,
-}) => {
+export const PlayerElement: React.FC<Props> = ({ audioElem }) => {
   const clickRef: any = useRef();
   const volumeRef: any = useRef();
 
-  const [volume, setVolumeState] = useState(
-    audioElem?.current?.volume ? audioElem?.current?.volume : 1
-  );
-
-  useEffect(() => {});
+  const {
+    queue,
+    volume,
+    progress,
+    isPlaying,
+    duration,
+    currentTrack,
+    onRepeat,
+  } = useTypedSelector((state) => state.player);
+  const { setVolume, setOnRepeat, setIsPlaying, setCurrentTrack } =
+    useActions();
 
   useEffect(() => {
-    if (currentTrack.progress === 100) {
+    if (progress === 100) {
       skipToNext();
       setIsPlaying(isPlaying);
     }
-  }, [currentTrack.progress]);
+  }, [progress]);
 
   const PlayPause = () => {
     setIsPlaying(!isPlaying);
@@ -49,10 +45,10 @@ export const PlayerElement: React.FC<Props> = ({
 
     const divProgress = (offset / width) * 100;
     audioElem.current.currentTime =
-      (divProgress > 100 ? 100 : divProgress / 100) * currentTrack.length;
+      (divProgress > 100 ? 100 : divProgress / 100) * duration;
   };
 
-  const setVolume = (e: any) => {
+  const setVolumeHandler = (e: any) => {
     let width = volumeRef.current.clientWidth;
     const offset = e.nativeEvent.offsetX;
 
@@ -62,28 +58,32 @@ export const PlayerElement: React.FC<Props> = ({
     }
 
     audioElem.current.volume = volume > 100 ? 1 : volume / 100;
-    setVolumeState(volume > 100 ? 1 : volume / 100);
+    setVolume(volume > 100 ? 1 : volume / 100);
   };
 
   const skipBack = () => {
-    const index = tracks.findIndex((x: any) => x.title === currentTrack.title);
+    const index = queue.findIndex((x: ITrack) => x.id === currentTrack.title);
     if (index === 0) {
-      setCurrentTrack(tracks[tracks.length - 1]);
+      setCurrentTrack(queue[queue.length - 1]);
     } else {
-      setCurrentTrack(tracks[index - 1]);
+      setCurrentTrack(queue[index - 1]);
     }
     audioElem.current.currentTime = 0;
   };
 
   const skipToNext = () => {
-    const index = tracks.findIndex((x: any) => x.title === currentTrack.title);
+    const index = queue.findIndex((x: any) => x.title === currentTrack.title);
 
-    if (index === tracks.length - 1) {
-      setCurrentTrack(tracks[0]);
+    if (index === queue.length - 1) {
+      setCurrentTrack(queue[0]);
     } else {
-      setCurrentTrack(tracks[index + 1]);
+      setCurrentTrack(queue[index + 1]);
     }
     audioElem.current.currentTime = 0;
+  };
+
+  const repeatHandler = () => {
+    setOnRepeat(!onRepeat);
   };
 
   const convertToTime = (progress: any, totalTime: any) => {
@@ -136,9 +136,7 @@ export const PlayerElement: React.FC<Props> = ({
           </div>
 
           <div className={"player__timer"}>
-            <span>
-              {convertToTime(currentTrack.progress, currentTrack.length)}
-            </span>
+            <span>{convertToTime(progress, duration)}</span>
             <div
               className="navigation_wrapper"
               onClick={checkWidth}
@@ -146,19 +144,23 @@ export const PlayerElement: React.FC<Props> = ({
             >
               <div
                 className="seek_bar"
-                style={{ width: `${currentTrack.progress + "%"}` }}
+                style={{ width: `${progress + "%"}` }}
               ></div>
             </div>
-            <span>{convertToTime(100, currentTrack.length)}</span>
+            <span>{convertToTime(100, duration)}</span>
           </div>
 
-          <div className="volume_bar" onClick={setVolume} ref={volumeRef}>
+          <div
+            className="volume_bar"
+            onClick={setVolumeHandler}
+            ref={volumeRef}
+          >
             <div className="volume" style={{ width: `${volume * 100}%` }}></div>
           </div>
           <img
             src={repeatIcon}
             className="btn_action"
-            onClick={skipToNext}
+            onClick={repeatHandler}
             alt={"repeat"}
           />
         </div>
