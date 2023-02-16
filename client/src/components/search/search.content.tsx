@@ -4,6 +4,7 @@ import axios from "axios";
 import { useActions } from "../../hooks/useActions";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { TrackItem } from "../track/track.item";
+import { Loader } from "../loader/loader";
 
 export const SearchContent: React.FC = () => {
   const { tracks } = useTypedSelector((state) => state.track);
@@ -13,6 +14,8 @@ export const SearchContent: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const params = new URLSearchParams(location.search);
+
+  const displayedCount = 3;
 
   const [albums, setAlbums] = useState();
   const [users, setUsers] = useState();
@@ -37,21 +40,38 @@ export const SearchContent: React.FC = () => {
   };
 
   const handleShowAll = () => {
-    setShowAll(true);
+    setShowAll(!showAll);
   };
 
   return (
     <>
       <div className={"page_header"}>Results for "{params.get("q")}"</div>
       <hr />
-      {isLoading && <div>Loading...</div>}
+      {isLoading && (
+        <div
+          style={{ width: "100%", display: "flex", justifyContent: "center" }}
+        >
+          <Loader />
+        </div>
+      )}
       {!isLoading && searchResults && (
         <>
+          <h1>Soundtracks</h1>
+          {!tracks?.length && <h2>No matches</h2>}
+          {!showAll && tracks && tracks.length > displayedCount && (
+            <button onClick={handleShowAll}>Show All</button>
+          )}
+          {showAll && tracks && tracks.length > displayedCount && (
+            <button onClick={handleShowAll}>Hide</button>
+          )}
           {tracks &&
-            tracks.slice(0, showAll ? tracks.length : 5).map((track) => {
-              return <TrackItem track={track} key={track.id} tracks={tracks} />;
-            })}
-          {!showAll && <button onClick={handleShowAll}>Show All</button>}
+            tracks
+              .slice(0, showAll ? tracks.length : displayedCount)
+              .map((track) => {
+                return (
+                  <TrackItem track={track} key={track.id} tracks={tracks} />
+                );
+              })}
         </>
       )}
     </>

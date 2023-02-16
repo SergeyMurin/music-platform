@@ -56,13 +56,31 @@ export const ResetPasswordForm: React.FC<Props> = ({ error, submit }) => {
 
   return (
     <form onSubmit={onSubmit}>
-      <input type={"password"} {...register("password")} />
-      {errors?.password && <p>{errors.password.message}</p>}
+      <input
+        type={"password"}
+        placeholder={"New password"}
+        {...register("password")}
+      />
+      {errors?.password ? (
+        <p className={"error"}>{errors.password.message}</p>
+      ) : (
+        <p className={"error"}></p>
+      )}
 
-      <input type={"password"} {...register("repeatPassword")} />
-      {errors?.repeatPassword && <p>{errors.repeatPassword.message}</p>}
-
-      {error && <p>{error}</p>}
+      <input
+        type={"password"}
+        placeholder={"Repeat password"}
+        {...register("repeatPassword")}
+      />
+      {errors?.repeatPassword ? (
+        <p className={"error"}>{errors.repeatPassword.message}</p>
+      ) : error ? (
+        <p className={"error"}>{error}</p>
+      ) : <p className={"error"}></p> ? (
+        <p className={"error"}></p>
+      ) : (
+        <></>
+      )}
       <button
         type="submit"
         disabled={!!errors.password && !!errors.repeatPassword}

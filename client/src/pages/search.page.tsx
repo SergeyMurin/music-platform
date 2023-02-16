@@ -3,7 +3,7 @@ import { SearchContent } from "../components/search/search.content";
 
 export const SearchPage: React.FC = () => {
   return (
-    <div>
+    <div className={"search-page"}>
       <SearchContent />
     </div>
   );

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useTypedSelector } from "../hooks/useTypedSelector";
 import { useActions } from "../hooks/useActions";
 import { TrackItem } from "../components/track/track.item";
+import { Loader } from "../components/loader/loader";
 
 export const HomePage: React.FC = () => {
   const { popularTracks } = useTypedSelector((state) => state.track);
@@ -13,7 +14,13 @@ export const HomePage: React.FC = () => {
     <div className={"home-page"}>
       <div className={"page_header"}>Popular Soundtracks</div>
       <hr />
-      {!popularTracks?.length && <div>Loading...</div>}
+      {!popularTracks?.length && (
+        <div
+          style={{ width: "100%", display: "flex", justifyContent: "center" }}
+        >
+          <Loader />
+        </div>
+      )}
       {popularTracks &&
         popularTracks.map((track) => {
           return (

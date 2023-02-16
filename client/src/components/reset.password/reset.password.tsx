@@ -32,17 +32,29 @@ export const ResetPassword: React.FC = () => {
       .catch((error) => setResetPasswordError(error.response.data.message));
   };
   return (
-    <>
-      {!isReset && (
-        <ResetPasswordForm submit={onSubmit} error={resetPasswordError} />
-      )}
-      {isReset && (
-        <div>
-          <div>Password has been reset</div>
-          <Link to={"../sign-in"}>Sign In</Link>
-          <Link to={"../"}>Home</Link>
-        </div>
-      )}
-    </>
+    <div className={"sign-in"}>
+      <div className={"sign-in-container"}>
+        {!isReset && (
+          <>
+            <h1>Reset password</h1>
+            <ResetPasswordForm submit={onSubmit} error={resetPasswordError} />
+          </>
+        )}
+        {isReset && (
+          <div>
+            <h1 className={"success"}>Password has been reset</h1>
+            <h3>Now you can login</h3>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <Link to={"../sign-in"} className={"button-2"}>
+                Sign In
+              </Link>
+              <Link to={"../"} className={"button-2"}>
+                Home
+              </Link>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };

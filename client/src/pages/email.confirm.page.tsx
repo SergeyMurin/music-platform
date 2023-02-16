@@ -3,6 +3,7 @@ import { useTypedSelector } from "../hooks/useTypedSelector";
 import { useActions } from "../hooks/useActions";
 import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
+import { Loader } from "../components/loader/loader";
 
 export const EmailConfirmPage: React.FC = () => {
   const { user, isAuth } = useTypedSelector((state) => state.user);
@@ -27,16 +28,21 @@ export const EmailConfirmPage: React.FC = () => {
       .catch((e) => console.error(e));
   };
   return (
-    <div>
+    <div className={"email-confirm-page color-change-2x"}>
       {isAuth && user?.email_confirmed && (
-        <div>
-          <div>Email confirmed</div>
-          <Link to={"../"} replace={true}>
+        <>
+          <h1>Email confirmed</h1>
+          <Link to={"/"} className={"button"} replace={true}>
             To home
           </Link>
-        </div>
+        </>
       )}
-      {isAuth && !user?.email_confirmed && <div>Confirming email...</div>}
+      {isAuth && !user?.email_confirmed && (
+        <>
+          <h1>Confirming email...</h1>
+          <Loader />
+        </>
+      )}
     </div>
   );
 };

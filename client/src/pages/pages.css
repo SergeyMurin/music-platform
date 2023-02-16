@@ -1,15 +1,29 @@
 .email-page{
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
 
-.email-page h1{
+.email-page h1, .email-confirm-page h1{
     text-align: center;
     margin: 1rem 9rem;
 }
 
-.email-page button{
+.email-page .button{
     margin-top: 2rem;
+}
+
+.email-confirm-page{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.search-page, .home-page{
+    width: 100%;
+    padding: 2rem 5rem;
 }

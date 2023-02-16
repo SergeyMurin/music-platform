@@ -22,10 +22,19 @@ export const ForgotPassword: React.FC = () => {
   };
 
   return (
-    <>
-      <ForgotPasswordForm submit={onSubmit} error={forgotPasswordError} />
-      {!isSent && isSubmit && <div>Sending link to your email</div>}{" "}
-      {isSent && isSubmit && <div>Reset link has been sent to your email</div>}
-    </>
+    <div className={"sign-in"}>
+      <div className={"sign-in-container"}>
+        <h1>Forgot password?</h1>
+        <h3>
+          Enter the email address associated with your account. A confirmation
+          email will be sent to it
+        </h3>
+        <ForgotPasswordForm submit={onSubmit} error={forgotPasswordError} />
+        {!isSent && isSubmit && <div>Sending link to your email</div>}{" "}
+        {isSent && isSubmit && (
+          <h4 className={"success"}>Reset link has been sent to your email</h4>
+        )}
+      </div>
+    </div>
   );
 };

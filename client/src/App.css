@@ -25,8 +25,11 @@ body {
 
 .page {
     color: var(--base-player-background-color);
-    padding-top: 8vh;
+    padding: 8vh 0 0 0;
     width: 65vw;
+    min-width: 65vw;
+    max-width: 65vw;
+
     min-height: 92vh;
     background-color: var(--base-page-background-color);
     display: flex;
@@ -69,7 +72,7 @@ a {
 .track_item {
     overflow: hidden;
     height: 5rem;
-    margin: 1rem 5rem;
+    margin: 1rem 0;
     box-sizing: border-box;
     color: var(--base-page-background-color);
     background-color: var(--base-player-background-color);
@@ -138,12 +141,12 @@ hr {
     height: 0.15rem;
     background-color: var(--base-seekbar-color);
 
-    margin: 1rem 5rem;
+    margin: 1rem 0;
     border-radius: 1rem;
 }
 
 .page_header {
-    margin: 1rem 5rem;
+    margin: 1rem 0;
     font-size: 3rem;
     font-weight: 800;
 }
@@ -216,10 +219,12 @@ input:focus {
     background: white;
 }
 
+.success {
+    color: var(--base-player-light-color);
+}
 
 
-
-button, .button {
+button, .button, .button-2 {
     color: var(--base-page-background-color);
     border-radius: 0;
     border: none;
@@ -233,7 +238,12 @@ button, .button {
     cursor: pointer;
 }
 
-button:hover, .button:hover {
+.button-2{
+    color: var(--base-player-background-color) !important;
+    background-color: var(--base-page-background-color);
+}
+
+button:hover, .button:hover, .button-2:hover {
     transition: background-color 0.2s ease-in-out;
     background-color: var(--base-seekbar-color);
     -webkit-box-shadow: var(--base-shadow);
@@ -241,20 +251,15 @@ button:hover, .button:hover {
     box-shadow: var(--base-shadow);
 }
 
-button:disabled, .button:disabled {
+button:disabled, .button:disabled, .button-2:disabled {
     background-color: var(--base-player-light-color);
 }
-
 
 
 .fade-in-fwd {
     -webkit-animation: fade-in-fwd 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
     animation: fade-in-fwd 0.6s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 }
-
-
-
-
 
 
 /* ----------------------------------------------
@@ -309,6 +314,7 @@ button:disabled, .button:disabled {
         background: var(--base-seekbar-color);
     }
 }
+
 @keyframes color-change-2x {
     0% {
         background: var(--base-page-background-color);
@@ -317,3 +323,6 @@ button:disabled, .button:disabled {
         background: var(--base-seekbar-color);
     }
 }
+
+
+

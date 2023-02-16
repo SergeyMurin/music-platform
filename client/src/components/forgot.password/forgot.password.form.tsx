@@ -41,9 +41,15 @@ export const ForgotPasswordForm: React.FC<Props> = ({ error, submit }) => {
   return (
     <form onSubmit={onSubmit}>
       <input type={"email"} {...register("email")} />
-      {errors?.email && <p>{errors.email.message}</p>}
-
-      {error && <p>{error}</p>}
+      {errors?.email ? (
+        <p className={"error"}>{errors.email.message}</p>
+      ) : error ? (
+        <p className={"error"}>{error}</p>
+      ) : <p className={"error"}></p> ? (
+        <p className={"error"}></p>
+      ) : (
+        <></>
+      )}
 
       <button type="submit" disabled={!!errors.email}>
         Send email
