@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
+import pauseIcon from "../../assets/player/pause-icon.svg";
+import playIcon from "../../assets/player/play-icon.svg";
+import "./../player/player.css";
 
 type Props = {
   track: ITrack;
@@ -27,30 +30,30 @@ export const PlayPauseButton: React.FC<Props> = ({ track }) => {
 
   const ButtonPlay: React.FC = () => {
     return (
-      <button
+      <img
+        src={playIcon}
+        className={"btn_action"}
         onClick={() => {
           const idx: any = tracks?.findIndex((x) => x.id === track.id);
           setQueue(tracks);
           setCurrentTrack(tracks?.[idx]);
           setIsPlaying(true);
         }}
-      >
-        Play
-      </button>
+      />
     );
   };
 
   const ButtonPause: React.FC = () => {
     return (
-      <button
+      <img
+        src={pauseIcon}
+        className={"btn_action"}
         onClick={() => {
           const idx: any = tracks?.findIndex((x) => x.id === track.id);
           setCurrentTrack(tracks?.[idx]);
           setIsPlaying(false);
         }}
-      >
-        Pause
-      </button>
+      />
     );
   };
 

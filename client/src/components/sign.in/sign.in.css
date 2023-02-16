@@ -1,0 +1,93 @@
+.sign-in a {
+    color: var(--base-page-background-color);
+    font-weight: lighter;
+}
+
+.sign-in a:hover {
+    text-decoration: underline;
+}
+
+.sign-in h1 {
+    color: var(--base-page-background-color);
+
+}
+
+.sign-in a:hover {
+    transition: color 0.1s ease-in-out;
+    color: var(--base-seekbar-color);
+}
+
+.error {
+    color: tomato;
+    height: 1rem;
+    padding: 0.5rem 0rem;
+    text-align: center;
+}
+
+.sign-in {
+    width: 50%;
+    min-height: 92vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--base-player-background-color);
+}
+
+.sign-in form {
+    height: 100%;
+    width: 60%;
+
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sign-in form input {
+    width: 100%;
+    border-bottom: 0.1rem solid var(--base-background-color);
+    color: var(--base-background-color);
+    font-size: large;
+    padding-left: 1rem;
+}
+
+.sign-in form input:focus {
+    border-bottom: 0.1rem solid var(--base-seekbar-color);
+    color: var(--base-seekbar-color);
+}
+
+.google_auth {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.sign-in form button {
+    background-color: var(--base-page-background-color);
+    border-radius: 0;
+    border: none;
+    box-sizing: border-box;
+    color: var(--base-player-background-color);
+    font-weight: normal;
+
+    border-bottom: 0.3rem solid var(--base-seekbar-color);
+    padding: 0.5rem 1rem;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+}
+
+.sign-in form button:hover {
+    transition: background-color 0.2s ease-in-out;
+    background-color: var(--base-seekbar-color);
+}
+
+.sign-in form button:disabled {
+    background-color: var(--base-player-light-color);
+}
+
+
+

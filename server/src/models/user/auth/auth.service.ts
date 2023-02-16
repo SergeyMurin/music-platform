@@ -138,6 +138,13 @@ export class AuthService {
       throw new HttpException('Invalid email.', HttpStatus.BAD_REQUEST);
     }
 
+    if (user.google_auth) {
+      throw new HttpException(
+        'Please sign in with google.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const isMatch = await compare(password, user.password);
     if (!isMatch) {
       throw new HttpException('Invalid password.', HttpStatus.BAD_REQUEST);

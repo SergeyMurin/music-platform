@@ -10,6 +10,7 @@ import { useActions } from "../../hooks/useActions";
 import { ITrack } from "../../types/track";
 import { setQueue } from "../../store/action.creators/player.actions";
 import { LikeButton } from "../button/like.button";
+import { DownloadButton } from "../button/download.button";
 
 type Props = {
   audioElem: any;
@@ -205,13 +206,17 @@ export const PlayerElement: React.FC<Props> = ({ audioElem }) => {
           {onRepeat && (
             <img
               src={repeatOnIcon}
-              className="btn_action"
+              className={`btn_action ${onRepeat ? "active" : ""}`}
               onClick={repeatHandler}
               alt={"repeat"}
             />
           )}
 
           <LikeButton isForTrack={true} track={currentTrack} />
+          <DownloadButton
+            track_id={currentTrack?.id}
+            fileName={currentTrack?.title}
+          />
         </div>
       </div>
     </div>

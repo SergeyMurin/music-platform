@@ -7,6 +7,9 @@ import {
 import { useActions } from "../../hooks/useActions";
 import { ITrack } from "../../types/track";
 import { useNavigate } from "react-router-dom";
+import favoriteOnIcon from "../../assets/player/favorite_on-icon.svg";
+import favoriteIcon from "../../assets/player/favorite-icon.svg";
+import "../player/player.css";
 
 type Props = {
   isForTrack: boolean;
@@ -22,10 +25,10 @@ export const LikeButton: React.FC<Props> = ({ isForTrack, track }) => {
   const navigate = useNavigate();
 
   /*useEffect(() => {
-              if (user && token) {
-                fetchUserFavorites(user.id, token);
-              }
-            }, []);*/
+                    if (user && token) {
+                      fetchUserFavorites(user.id, token);
+                    }
+                  }, []);*/
 
   useEffect(() => {
     if (isForTrack && favorites) {
@@ -74,8 +77,20 @@ export const LikeButton: React.FC<Props> = ({ isForTrack, track }) => {
 
   return (
     <>
-      {isFavorite && <button onClick={unlikeButtonHandler}>Unlike</button>}
-      {!isFavorite && <button onClick={likeButtonHandler}>Like</button>}
+      {isFavorite && (
+        <img
+          src={favoriteOnIcon}
+          className={"btn_action like"}
+          onClick={unlikeButtonHandler}
+        />
+      )}
+      {!isFavorite && (
+        <img
+          src={favoriteIcon}
+          className={"btn_action like"}
+          onClick={likeButtonHandler}
+        />
+      )}
     </>
   );
 };

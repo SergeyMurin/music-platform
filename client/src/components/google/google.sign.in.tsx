@@ -7,8 +7,8 @@ import { fetchUser } from "../../store/action.creators/user.actions";
 export const GoogleSignIn: React.FC = () => {
   const { setAuth, setToken, fetchUser } = useActions();
   return (
-    <GoogleOAuthProvider clientId="836445093751-38eejskvs0dioadp0sstf09j8tphasqo.apps.googleusercontent.com">
-      <div>
+    <div className={"google_auth"}>
+      <GoogleOAuthProvider clientId="836445093751-38eejskvs0dioadp0sstf09j8tphasqo.apps.googleusercontent.com">
         <GoogleLogin
           useOneTap
           onSuccess={async (credentialResponse) => {
@@ -29,7 +29,7 @@ export const GoogleSignIn: React.FC = () => {
             console.log("Login Failed");
           }}
         />
-      </div>
-    </GoogleOAuthProvider>
+      </GoogleOAuthProvider>
+    </div>
   );
 };

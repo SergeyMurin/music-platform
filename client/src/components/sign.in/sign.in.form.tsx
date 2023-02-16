@@ -2,6 +2,7 @@ import React from "react";
 import { useForm, Resolver } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { validateEmail } from "../sign.up/sign.up.form";
+import { GoogleSignIn } from "../google/google.sign.in";
 
 type FormValues = {
   email: string;
@@ -21,7 +22,7 @@ const resolver: Resolver<FormValues> = async (values) => {
       : !validateEmail(values.email)
       ? {
           email: {
-            type: "onBlur",
+            type: "onChange",
             message: "Email not valid",
           },
         }
@@ -51,18 +52,34 @@ export const SignInForm: React.FC<Props> = ({ error, submit }) => {
 
   return (
     <form onSubmit={onSubmit}>
-      <input type={"email"} {...register("email")} />
-      {errors?.email && <p>{errors.email.message}</p>}
+      <input type={"email"} placeholder={"Email"} {...register("email")} />
+      {errors?.email ? (
+        <p className={"error"}>{errors.email.message}</p>
+      ) : (
+        <p className={"error"}></p>
+      )}
 
-      <input type={"password"} {...register("password")} />
-      {errors?.password && <p>{errors.password.message}</p>}
-
-      {error && <p>{error}</p>}
-      <Link to={"../password/forgot"}>Forgot password?</Link>
+      <input
+        type={"password"}
+        placeholder={"Password"}
+        {...register("password")}
+      />
+      {errors?.password ? (
+        <p className={"error"}>{errors.password.message}</p>
+      ) : error ? (
+        <p className={"error"}>{error}</p>
+      ) : <p className={"error"}></p> ? (
+        <p className={"error"}></p>
+      ) : (
+        <></>
+      )}
 
       <button type="submit" disabled={!!errors.email || !!errors.password}>
         Sign In
       </button>
+
+      <Link to={"../password/forgot"}>Forgot password?</Link>
+      <GoogleSignIn />
     </form>
   );
 };

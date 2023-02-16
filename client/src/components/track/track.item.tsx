@@ -42,16 +42,22 @@ export const TrackItem: React.FC<Props> = ({ track, tracks }) => {
       key={track.id}
     >
       <img src={track.picture_url} onClick={trackClickHandler}></img>
-      <span>{track.title}</span>
+      <div className={`track_item_container`}>
+        <div className={"play"}>
+          <PlayPauseButton track={isCurrent(track) ? currentTrack : track} />
+        </div>
+        <div className={"info"}>
+          <span>{track.title}</span>
+        </div>
+        <div className={"like"}>
+          <LikeButton
+            isForTrack={true}
+            track={isCurrent(track) ? currentTrack : track}
+          />
 
-      <PlayPauseButton track={isCurrent(track) ? currentTrack : track} />
-
-      <LikeButton
-        isForTrack={true}
-        track={isCurrent(track) ? currentTrack : track}
-      />
-
-      <DownloadButton track_id={track.id} fileName={track.title} />
+          <DownloadButton track_id={track.id} fileName={track.title} />
+        </div>
+      </div>
     </div>
   );
 };

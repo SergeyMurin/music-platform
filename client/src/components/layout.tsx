@@ -7,7 +7,7 @@ import { Search } from "./search/search";
 
 export const Layout: React.FC = () => {
   const { setUser, setToken, setAuth } = useActions();
-  const { isAuth } = useTypedSelector((state) => state.user);
+  const { isAuth, user } = useTypedSelector((state) => state.user);
   const signOutHandler = () => {
     localStorage.removeItem("id");
     localStorage.removeItem("token");
@@ -30,10 +30,15 @@ export const Layout: React.FC = () => {
               Sign In
             </Link>
           )}
-          {isAuth && (
-            <Link to={""} onClick={signOutHandler}>
-              Sign Out
-            </Link>
+          {isAuth && user && (
+            <>
+              <Link to={`profile/${user.id}`} className={"profile_link"}>
+                {user.username}
+              </Link>
+              <Link to={""} onClick={signOutHandler}>
+                Sign Out
+              </Link>
+            </>
           )}
         </div>
       </header>

@@ -6,9 +6,9 @@ import { Navigate } from "react-router-dom";
 export const SignInPage: React.FC = () => {
   const { isAuth } = useTypedSelector((state) => state.user);
   return (
-    <div>
+    <>
       {isAuth && <Navigate to={"../"} />}
       <SignIn />
-    </div>
+    </>
   );
 };

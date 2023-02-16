@@ -4,6 +4,7 @@ import { SignInForm } from "./sign.in.form";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useActions } from "../../hooks/useActions";
+import "./sign.in.css";
 
 export const SignIn: React.FC = () => {
   const [signInError, setSignInError] = useState("");
@@ -31,9 +32,10 @@ export const SignIn: React.FC = () => {
       });
   };
   return (
-    <div>
+    <div className={"sign-in"}>
+      <h1>Sign In</h1>
+
       <SignInForm submit={onSubmit} error={signInError} />
-      <GoogleSignIn />
       <Link to={"/sign-up"} replace={true}>
         Sign Up
       </Link>

@@ -87,11 +87,18 @@ span {
 
 
 .btn_action {
-    height: 2rem;
-    width: 2rem;
+    filter: invert(13%) sepia(30%) saturate(2232%) hue-rotate(168deg) brightness(89%) contrast(98%);
+    height: 2rem !important;
+    width: 2rem !important;
     margin: 0 0.5rem;
     cursor: pointer;
 }
+
+.btn_action:hover {
+    transition: filter 0.2s ease-in-out;
+    filter: invert(39%) sepia(46%) saturate(450%) hue-rotate(159deg) brightness(92%) contrast(93%);
+}
+
 
 
 
