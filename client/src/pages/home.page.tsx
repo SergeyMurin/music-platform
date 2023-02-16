@@ -11,7 +11,8 @@ export const HomePage: React.FC = () => {
   }, []);
   return (
     <div className={"home-page"}>
-      <div>HomePage</div>
+      <div className={"page_header"}>Popular Soundtracks</div>
+      <hr />
       {!popularTracks?.length && <div>Loading...</div>}
       {popularTracks &&
         popularTracks.map((track) => {

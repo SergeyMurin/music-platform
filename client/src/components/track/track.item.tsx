@@ -37,12 +37,11 @@ export const TrackItem: React.FC<Props> = ({ track, tracks }) => {
   };
 
   return (
-    <div className={"track-item"} key={track.id}>
-      <img
-        src={track.picture_url}
-        onClick={trackClickHandler}
-        style={{ width: "100px", height: "100px" }}
-      ></img>
+    <div
+      className={`track_item fade-in-fwd ${isCurrent(track) ? "current" : ""}`}
+      key={track.id}
+    >
+      <img src={track.picture_url} onClick={trackClickHandler}></img>
       <span>{track.title}</span>
 
       <PlayPauseButton track={isCurrent(track) ? currentTrack : track} />

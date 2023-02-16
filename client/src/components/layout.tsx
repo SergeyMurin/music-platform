@@ -18,18 +18,24 @@ export const Layout: React.FC = () => {
   return (
     <div className={"layout"}>
       <header>
-        {!isAuth && (
-          <Link to={"/sign-in"} replace={true}>
-            Sign In
+        <div className={"logo_panel"}>
+          <Link to={""} className={""}>
+            TrackTornado
           </Link>
-        )}
-        {isAuth && (
-          <Link to={""} onClick={signOutHandler}>
-            Sign Out
-          </Link>
-        )}
-
+        </div>
         <Search />
+        <div className={"user_panel"}>
+          {!isAuth && (
+            <Link to={"/sign-in"} replace={true}>
+              Sign In
+            </Link>
+          )}
+          {isAuth && (
+            <Link to={""} onClick={signOutHandler}>
+              Sign Out
+            </Link>
+          )}
+        </div>
       </header>
       <div className={"page"}>
         <Outlet />

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { PlayerElement } from "./player.element";
-import "./player.scss";
+import "./player.css";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 

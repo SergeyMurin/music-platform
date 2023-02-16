@@ -42,7 +42,8 @@ export const SearchContent: React.FC = () => {
 
   return (
     <>
-      <div>Results for "{params.get("q")}"</div>
+      <div className={"page_header"}>Results for "{params.get("q")}"</div>
+      <hr />
       {isLoading && <div>Loading...</div>}
       {!isLoading && searchResults && (
         <>

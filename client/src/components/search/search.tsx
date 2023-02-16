@@ -27,8 +27,10 @@ export const Search: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSearch}>
+    <form onSubmit={handleSearch} className={"search_container"}>
       <input
+        className={"search_input"}
+        placeholder={"Looking for something?"}
         type="text"
         value={searchQuery}
         onChange={(event) => setSearchQuery(event.target.value)}

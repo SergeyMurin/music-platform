@@ -37,7 +37,7 @@ function App() {
   return (
     <div className="App">
       <AppRoutes />
-      <MyMarquee />
+      {/*<MyMarquee />*/}
     </div>
   );
 }
