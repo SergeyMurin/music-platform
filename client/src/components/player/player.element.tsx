@@ -8,15 +8,17 @@ import repeatOnIcon from "../../assets/player/repeat-on-icon.svg";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 import { ITrack } from "../../types/track";
-import { setQueue } from "../../store/action.creators/player.actions";
 import { LikeButton } from "../button/like.button";
 import { DownloadButton } from "../button/download.button";
+import axios from "axios";
+import MyMarquee from "./marquee";
 
 type Props = {
   audioElem: any;
+  author: any;
 };
 
-export const PlayerElement: React.FC<Props> = ({ audioElem }) => {
+export const PlayerElement: React.FC<Props> = ({ audioElem, author }) => {
   const clickRef: any = useRef();
   const volumeRef: any = useRef();
 
@@ -124,11 +126,13 @@ export const PlayerElement: React.FC<Props> = ({ audioElem }) => {
   return (
     <div className={"player-element"}>
       <div className="player_container">
-        {/*img*/}
-        {/* <img src={currentTrack?.picture_url} style={{ width: "20px" }} />*/}
         <div className={"player__track-info"}>
+          <div className={"player_pic"}>
+            <img src={currentTrack?.picture_url} />
+          </div>
           <div className="title">
-            <p>{currentTrack?.title}</p>
+            <MyMarquee text={currentTrack?.title} activateLength={20} />
+            <MyMarquee text={author?.username} activateLength={20} />
           </div>
         </div>
         <div className="navigation">
@@ -139,7 +143,7 @@ export const PlayerElement: React.FC<Props> = ({ audioElem }) => {
               onClick={() => {
                 setTimeout(() => {
                   skipBack();
-                }, 500);
+                }, 300);
               }}
               alt={"previous"}
             />
@@ -164,14 +168,33 @@ export const PlayerElement: React.FC<Props> = ({ audioElem }) => {
               onClick={() => {
                 setTimeout(() => {
                   skipToNext();
-                }, 500);
+                }, 300);
               }}
               alt={"next"}
             />
+
+            {/*Repeat*/}
+            {!onRepeat && (
+              <img
+                src={repeatIcon}
+                className="btn_action replay"
+                onClick={repeatHandler}
+                alt={"repeat"}
+              />
+            )}
+
+            {onRepeat && (
+              <img
+                src={repeatOnIcon}
+                className={`btn_action replay ${onRepeat ? "active" : ""}`}
+                onClick={repeatHandler}
+                alt={"repeat"}
+              />
+            )}
           </div>
 
           <div className={"player__timer"}>
-            <span>{convertToTime(progress, duration)}</span>
+            <span className={"left"}>{convertToTime(progress, duration)}</span>
             <div
               className="navigation_wrapper"
               onClick={checkWidth}
@@ -182,41 +205,29 @@ export const PlayerElement: React.FC<Props> = ({ audioElem }) => {
                 style={{ width: `${progress + "%"}` }}
               ></div>
             </div>
-            <span>{convertToTime(100, duration)}</span>
+            <span className={"right"}>{convertToTime(100, duration)}</span>
           </div>
 
-          <div
-            className="volume_bar"
-            onClick={setVolumeHandler}
-            ref={volumeRef}
-          >
-            <div className="volume" style={{ width: `${volume * 100}%` }}></div>
+          <div className={"volume_container"}>
+            <div
+              className="volume_bar"
+              onClick={setVolumeHandler}
+              ref={volumeRef}
+            >
+              <div
+                className="volume"
+                style={{ width: `${volume * 100}%` }}
+              ></div>
+            </div>
           </div>
 
-          {/*Repeat*/}
-          {!onRepeat && (
-            <img
-              src={repeatIcon}
-              className="btn_action"
-              onClick={repeatHandler}
-              alt={"repeat"}
+          <div className={"like-download"}>
+            <LikeButton isForTrack={true} track={currentTrack} />
+            <DownloadButton
+              track_id={currentTrack?.id}
+              fileName={currentTrack?.title}
             />
-          )}
-
-          {onRepeat && (
-            <img
-              src={repeatOnIcon}
-              className={`btn_action ${onRepeat ? "active" : ""}`}
-              onClick={repeatHandler}
-              alt={"repeat"}
-            />
-          )}
-
-          <LikeButton isForTrack={true} track={currentTrack} />
-          <DownloadButton
-            track_id={currentTrack?.id}
-            fileName={currentTrack?.title}
-          />
+          </div>
         </div>
       </div>
     </div>

@@ -1,11 +1,24 @@
 import React from "react";
 import Marquee from "react-fast-marquee";
 
-const MyMarquee = () => {
+type Props = {
+  text: string;
+
+  activateLength: number;
+};
+const MyMarquee: React.FC<Props> = ({ text, activateLength }) => {
   return (
-    <Marquee gradientWidth={0} speed={15}>
-      This is an automatic text marquee. This is an automatic text marquee.
-    </Marquee>
+    <>
+      {text?.length >= activateLength ? (
+        <Marquee gradientWidth={0} speed={4} pauseOnHover={true}>
+          <div style={{ whiteSpace: "nowrap", width: "200%" }}>{text}</div>
+        </Marquee>
+      ) : text ? (
+        <div style={{ whiteSpace: "nowrap", width: "100%" }}>{text}</div>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };
 

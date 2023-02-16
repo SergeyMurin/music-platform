@@ -3,14 +3,28 @@ import { PlayerElement } from "./player.element";
 import "./player.css";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
+import axios from "axios";
+
+const getAuthor = async (id: string) => {
+  return await axios.get("http://localhost:5000/user", { params: { id } });
+};
 
 export const Player: React.FC = () => {
   const audioElem: any = useRef();
+  const [author, setAuthor] = useState();
 
   const { currentTrack, isPlaying, volume } = useTypedSelector(
     (state) => state.player
   );
   const { setDuration, setProgress, setCurrentTime } = useActions();
+
+  useEffect(() => {
+    if (currentTrack) {
+      getAuthor(currentTrack.user_id).then((response) => {
+        setAuthor(response.data);
+      });
+    }
+  }, [currentTrack]);
 
   useEffect(() => {
     if (isPlaying) {
@@ -37,7 +51,7 @@ export const Player: React.FC = () => {
           ref={audioElem}
           onTimeUpdate={onPlaying}
         />
-        <PlayerElement audioElem={audioElem} />
+        <PlayerElement audioElem={audioElem} author={author} />
       </div>
     </>
   );
