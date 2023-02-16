@@ -1,0 +1,15 @@
+.email-page{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.email-page h1{
+    text-align: center;
+    margin: 1rem 9rem;
+}
+
+.email-page button{
+    margin-top: 2rem;
+}

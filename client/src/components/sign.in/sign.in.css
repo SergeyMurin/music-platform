@@ -34,6 +34,14 @@
     background-color: var(--base-player-background-color);
 }
 
+.sign-in-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
 .sign-in form {
     height: 100%;
     width: 60%;

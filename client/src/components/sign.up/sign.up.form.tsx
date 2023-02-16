@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm, Resolver } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { GoogleSignIn } from "../google/google.sign.in";
 
 type FormValues = {
   email: string;
@@ -73,17 +74,39 @@ export const SignUpForm: React.FC<Props> = ({ error, submit }) => {
 
   return (
     <form onSubmit={onSubmit}>
-      <input type={"email"} {...register("email")} />
-      {errors?.email && <p>{errors.email.message}</p>}
+      <input type={"email"} placeholder={"Email"} {...register("email")} />
+      {errors?.email ? (
+        <p className={"error"}>{errors.email.message}</p>
+      ) : (
+        <p className={"error"}></p>
+      )}
 
-      <input type={"password"} {...register("password")} />
-      {errors?.password && <p>{errors.password.message}</p>}
+      <input
+        type={"password"}
+        placeholder={"Password"}
+        {...register("password")}
+      />
+      {errors?.password ? (
+        <p className={"error"}>{errors.password.message}</p>
+      ) : (
+        <p className={"error"}></p>
+      )}
 
-      <input type={"password"} {...register("repeatPassword")} />
-      {errors?.repeatPassword && <p>{errors.repeatPassword.message}</p>}
+      <input
+        type={"password"}
+        placeholder={"Repeat password"}
+        {...register("repeatPassword")}
+      />
+      {errors?.repeatPassword ? (
+        <p className={"error"}>{errors.repeatPassword.message}</p>
+      ) : error ? (
+        <p className={"error"}>{error}</p>
+      ) : <p className={"error"}></p> ? (
+        <p className={"error"}></p>
+      ) : (
+        <></>
+      )}
 
-      {error && <p>{error}</p>}
-      <Link to={"../password/forgot"}>Forgot password?</Link>
       <button
         type="submit"
         disabled={
@@ -92,6 +115,8 @@ export const SignUpForm: React.FC<Props> = ({ error, submit }) => {
       >
         Sign Up
       </button>
+
+      <GoogleSignIn />
     </form>
   );
 };

@@ -4,6 +4,7 @@ import { Player } from "./player/player";
 import { useActions } from "../hooks/useActions";
 import { useTypedSelector } from "../hooks/useTypedSelector";
 import { Search } from "./search/search";
+import "../pages/pages.css";
 
 export const Layout: React.FC = () => {
   const { setUser, setToken, setAuth } = useActions();

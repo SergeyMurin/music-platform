@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { GoogleSignIn } from "../google/google.sign.in";
 import { SignUpForm } from "./sign.up.form";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useActions } from "../../hooks/useActions";
+import "../sign.in/sign.in.css";
 
 export const SignUp: React.FC = () => {
   const [signUpError, setSignUpError] = useState("");
@@ -29,12 +29,14 @@ export const SignUp: React.FC = () => {
   };
 
   return (
-    <div>
-      <SignUpForm submit={submitHandler} error={signUpError} />
-      <GoogleSignIn />
-      <Link to={"/sign-in"} replace={true}>
-        Sign In
-      </Link>
+    <div className={"sign-in"}>
+      <div className={"sign-in-container"}>
+        <h1>Sign Up</h1>
+        <SignUpForm submit={submitHandler} error={signUpError} />
+        <Link to={"/sign-in"} replace={true}>
+          Sign In
+        </Link>
+      </div>
     </div>
   );
 };

@@ -33,12 +33,14 @@ export const SignIn: React.FC = () => {
   };
   return (
     <div className={"sign-in"}>
-      <h1>Sign In</h1>
+      <div className={"sign-in-container"}>
+        <h1>Sign In</h1>
 
-      <SignInForm submit={onSubmit} error={signInError} />
-      <Link to={"/sign-up"} replace={true}>
-        Sign Up
-      </Link>
+        <SignInForm submit={onSubmit} error={signInError} />
+        <Link to={"/sign-up"} replace={true}>
+          Sign Up
+        </Link>
+      </div>
     </div>
   );
 };
