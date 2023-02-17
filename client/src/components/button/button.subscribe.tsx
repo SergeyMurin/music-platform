@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import subscribeOnIcon from "../../assets/user/subscribe-on-icon.svg";
 import subscribeIcon from "../../assets/user/subscribe-icon.svg";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
-import axios from "axios";
 import {
   createSubscribeAsync,
   removeSubscribeAsync,
@@ -22,12 +21,12 @@ export const ButtonSubscribe: React.FC<Props> = ({ user }) => {
 
   useEffect(() => {
     if (subscriptions) {
-      const subscriptionId = subscriptions.find((s) => s === user.id);
+      const subscriptionId = subscriptions.find((s: any) => s.id === user.id);
       if (subscriptionId) {
         setIsSubscribe(true);
       }
     }
-  }, []);
+  }, [user, subscriptions]);
 
   const subscribeAccess = () => {
     if (!isAuth) {
@@ -58,14 +57,14 @@ export const ButtonSubscribe: React.FC<Props> = ({ user }) => {
       {isSubscribe && (
         <img
           src={subscribeOnIcon}
-          className={"btn_action like"}
+          className={"btn_action like subscribe"}
           onClick={unsubscribeButtonHandler}
         />
       )}
       {!isSubscribe && (
         <img
           src={subscribeIcon}
-          className={"btn_action like"}
+          className={"btn_action like subscribe"}
           onClick={subscribeButtonHandler}
         />
       )}

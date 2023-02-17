@@ -29,23 +29,30 @@ export const UserInfo: React.FC<Props> = () => {
                 <h1>{userInfo.username}</h1>
                 <h2>{userInfo.bio ? userInfo.bio : "No bio"}</h2>
               </div>
+              <div className={"buttons"}>
+                <Link to={"favorites"} className={"button"}>
+                  Favorites <small>{userInfo.favorites_count}</small>
+                </Link>
+                <Link to={"tracks"} className={"button"}>
+                  Tracks <small>{userInfo.tracks_count}</small>
+                </Link>
+                <Link to={"subscribers"} className={"button"}>
+                  Subscribers <small>{userInfo.subscribers_count}</small>
+                </Link>
+                <Link to={"subscriptions"} className={"button"}>
+                  Subscriptions <small>{userInfo.subscriptions_count}</small>
+                </Link>
+
+                {userInfo.id === user?.id && (
+                  <Link to={"../upload"} className={"button"}>
+                    Upload
+                  </Link>
+                )}
+              </div>
             </div>
 
             {userInfo.id !== user?.id && <ButtonSubscribe user={userInfo} />}
           </div>
-
-          <Link to={"favorites"} className={"button"}>
-            Favorites <small>{userInfo.favorites_count}</small>
-          </Link>
-          <Link to={"tracks"} className={"button"}>
-            Tracks <small>{userInfo.tracks_count}</small>
-          </Link>
-          <Link to={"subscribers"} className={"button"}>
-            Subscribers <small>{userInfo.subscribers_count}</small>
-          </Link>
-          <Link to={"subscriptions"} className={"button"}>
-            Subscriptions <small>{userInfo.subscriptions_count}</small>
-          </Link>
 
           <div className={"after-card"}>
             <Outlet />

@@ -2,8 +2,8 @@ export interface UserState {
   user: IUser | null;
   isAuth: boolean;
   token: string | null;
-  subscriptions: string[] | null;
-  subscribers: string[] | null;
+  subscriptions: string[] | null | any;
+  subscribers: string[] | null | any;
   favorites: any[] | null;
 }
 
