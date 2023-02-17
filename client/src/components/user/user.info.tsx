@@ -14,7 +14,7 @@ export const UserInfo: React.FC<Props> = () => {
     if (id) {
       getAuthorAsync(id).then((response) => setUserInfo(response.data));
     }
-  }, []);
+  }, [id]);
   return (
     <div className={"profile_page"}>
       {!userInfo && <div className={"profile_card"}></div>}

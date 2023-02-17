@@ -14,11 +14,17 @@ import {
   fetchTrackTags,
 } from "../../requests/tracks";
 
+export const fetchAuthorInfo = async (id: any) => {
+  const response = await axios.get("http://localhost:5000/user", {
+    params: { id },
+  });
+  return response.data;
+};
+
 export const TrackInfo: React.FC = () => {
   const [track, setTrack] = useState<ITrack | null>(null);
-  const [comments, setComments] = useState<any>();
   const [author, setAuthor] = useState<IUser>();
-  const [gernes, setGenres] = useState<any>();
+  const [genres, setGenres] = useState<any>();
   const [tags, setTags] = useState<any>();
   const [showLyrics, setShowLyrics] = useState(false);
 
@@ -30,7 +36,7 @@ export const TrackInfo: React.FC = () => {
       setTrack(data);
       setTracks([data]);
     });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (track) {
@@ -53,13 +59,6 @@ export const TrackInfo: React.FC = () => {
     navigate(`../profile/${author?.id}`);
   };
 
-  const fetchAuthorInfo = async (id: any) => {
-    const response = await axios.get("http://localhost:5000/user", {
-      params: { id },
-    });
-    return response.data;
-  };
-
   return (
     <div className={"track_page"}>
       {!track && <div className={"track_card"}></div>}
@@ -76,9 +75,9 @@ export const TrackInfo: React.FC = () => {
                   {author.username}
                 </h2>
 
-                {gernes && (
+                {genres && (
                   <div id={"genres"}>
-                    {gernes.map((g: any) => {
+                    {genres.map((g: any) => {
                       return <small key={g.id}>{g.title + " "}</small>;
                     })}
                   </div>
@@ -107,17 +106,30 @@ export const TrackInfo: React.FC = () => {
 
           <div className={"after-card"}>
             <div style={{ display: "flex", alignItems: "center" }}>
-              <h2>Lyrics:</h2>
               {track.lyrics && !showLyrics && (
-                <button onClick={lyricsHandler}>Show</button>
+                <>
+                  {" "}
+                  <h2>Lyrics:</h2>
+                  <button onClick={lyricsHandler}>Show</button>
+                </>
               )}
               {track.lyrics && showLyrics && (
-                <button onClick={lyricsHandler}>Hide</button>
+                <>
+                  {" "}
+                  <h2>Lyrics:</h2>
+                  <button onClick={lyricsHandler}>Hide</button>
+                </>
               )}
             </div>
-            <hr />
 
-            {track.lyrics && showLyrics && <p> {track.lyrics}</p>}
+            {track.lyrics && showLyrics && (
+              <>
+                <div className={"fade-in-fwd"}>
+                  <p> {track.lyrics}</p>
+                  <hr />
+                </div>
+              </>
+            )}
           </div>
         </>
       )}

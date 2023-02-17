@@ -36,9 +36,11 @@ export class SubscriberService {
       order: [['createdAt', 'DESC']],
     });
 
-    return subscribers.map((subscriber) => {
-      return subscriber.on_whom_user_id;
-    });
+    return await Promise.all(
+      subscribers.map(async (subscriber) => {
+        return await this.userService.getById(subscriber.on_whom_user_id);
+      }),
+    );
   }
 
   async getAllSubscribers(id: string) {
@@ -47,9 +49,11 @@ export class SubscriberService {
       order: [['createdAt', 'DESC']],
     });
 
-    return subscribers.map((subscriber) => {
-      return subscriber.who_user_id;
-    });
+    return await Promise.all(
+      subscribers.map(async (subscriber) => {
+        return await this.userService.getById(subscriber.who_user_id);
+      }),
+    );
   }
 
   async subscribe(token, dto) {

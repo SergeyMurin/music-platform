@@ -8,9 +8,6 @@ type Props = {
 export const UserItem: React.FC<Props> = ({ user }) => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
   const authorClickHandler = (e: any) => {
     let href = window.location.href;
     href = href
@@ -20,7 +17,7 @@ export const UserItem: React.FC<Props> = ({ user }) => {
     if (href === "search") {
       navigate(`../profile/${user.id}`);
     } else if (href === "subscribers" || href === "subscriptions") {
-      navigate(`../../../profile/${user.id}`);
+      navigate(`../../profile/${user.id}`);
     } else navigate(`profile/${user.id}`);
   };
 

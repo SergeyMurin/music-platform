@@ -21,7 +21,7 @@ export const ProfileTracks: React.FC = () => {
   }, []);
 
   return (
-    <div className={"favorites"}>
+    <div className={"tracks"}>
       <h2>Tracks:</h2>
       <hr />
       {tracks &&
