@@ -278,16 +278,18 @@ export const formatTags = (fromSelect: Option[], newTags: any, limit = 10) => {
   let output = "";
   let count = 0;
 
-  for (const tagSelect of fromSelect) {
-    if (count > limit) {
-      output = output.replace(/\s+/g, ",").replace(/,+/g, ",").trim();
-      if (output.endsWith(",")) {
-        output = output.slice(0, -1);
+  if (fromSelect) {
+    for (const tagSelect of fromSelect) {
+      if (count > limit) {
+        output = output.replace(/\s+/g, ",").replace(/,+/g, ",").trim();
+        if (output.endsWith(",")) {
+          output = output.slice(0, -1);
+        }
+        return output;
       }
-      return output;
+      output += (tagSelect.value as string) + " ";
+      count++;
     }
-    output += (tagSelect.value as string) + " ";
-    count++;
   }
 
   for (const newTag of newTags) {
