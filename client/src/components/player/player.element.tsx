@@ -12,6 +12,7 @@ import { LikeButton } from "../button/like.button";
 import { DownloadButton } from "../button/download.button";
 import axios from "axios";
 import MyMarquee from "./marquee";
+import { useHref, useNavigate } from "react-router-dom";
 
 type Props = {
   audioElem: any;
@@ -123,19 +124,38 @@ export const PlayerElement: React.FC<Props> = ({ audioElem, author }) => {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
+  const trackHref = useHref({ pathname: "/track" });
+  const userHref = useHref({ pathname: "/profile" });
+  const navigate = useNavigate();
+  const trackClickHandler = () => {
+    navigate(trackHref + `/${currentTrack.id}`);
+  };
+  const authorClickHandler = () => {
+    navigate(userHref + `/${currentTrack.user_id}`);
+  };
+
   return (
     <div className={"player-element"}>
       <div className="player_container">
         <div className={"player__track-info"}>
           <div className={"player_pic"}>
             <img
+              onClick={trackClickHandler}
               style={{ cursor: "pointer" }}
               src={currentTrack?.picture_url}
             />
           </div>
           <div className="title">
-            <MyMarquee text={currentTrack?.title} activateLength={20} />
-            <MyMarquee text={author?.username} activateLength={20} />
+            <MyMarquee
+              text={currentTrack?.title}
+              activateLength={20}
+              onClickEvent={trackClickHandler}
+            />
+            <MyMarquee
+              text={author?.username}
+              activateLength={20}
+              onClickEvent={authorClickHandler}
+            />
           </div>
         </div>
         <div className="navigation">

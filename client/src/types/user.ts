@@ -11,6 +11,7 @@ export interface IUser {
   id: string;
   username: string;
   email: string;
+  bio: string;
   email_confirmed: string;
   picture_url: string;
   subscribers_count: number;

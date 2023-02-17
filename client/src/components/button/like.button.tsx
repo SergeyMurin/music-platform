@@ -32,10 +32,10 @@ export const LikeButton: React.FC<Props> = ({ isForTrack, track }) => {
 
   useEffect(() => {
     if (isForTrack && favorites) {
-      const favorite = favorites.find((f) => f.track_id === track?.id);
+      const favorite = favorites.find((f) => f.id === track?.id);
       if (favorite) {
         setIsFavorite(true);
-        setFavoriteId(favorite.id);
+        setFavoriteId(favorite.favorite_id);
       } else setIsFavorite(false);
     }
   }, [favorites, track]);

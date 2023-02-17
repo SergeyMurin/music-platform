@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { useActions } from "../../hooks/useActions";
-import { BiUnderline } from "react-icons/all";
 import { LikeButton } from "../button/like.button";
 import { DownloadButton } from "../button/download.button";
 import { Link, useNavigate } from "react-router-dom";
@@ -26,8 +24,6 @@ export const TrackItem: React.FC<Props> = ({ track, tracks }) => {
   }, []);
 
   const trackClickHandler = (e: any) => {
-    e.stopPropagation();
-    e.preventDefault();
     let href = window.location.href;
     href = href
       .split("/")
@@ -39,9 +35,6 @@ export const TrackItem: React.FC<Props> = ({ track, tracks }) => {
   };
 
   const authorClickHandler = (e: any) => {
-    e.stopPropagation();
-    e.preventDefault();
-
     let href = window.location.href;
     href = href
       .split("/")

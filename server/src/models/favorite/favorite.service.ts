@@ -88,11 +88,13 @@ export class FavoriteService {
           where: { id: favorite.id },
         });
         if (favoriteTrack) {
+          const track = await this.trackService.getTrackById(
+            favoriteTrack.track_id,
+          );
           return {
+            favorite_id: favoriteTrack.id,
             type: 'track',
-            id: favorite.id,
-            track_id: favoriteTrack.track_id,
-            user_id: userId,
+            ...track.dataValues,
           };
         }
 
@@ -100,11 +102,11 @@ export class FavoriteService {
           where: { id: favorite.id },
         });
         if (favoriteAlbum) {
+          const album = await this.albumService.getById(favoriteAlbum.album_id);
           return {
             type: 'album',
-            id: favorite.id,
-            track_id: favoriteAlbum.album_id,
-            user_id: userId,
+            favorite_id: favoriteAlbum.id,
+            ...album.dataValues,
           };
         }
       }),

@@ -63,18 +63,8 @@ export class UserService {
   async getUserById(dto: GetUserDto) {
     const user = await this.getById(dto.id);
     return {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      email_confirmed: user.email_confirmed,
-      bio: user.bio,
-      subscribers_count: user.subscribers_count,
-      subscriptions_count: user.subscriptions_count,
-      favorites_count: user.favorites_count,
-      reposts_count: user.reposts_count,
-      tracks_count: user.tracks_count,
-      albums_count: user.albums_count,
-      playlists_count: user.playlists_count,
+      ...user.dataValues,
+      picture_url: user.picture_url,
     };
   }
 
@@ -171,18 +161,7 @@ export class UserService {
     return await Promise.all(
       searchedUsers.map(async (user) => {
         return {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          email_confirmed: user.email_confirmed,
-          bio: user.bio,
-          subscribers_count: user.subscribers_count,
-          subscriptions_count: user.subscriptions_count,
-          favorites_count: user.favorites_count,
-          reposts_count: user.reposts_count,
-          tracks_count: user.tracks_count,
-          albums_count: user.albums_count,
-          playlists_count: user.playlists_count,
+          ...user.dataValues,
         };
       }),
     );

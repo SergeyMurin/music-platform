@@ -1,8 +1,8 @@
-.track_page {
+.track_page, .profile_page {
     width: 100%;
 }
 
-.track_card {
+.track_card, .profile_card {
     margin-top: 2rem;
     width: 100%;
     height: 20rem;
@@ -13,24 +13,24 @@
     background-color: var(--base-player-background-color);
 }
 
-.track_card_img {
+.track_card_img, .profile_card_img {
     height: 20rem;
     width: 20rem;
 
 }
 
-.track_card img {
+.track_card img, .profile_card img {
     height: 20rem;
     width: 20rem;
     object-fit: cover;
 
 }
 
-.card_info {
+.card_info, .profile_info {
     width: 100%;
 }
 
-.card_info_container {
+.card_info_container, .profile_info_container {
     display: flex;
     width: calc(100% - 1rem);
     flex-direction: column;
@@ -38,17 +38,17 @@
     min-height: 15rem;
 }
 
-.card_info h1 {
+.card_info h1, .profile_info h1 {
     font-size: 3rem;
     margin-bottom: 0.1rem;
 }
 
-.card_info h2 {
+.card_info h2, .profile_info h2 {
     margin: 0 0 3rem 0;
 
 }
 
-.card_buttons {
+.card_buttons, .profile_buttons {
     width: 95%;
     display: flex;
     align-items: center;

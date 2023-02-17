@@ -5,6 +5,8 @@ import { useActions } from "../../hooks/useActions";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { TrackItem } from "../track/track.item";
 import { Loader } from "../loader/loader";
+import { UserItem } from "../user/user.item";
+import { IUser } from "../../types/user";
 
 export const SearchContent: React.FC = () => {
   const { tracks } = useTypedSelector((state) => state.track);
@@ -12,13 +14,15 @@ export const SearchContent: React.FC = () => {
   const location = useLocation();
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [showAll, setShowAll] = useState(false);
+
+  const [showTracksAll, setShowTracksAll] = useState(false);
+  const [showUsersAll, setShowUsersAll] = useState(false);
   const params = new URLSearchParams(location.search);
 
   const displayedCount = 3;
 
   const [albums, setAlbums] = useState();
-  const [users, setUsers] = useState();
+  const [users, setUsers] = useState<IUser[]>();
 
   useEffect(() => {
     const query = params.get("q");
@@ -35,12 +39,17 @@ export const SearchContent: React.FC = () => {
       .get(`http://localhost:5000/user/search?term=${query}&type=all`)
       .then((response) => {
         setTracks(response.data.tracks);
+        setUsers(response.data.users);
         setSearchResults(response.data);
       });
   };
 
-  const handleShowAll = () => {
-    setShowAll(!showAll);
+  const handleShowTracksAll = () => {
+    setShowTracksAll(!showTracksAll);
+  };
+
+  const handleShowUsersAll = () => {
+    setShowUsersAll(!showUsersAll);
   };
 
   return (
@@ -56,21 +65,42 @@ export const SearchContent: React.FC = () => {
       )}
       {!isLoading && searchResults && (
         <>
+          {/*Tracks*/}
+
           <h1>Soundtracks</h1>
+
           {!tracks?.length && <h2>No matches</h2>}
-          {!showAll && tracks && tracks.length > displayedCount && (
-            <button onClick={handleShowAll}>Show All</button>
+          {!showTracksAll && tracks && tracks.length > displayedCount && (
+            <button onClick={handleShowTracksAll}>Show All</button>
           )}
-          {showAll && tracks && tracks.length > displayedCount && (
-            <button onClick={handleShowAll}>Hide</button>
+          {showTracksAll && tracks && tracks.length > displayedCount && (
+            <button onClick={handleShowTracksAll}>Hide</button>
           )}
           {tracks &&
             tracks
-              .slice(0, showAll ? tracks.length : displayedCount)
+              .slice(0, showTracksAll ? tracks.length : displayedCount)
               .map((track) => {
                 return (
                   <TrackItem track={track} key={track.id} tracks={tracks} />
                 );
+              })}
+
+          {/*Users*/}
+          <hr />
+          <h1>Users</h1>
+
+          {!users?.length && <h2>No matches</h2>}
+          {!showUsersAll && users && users.length > displayedCount && (
+            <button onClick={handleShowUsersAll}>Show All</button>
+          )}
+          {showUsersAll && users && users.length > displayedCount && (
+            <button onClick={handleShowUsersAll}>Hide</button>
+          )}
+          {users &&
+            users
+              .slice(0, showUsersAll ? users.length : displayedCount)
+              .map((user) => {
+                return <UserItem user={user} key={user.id} />;
               })}
         </>
       )}

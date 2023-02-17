@@ -18,6 +18,7 @@ import { ResetPasswordPage } from "../pages/reset.password.page";
 import { Upload } from "../components/upload/upload";
 import { TrackUpload } from "../components/upload/track.upload";
 import { AlbumUpload } from "../components/upload/album.upload";
+import { ProfileFavorites } from "../components/user/profile.favorites";
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -38,7 +39,11 @@ export const AppRoutes: React.FC = () => {
         <Route path={"admin"} element={<AdminPage />} />
         <Route path={"album/:id"} element={<AlbumPage />} />
         <Route path={"playlist/:id"} element={<PlaylistPage />} />
-        <Route path={"profile/:id"} element={<ProfilePage />} />
+
+        <Route path={"profile/:id"} element={<ProfilePage />}>
+          <Route path={"favorites"} element={<ProfileFavorites />} />
+        </Route>
+
         <Route path={"search"} element={<SearchPage />} />
         <Route path={"track/:id"} element={<TrackPage />} />
 

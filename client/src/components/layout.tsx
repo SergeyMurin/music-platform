@@ -1,21 +1,16 @@
 import React from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Player } from "./player/player";
-import { useActions } from "../hooks/useActions";
 import { useTypedSelector } from "../hooks/useTypedSelector";
 import { Search } from "./search/search";
 import "../pages/pages.css";
 
 export const Layout: React.FC = () => {
-  const { setUser, setToken, setAuth } = useActions();
   const { isAuth, user } = useTypedSelector((state) => state.user);
   const signOutHandler = () => {
     localStorage.removeItem("id");
     localStorage.removeItem("token");
-    window.location.reload();
-    setToken(null);
-    setUser(null);
-    setAuth(false);
+    window.location.replace(window.location.origin);
   };
   return (
     <div className={"layout"}>
