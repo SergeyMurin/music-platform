@@ -19,6 +19,8 @@ export const UserItem: React.FC<Props> = ({ user }) => {
       .split(" ")[0];
     if (href === "search") {
       navigate(`../profile/${user.id}`);
+    } else if (href === "subscribers" || href === "subscriptions") {
+      navigate(`../../../profile/${user.id}`);
     } else navigate(`profile/${user.id}`);
   };
 

@@ -46,7 +46,10 @@ export const UserInfo: React.FC<Props> = () => {
           <Link to={"subscriptions"} className={"button"}>
             Subscriptions <small>{userInfo.subscriptions_count}</small>
           </Link>
-          <Outlet />
+
+          <div className={"after-card"}>
+            <Outlet />
+          </div>
         </>
       )}
     </div>

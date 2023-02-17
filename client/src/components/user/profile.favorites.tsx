@@ -5,6 +5,7 @@ import { TrackItem } from "../track/track.item";
 import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
+import { getFavoritesAsync } from "../../requests/favorite";
 
 export const ProfileFavorites: React.FC = () => {
   const { id } = useParams();
@@ -19,13 +20,11 @@ export const ProfileFavorites: React.FC = () => {
       });
     }
   }, []);
-  const getFavoritesAsync = async (id: string) => {
-    return await axios.get("http://localhost:5000/favorite/all", {
-      params: { id },
-    });
-  };
+
   return (
     <div className={"favorites"}>
+      <h2>Favorites:</h2>
+      <hr />
       {favorites &&
         tracks &&
         favorites.map((f: ITrack) => {

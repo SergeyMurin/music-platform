@@ -8,6 +8,11 @@ import { LikeButton } from "../button/like.button";
 import { DownloadButton } from "../button/download.button";
 import axios from "axios";
 import "./track.css";
+import {
+  fetchTrackGenres,
+  fetchTrackInfo,
+  fetchTrackTags,
+} from "../../requests/tracks";
 
 export const TrackInfo: React.FC = () => {
   const [track, setTrack] = useState<ITrack | null>(null);
@@ -34,27 +39,6 @@ export const TrackInfo: React.FC = () => {
       fetchTrackTags(track.id).then((data) => setTags(data));
     }
   }, [track]);
-
-  const fetchTrackInfo = async (id: string) => {
-    const response = await axios.get("http://localhost:5000/track", {
-      params: { id },
-    });
-    return response.data;
-  };
-
-  const fetchTrackGenres = async (id: string) => {
-    const response = await axios.get("http://localhost:5000/genre-track", {
-      params: { id },
-    });
-    return response.data;
-  };
-
-  const fetchTrackTags = async (id: string) => {
-    const response = await axios.get("http://localhost:5000/tag-track", {
-      params: { id },
-    });
-    return response.data;
-  };
 
   const lyricsHandler = () => {
     setShowLyrics(!showLyrics);

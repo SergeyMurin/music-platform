@@ -19,6 +19,7 @@ import { Upload } from "../components/upload/upload";
 import { TrackUpload } from "../components/upload/track.upload";
 import { AlbumUpload } from "../components/upload/album.upload";
 import { ProfileFavorites } from "../components/user/profile.favorites";
+import { ProfileTracks } from "../components/user/profile.tracks";
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -42,6 +43,7 @@ export const AppRoutes: React.FC = () => {
 
         <Route path={"profile/:id"} element={<ProfilePage />}>
           <Route path={"favorites"} element={<ProfileFavorites />} />
+          <Route path={"tracks"} element={<ProfileTracks />} />
         </Route>
 
         <Route path={"search"} element={<SearchPage />} />

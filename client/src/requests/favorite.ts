@@ -28,3 +28,9 @@ export const removeFavoriteTrackAsync = async (
     },
   });
 };
+
+export const getFavoritesAsync = async (id: string) => {
+  return await axios.get("http://localhost:5000/favorite/all", {
+    params: { id },
+  });
+};

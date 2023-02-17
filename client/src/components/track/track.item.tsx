@@ -31,7 +31,7 @@ export const TrackItem: React.FC<Props> = ({ track, tracks }) => {
       .split(" ")[0];
     if (href === "search") {
       navigate(`../track/${track.id}`);
-    } else if (href === "favorites") {
+    } else if (href === "favorites" || href === "tracks") {
       navigate(`../../../track/${track.id}`);
     } else navigate(`track/${track.id}`);
   };
