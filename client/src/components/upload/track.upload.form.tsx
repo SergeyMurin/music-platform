@@ -119,90 +119,122 @@ export const TrackUploadForm: React.FC<Props> = ({
   });
 
   return (
-    <form onSubmit={onSubmit}>
+    <form className={"track-upload-form"} onSubmit={onSubmit}>
       {/*TITLE*/}
-      <label>Title: </label>
-      <input type={"text"} {...register("title")} />
-      {errors?.title && <p>{errors.title.message}</p>}
+      <div className={"form-row"}>
+        <label>Title: </label>
+        <input type={"text"} {...register("title")} />
+        {errors?.title ? (
+          <p className={"error"}>{errors.title.message}</p>
+        ) : (
+          <p className={"error"}></p>
+        )}
+      </div>
 
-      {/*PICTURE*/}
+      <div className={"form-row"}>
+        {/*PICTURE*/}
 
-      <label>Soundtrack picture: </label>
-      <input type={"file"} {...register("picture")} />
-      {errors?.picture && <p>{errors.picture.message}</p>}
-
-      {/*TRACK*/}
-      <label>Soundtrack: </label>
-      <input type={"file"} {...register("track")} />
-      {errors?.track && <p>{errors.track.message}</p>}
+        <label>Soundtrack picture: </label>
+        <input type={"file"} {...register("picture")} />
+        {errors?.picture ? (
+          <p>{errors.picture.message}</p>
+        ) : (
+          <p className={"error"}></p>
+        )}
+      </div>
+      <div className={"form-row"}>
+        {/*TRACK*/}
+        <label>Soundtrack: </label>
+        <input type={"file"} {...register("track")} />
+        {errors?.track ? (
+          <p className={"error"}>{errors.track.message}</p>
+        ) : (
+          <p className={"error"}></p>
+        )}
+      </div>
 
       {/*GENRES*/}
-      <label>Genres: </label>
-      <article>Genres limit: {genresLimit}</article>
-      <MultiSelect
-        key="genre"
-        options={generateGenreOptions(genres)}
-        onChange={handleGenreChange}
-        value={genreOptionSelected}
-        isSelectAll={true}
-        menuPlacement={"bottom"}
-      />
-      {genreError && <p>Genre is required</p>}
-
-      {/*TAGS*/}
-
-      <label>Tags:</label>
-      <MultiSelect
-        key="tag"
-        options={generateTagOptions(tags)}
-        onChange={handleTagChange}
-        value={tagOptionSelected}
-        isSelectAll={true}
-        menuPlacement={"bottom"}
-      />
-
-      {/*NEW TAGS*/}
-
-      <label>New tags: {newTags && newTags.map((nt: any) => `#${nt} `)}</label>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          setNewTags([]);
-          setNewTagInputValue("");
-        }}
-      >
-        Clear
-      </button>
-      <input
-        type={"text"}
-        value={newTagInputValue}
-        onChange={(e) => setNewTagInputValue(e.target.value)}
-      />
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          const tags = newTags;
-          if (tags.find((t) => t === newTagInputValue)) {
-            return;
-          }
-          tags.push(newTagInputValue);
-          setNewTags(tags);
-          setNewTagInputValue("");
-        }}
-      >
-        Add
-      </button>
+      <div className={"form-row"}>
+        <label>Genres: (Limit {genresLimit}) </label>
+        <MultiSelect
+          key="genre"
+          options={generateGenreOptions(genres)}
+          onChange={handleGenreChange}
+          value={genreOptionSelected}
+          isSelectAll={true}
+          menuPlacement={"bottom"}
+        />
+        {genreError ? (
+          <p className={"error"}>Genre is required</p>
+        ) : (
+          <p className={"error"}></p>
+        )}
+      </div>
       <article>
-        (Optional) Select tags or add new tags using commas. Example:tag1,tag2.
-        Tags limit from select bar: {tagsLimit}
+        (Optional) Select tags or add new tags using. Example:tag1,tag2. Tags
+        limit from select bar: {tagsLimit}
       </article>
+      <div className={"form-row"}>
+        {/*TAGS*/}
 
-      {/*EXPLICIT*/}
-      <label>Explicit</label>
-      <input type={"checkbox"} {...register("explicit")} />
+        <label>Tags:</label>
+        <MultiSelect
+          key="tag"
+          options={generateTagOptions(tags)}
+          onChange={handleTagChange}
+          value={tagOptionSelected}
+          isSelectAll={true}
+          menuPlacement={"bottom"}
+        />
+      </div>
+      <div className={"form-row"}>
+        {/*NEW TAGS*/}
 
-      {/*LYRICS*/}
-      <textarea {...register("lyrics")} />
+        <label>
+          New tags: {newTags && newTags.map((nt: any) => `#${nt} `)}
+        </label>
+      </div>
+      <div className={"form-row"}>
+        <input
+          type={"text"}
+          value={newTagInputValue}
+          onChange={(e) => setNewTagInputValue(e.target.value)}
+        />
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            const tags = newTags;
+            if (tags.find((t) => t === newTagInputValue)) {
+              return;
+            }
+            tags.push(newTagInputValue);
+            setNewTags(tags);
+            setNewTagInputValue("");
+          }}
+        >
+          Add
+        </button>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            setNewTags([]);
+            setNewTagInputValue("");
+          }}
+        >
+          Clear
+        </button>
+      </div>
+
+      <div className={"form-row"}>
+        {/*EXPLICIT*/}
+        <label>Explicit:</label>
+        <input type={"checkbox"} {...register("explicit")} />
+
+        {/*LYRICS*/}
+        <label>Lyrics:</label>
+
+        <textarea {...register("lyrics")} />
+      </div>
 
       {error && <p>{error}</p>}
       {success && <p>Success</p>}

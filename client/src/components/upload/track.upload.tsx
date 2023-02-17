@@ -3,6 +3,7 @@ import { TrackUploadForm } from "./track.upload.form";
 import axios from "axios";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
+import "./upload.css";
 
 export const TrackUpload: React.FC = () => {
   const [uploadTrackError, setUploadTrackError] = useState("");
@@ -47,6 +48,8 @@ export const TrackUpload: React.FC = () => {
 
   return (
     <div>
+      <h1>Soundtrack upload form</h1>
+      <hr />
       <TrackUploadForm
         onsubmit={onSubmit}
         error={uploadTrackError}

@@ -163,6 +163,7 @@ const MultiSelect = (props: any) => {
 
     return (
       <ReactSelect
+        className={"react-select"}
         {...props}
         inputValue={selectInput}
         onInputChange={onInputChange}
@@ -189,6 +190,7 @@ const MultiSelect = (props: any) => {
 
   return (
     <ReactSelect
+      className={"react-select"}
       {...props}
       inputValue={selectInput}
       onInputChange={onInputChange}

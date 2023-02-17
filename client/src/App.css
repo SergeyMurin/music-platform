@@ -17,7 +17,6 @@ body {
     /*font-family: 'Russo One', sans-serif;*/
     font-weight: bold;
     margin: 0;
-    padding: 0 0 5rem 0;
     display: flex;
     justify-content: center;
     background-color: var(--base-background-color);
@@ -25,12 +24,12 @@ body {
 
 .page {
     color: var(--base-player-background-color);
-    padding: 8vh 0 0 0;
+    padding: 8vh 0 5rem 0;
+
     width: 65vw;
     min-width: 65vw;
     max-width: 65vw;
-
-    min-height: 92vh;
+    min-height: 100vh;
     background-color: var(--base-page-background-color);
     display: flex;
     justify-content: center;

@@ -1,0 +1,23 @@
+.track-upload-form {
+    display: flex;
+    padding: 2rem 3rem;
+    flex-direction: column;
+}
+
+.form-row {
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+}
+
+.react-select {
+    width: 100%;
+    color: black;
+    border-radius: 0;
+    padding: 0;
+}
+
+input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+}

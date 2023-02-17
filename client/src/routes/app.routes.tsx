@@ -22,8 +22,10 @@ import { ProfileFavorites } from "../components/user/profile.favorites";
 import { ProfileTracks } from "../components/user/profile.tracks";
 import { ProfileSubscribers } from "../components/user/profile.subscribers";
 import { ProfileSubscriptions } from "../components/user/profile.subscriptions";
+import { useTypedSelector } from "../hooks/useTypedSelector";
 
 export const AppRoutes: React.FC = () => {
+  const { isAuth } = useTypedSelector((state) => state.user);
   return (
     <Routes>
       <Route path={"/"} element={<Layout />}>
@@ -53,9 +55,13 @@ export const AppRoutes: React.FC = () => {
         <Route path={"search"} element={<SearchPage />} />
         <Route path={"track/:id"} element={<TrackPage />} />
 
-        <Route path={"upload"} element={<Upload />} />
-        <Route path={"upload/track"} element={<TrackUpload />} />
-        <Route path={"upload/album"} element={<AlbumUpload />} />
+        {isAuth && (
+          <>
+            <Route path={"upload"} element={<Upload />} />
+            <Route path={"upload/track"} element={<TrackUpload />} />
+            <Route path={"upload/album"} element={<AlbumUpload />} />
+          </>
+        )}
       </Route>
     </Routes>
   );
