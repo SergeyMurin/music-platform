@@ -3,12 +3,16 @@ import { useTypedSelector } from "../hooks/useTypedSelector";
 import { useActions } from "../hooks/useActions";
 import { TrackItem } from "../components/track/track.item";
 import { Loader } from "../components/loader/loader";
+import { fetchUserFavorites } from "../store/action.creators/user.actions";
 
 export const HomePage: React.FC = () => {
-  const { isAuth } = useTypedSelector((state) => state.user);
+  const { isAuth, user, token } = useTypedSelector((state) => state.user);
   const { popularTracks } = useTypedSelector((state) => state.track);
-  const { fetchPopularTracks } = useActions();
+  const { fetchPopularTracks, fetchUserFavorites } = useActions();
   useEffect(() => {
+    if (user && token) {
+      fetchUserFavorites(user.id, token);
+    }
     fetchPopularTracks();
   }, []);
 

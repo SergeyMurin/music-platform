@@ -20,13 +20,12 @@ export const SignIn: React.FC = () => {
         ...dataValues,
       })
       .then((response) => {
-        /*fetchUser(response.data.id);
+        fetchUser(response.data.id);
         setToken(response.data.token);
-        setAuth(true);*/
+        setAuth(true);
 
         localStorage.setItem("id", response.data.id);
         localStorage.setItem("token", response.data.token);
-        window.location.replace("../");
       })
       .catch((error) => {
         setSignInError(error.response.data.message);

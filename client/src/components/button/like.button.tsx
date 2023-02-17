@@ -22,13 +22,12 @@ export const LikeButton: React.FC<Props> = ({ isForTrack, track }) => {
   const { fetchUserFavorites } = useActions();
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteId, setFavoriteId] = useState(null);
-  const navigate = useNavigate();
 
   /*useEffect(() => {
-                    if (user && token) {
-                      fetchUserFavorites(user.id, token);
-                    }
-                  }, []);*/
+                      if (user && token) {
+                        fetchUserFavorites(user.id, token);
+                      }
+                    }, []);*/
 
   useEffect(() => {
     if (isForTrack && favorites) {
@@ -41,6 +40,7 @@ export const LikeButton: React.FC<Props> = ({ isForTrack, track }) => {
   }, [favorites, track]);
 
   const unlikeButtonHandler = () => {
+    likeAccess();
     if (isForTrack && token && favoriteId && user) {
       removeFavoriteTrackAsync(token, favoriteId).then((response) => {
         fetchUserFavorites(user.id, token);
@@ -61,17 +61,7 @@ export const LikeButton: React.FC<Props> = ({ isForTrack, track }) => {
 
   const likeAccess = () => {
     if (!isAuth) {
-      let href = window.location.href;
-      href = href
-        .split("/")
-        [href.split("/").length - 1].split("?")[0]
-        .split(" ")[0];
-      navigate("");
-      if (href === "search") {
-        navigate(`../sign-in`);
-      } else if (href.startsWith(track.id)) {
-        navigate("../../sign-in");
-      } else navigate(`sign-in`);
+      window.location.replace(window.location.origin + "/sign-in");
     }
   };
 
