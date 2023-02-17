@@ -5,11 +5,13 @@ import { TrackItem } from "../components/track/track.item";
 import { Loader } from "../components/loader/loader";
 
 export const HomePage: React.FC = () => {
+  const { isAuth } = useTypedSelector((state) => state.user);
   const { popularTracks } = useTypedSelector((state) => state.track);
   const { fetchPopularTracks } = useActions();
   useEffect(() => {
     fetchPopularTracks();
   }, []);
+
   return (
     <div className={"home-page"}>
       <div className={"page_header"}>Popular Soundtracks</div>

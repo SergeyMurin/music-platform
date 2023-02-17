@@ -11,10 +11,19 @@ const MyMarquee: React.FC<Props> = ({ text, activateLength }) => {
     <>
       {text?.length >= activateLength ? (
         <Marquee gradientWidth={0} speed={4} pauseOnHover={true}>
-          <div style={{ whiteSpace: "nowrap", width: "200%" }}>{text}</div>
+          <div
+            style={{ whiteSpace: "nowrap", width: "200%", cursor: "pointer" }}
+          >
+            {text}
+          </div>
         </Marquee>
       ) : text ? (
-        <div style={{ whiteSpace: "nowrap", width: "100%" }}>{text}</div>
+        <div
+          className={"fake-link"}
+          style={{ whiteSpace: "nowrap", width: "100%" }}
+        >
+          {text}
+        </div>
       ) : (
         <></>
       )}

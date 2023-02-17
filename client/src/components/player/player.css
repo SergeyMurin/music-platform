@@ -71,6 +71,11 @@ p {
     align-items: center;
 }
 
+.like-download img{
+    height: 1.6rem !important;
+    width: 1.6rem !important;
+}
+
 
 .volume_bar {
     border: var(--base-player-background-color) 0.5rem solid;

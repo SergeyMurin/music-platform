@@ -17,12 +17,14 @@ export const GoogleSignIn: React.FC = () => {
                 token: credentialResponse.credential,
               })
               .then((response) => {
-                setAuth(true);
+                /*setAuth(true);
                 fetchUser(response.data.id);
-                setToken(response.data.token);
+                setToken(response.data.token);*/
 
                 localStorage.setItem("id", response.data.id);
                 localStorage.setItem("token", response.data.token);
+
+                window.location.replace("../");
               });
           }}
           onError={() => {

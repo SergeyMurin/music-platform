@@ -18,12 +18,13 @@ export const SignUp: React.FC = () => {
         ...formValues,
       })
       .then((response) => {
-        fetchUser(response.data.id);
-        setToken(response.data.token);
-        setAuth(true);
+        /*fetchUser(response.data.id);
+                setToken(response.data.token);
+                setAuth(true);*/
 
         localStorage.setItem("id", response.data.id);
         localStorage.setItem("token", response.data.token);
+        window.location.replace("../");
       })
       .catch((error) => setSignUpError(error.response.data.message));
   };

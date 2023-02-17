@@ -5,7 +5,7 @@ import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 import axios from "axios";
 
-const getAuthor = async (id: string) => {
+export const getAuthorAsync = async (id: string) => {
   return await axios.get("http://localhost:5000/user", { params: { id } });
 };
 
@@ -20,7 +20,7 @@ export const Player: React.FC = () => {
 
   useEffect(() => {
     if (currentTrack) {
-      getAuthor(currentTrack.user_id).then((response) => {
+      getAuthorAsync(currentTrack.user_id).then((response) => {
         setAuthor(response.data);
       });
     }

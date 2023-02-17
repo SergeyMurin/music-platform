@@ -5,8 +5,9 @@ import { useActions } from "../../hooks/useActions";
 import { BiUnderline } from "react-icons/all";
 import { LikeButton } from "../button/like.button";
 import { DownloadButton } from "../button/download.button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PlayPauseButton } from "../button/play.pause.button";
+import { getAuthorAsync } from "../player/player";
 
 type Props = {
   track: ITrack;
@@ -14,10 +15,15 @@ type Props = {
 };
 
 export const TrackItem: React.FC<Props> = ({ track, tracks }) => {
-  const { isAuth } = useTypedSelector((state) => state.user);
-  const { currentTrack, isPlaying } = useTypedSelector((state) => state.player);
-  const { setCurrentTrack, setIsPlaying, setQueue } = useActions();
+  const { currentTrack } = useTypedSelector((state) => state.player);
+  const [author, setAuthor] = useState<any>();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getAuthorAsync(track.user_id).then((response) => {
+      setAuthor(response.data);
+    });
+  }, []);
 
   const trackClickHandler = (e: any) => {
     e.stopPropagation();
@@ -32,6 +38,20 @@ export const TrackItem: React.FC<Props> = ({ track, tracks }) => {
     } else navigate(`track/${track.id}`);
   };
 
+  const authorClickHandler = (e: any) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    let href = window.location.href;
+    href = href
+      .split("/")
+      [href.split("/").length - 1].split("?")[0]
+      .split(" ")[0];
+    if (href === "search") {
+      navigate(`../profile/${author.id}`);
+    } else navigate(`profile/${author.id}`);
+  };
+
   const isCurrent = (track: ITrack) => {
     return track.id === currentTrack?.id;
   };
@@ -41,13 +61,21 @@ export const TrackItem: React.FC<Props> = ({ track, tracks }) => {
       className={`track_item fade-in-fwd ${isCurrent(track) ? "current" : ""}`}
       key={track.id}
     >
-      <img src={track.picture_url} onClick={trackClickHandler}></img>
+      <div className={"track_img"}>
+        <img src={track.picture_url} onClick={trackClickHandler}></img>
+      </div>
+
       <div className={`track_item_container`}>
         <div className={"play"}>
           <PlayPauseButton track={isCurrent(track) ? currentTrack : track} />
         </div>
         <div className={"info"}>
-          <span>{track.title}</span>
+          <span className={"fake-link"} onClick={trackClickHandler}>
+            {track.title}
+          </span>
+          <span className={"fake-link"} onClick={authorClickHandler}>
+            {author?.username}
+          </span>
         </div>
         <div className={"like"}>
           <LikeButton

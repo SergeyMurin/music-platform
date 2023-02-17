@@ -12,6 +12,7 @@ export const Layout: React.FC = () => {
   const signOutHandler = () => {
     localStorage.removeItem("id");
     localStorage.removeItem("token");
+    window.location.reload();
     setToken(null);
     setUser(null);
     setAuth(false);

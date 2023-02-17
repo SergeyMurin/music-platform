@@ -101,6 +101,10 @@ a {
     width: 5rem;
     object-fit: cover;
 }
+.track_item .track_img{
+    height: 100%;
+    width: auto;
+}
 
 .track_item_container {
     width: 100%;
@@ -326,3 +330,10 @@ button:disabled, .button:disabled, .button-2:disabled {
 
 
 
+
+.fake-link{
+    cursor: pointer;
+}
+.fake-link:hover{
+    text-decoration: underline;
+}

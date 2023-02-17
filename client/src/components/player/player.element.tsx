@@ -128,7 +128,10 @@ export const PlayerElement: React.FC<Props> = ({ audioElem, author }) => {
       <div className="player_container">
         <div className={"player__track-info"}>
           <div className={"player_pic"}>
-            <img src={currentTrack?.picture_url} />
+            <img
+              style={{ cursor: "pointer" }}
+              src={currentTrack?.picture_url}
+            />
           </div>
           <div className="title">
             <MyMarquee text={currentTrack?.title} activateLength={20} />
