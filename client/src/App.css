@@ -9,6 +9,7 @@
     --base-seekbar-color: #3E6E8C;
     --base-player-light-color: #8AB0BF;
     --base-shadow: 0px -5px 16px 4px rgba(1, 24, 38, 0.31);
+    --btn-color: #EBEFF2;
 }
 
 body {
@@ -100,7 +101,8 @@ a {
     width: 5rem;
     object-fit: cover;
 }
-.track_item .track_img{
+
+.track_item .track_img {
     height: 100%;
     width: auto;
 }
@@ -241,7 +243,7 @@ button, .button, .button-2 {
     cursor: pointer;
 }
 
-.button-2{
+.button-2 {
     color: var(--base-player-background-color) !important;
     background-color: var(--base-page-background-color);
 }
@@ -328,11 +330,10 @@ button:disabled, .button:disabled, .button-2:disabled {
 }
 
 
-
-
-.fake-link{
+.fake-link {
     cursor: pointer;
 }
-.fake-link:hover{
+
+.fake-link:hover {
     text-decoration: underline;
 }

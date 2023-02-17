@@ -68,7 +68,13 @@ export const TrackInfo: React.FC = () => {
             <div className={"track_card_img"}>
               <img src={track.picture_url} />
             </div>
-            <div className={"card_info"}>
+            <div
+              className={"card_info"}
+              style={{
+                backgroundImage: `url(${track.picture_url})`,
+                objectFit: "cover",
+              }}
+            >
               <div className={"card_info_container"}>
                 <h1>{track.title}</h1>
                 <h2 className={"fake-link"} onClick={authorClickHandler}>
