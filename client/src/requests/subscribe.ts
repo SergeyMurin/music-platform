@@ -15,5 +15,6 @@ export const createSubscribeAsync = async (id: string, token: string) => {
 export const removeSubscribeAsync = async (id: string, token: string) => {
   return await axios.delete("http://localhost:5000/subscribe", {
     data: { user_id: id },
+    headers: { Authorization: `Bearer ${token}` },
   });
 };
