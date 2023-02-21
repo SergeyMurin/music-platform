@@ -1,15 +1,16 @@
 import React from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { Player } from "./player/player";
 import { useTypedSelector } from "../hooks/useTypedSelector";
 import { Search } from "./search/search";
 import "../pages/pages.css";
+import { Constants } from "../constants";
 
 export const Layout: React.FC = () => {
   const { isAuth, user } = useTypedSelector((state) => state.user);
   const signOutHandler = () => {
-    localStorage.removeItem("id");
-    localStorage.removeItem("token");
+    localStorage.removeItem(Constants.local.id);
+    localStorage.removeItem(Constants.local.token);
     window.location.replace(window.location.origin);
   };
   return (

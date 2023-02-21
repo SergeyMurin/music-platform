@@ -1,31 +1,42 @@
 import React, { useState } from "react";
-import { GoogleSignIn } from "../google/google.sign.in";
 import { SignInForm } from "./sign.in.form";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useActions } from "../../hooks/useActions";
 import "./sign.in.css";
+import { signInAsync } from "../../requests/auth";
+import { Constants } from "../../constants";
 
 export const SignIn: React.FC = () => {
   const [signInError, setSignInError] = useState("");
-  const { fetchUser, setToken, setAuth } = useActions();
+  const {
+    fetchUser,
+    setToken,
+    setAuth,
+    fetchUserFavorites,
+    fetchUserSubscriptions,
+    fetchUserSubscribers,
+  } = useActions();
 
   const onSubmit = (dataValues: any) => {
     signIn(dataValues).then();
   };
 
   const signIn = async (dataValues: any) => {
-    await axios
-      .post("http://localhost:5000/auth/sign-in", {
-        ...dataValues,
-      })
+    signInAsync(dataValues)
       .then((response) => {
-        fetchUser(response.data.id);
-        setToken(response.data.token);
-        setAuth(true);
+        const id = response.data.id;
+        const token = response.data.token;
 
-        localStorage.setItem("id", response.data.id);
-        localStorage.setItem("token", response.data.token);
+        fetchUser(id);
+        setToken(token);
+        setAuth(true);
+        fetchUserFavorites(id, token);
+        fetchUserSubscribers(id);
+        fetchUserSubscriptions(id);
+
+        localStorage.setItem(Constants.local.id, response.data.id);
+        localStorage.setItem(Constants.local.token, response.data.token);
       })
       .catch((error) => {
         setSignInError(error.response.data.message);

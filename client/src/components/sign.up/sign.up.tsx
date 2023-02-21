@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useActions } from "../../hooks/useActions";
 import "../sign.in/sign.in.css";
+import { Constants } from "../../constants";
+import { signUpAsync } from "../../requests/auth";
 
 export const SignUp: React.FC = () => {
   const [signUpError, setSignUpError] = useState("");
@@ -13,17 +15,14 @@ export const SignUp: React.FC = () => {
   };
 
   const signUp = async (formValues: any) => {
-    await axios
-      .post("http://localhost:5000/auth/sign-up", {
-        ...formValues,
-      })
+    signUpAsync(formValues)
       .then((response) => {
         fetchUser(response.data.id);
         setToken(response.data.token);
         setAuth(true);
 
-        localStorage.setItem("id", response.data.id);
-        localStorage.setItem("token", response.data.token);
+        localStorage.setItem(Constants.local.id, response.data.id);
+        localStorage.setItem(Constants.local.token, response.data.token);
       })
       .catch((error) => setSignUpError(error.response.data.message));
   };

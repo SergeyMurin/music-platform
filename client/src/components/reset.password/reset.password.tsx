@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { ResetPasswordForm } from "./reset.password.form";
 import { Link, useSearchParams } from "react-router-dom";
-import axios from "axios";
+import { resetPasswordAsync } from "../../requests/auth";
 
 export const ResetPassword: React.FC = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [resetPasswordError, setResetPasswordError] = useState("");
-  const [isReset, setIsReset] = useState(false);
+  const [isUpdated, setIsUpdated] = useState(false);
 
   const onSubmit = (dataValues: any) => {
     const token: string | null = searchParams.get("token");
@@ -16,31 +16,22 @@ export const ResetPassword: React.FC = () => {
   };
 
   const resetPassword = async (token: string, dataValues: any) => {
-    await axios
-      .patch(
-        "http://localhost:5000/auth/reset-password",
-        { password: dataValues?.password },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+    resetPasswordAsync(dataValues, token)
       .then(() => {
-        setIsReset(true);
+        setIsUpdated(true);
       })
       .catch((error) => setResetPasswordError(error.response.data.message));
   };
   return (
     <div className={"sign-in"}>
       <div className={"sign-in-container"}>
-        {!isReset && (
+        {!isUpdated && (
           <>
             <h1>Reset password</h1>
             <ResetPasswordForm submit={onSubmit} error={resetPasswordError} />
           </>
         )}
-        {isReset && (
+        {isUpdated && (
           <div>
             <h1 className={"success"}>Password has been reset</h1>
             <h3>Now you can login</h3>

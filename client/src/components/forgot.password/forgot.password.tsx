@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ForgotPasswordForm } from "./forgot.password.form";
-import axios from "axios";
+import { forgotPasswordAsync } from "../../requests/auth";
 
 export const ForgotPassword: React.FC = () => {
   const [isSubmit, setIsSubmit] = useState(false);
@@ -12,9 +12,8 @@ export const ForgotPassword: React.FC = () => {
     sendResetLink(values).then();
   };
 
-  const sendResetLink = async (values: {}) => {
-    await axios
-      .post("http://localhost:5000/auth/forgot-password", { ...values })
+  const sendResetLink = async (dataValues: any) => {
+    forgotPasswordAsync(dataValues)
       .then(() => {
         setIsSent(true);
       })

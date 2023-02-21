@@ -1,6 +1,4 @@
 import axios from "axios";
-import { Simulate } from "react-dom/test-utils";
-import error = Simulate.error;
 
 export const createFavoriteTrackAsync = async (
   token: string,

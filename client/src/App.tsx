@@ -5,23 +5,22 @@ import { useActions } from "./hooks/useActions";
 import { useTypedSelector } from "./hooks/useTypedSelector";
 import MyMarquee from "./components/player/marquee";
 import { fetchPopularTracks } from "./store/action.creators/track.actions";
+import { Constants } from "./constants";
 
 function App() {
-  const { isAuth } = useTypedSelector((state) => state.user);
   const {
     fetchUser,
     setToken,
-    fetchTags,
     fetchUserFavorites,
     fetchUserSubscribers,
     fetchUserSubscriptions,
+    fetchTags,
     fetchGenres,
-    fetchTracks,
   } = useActions();
 
   useEffect(() => {
-    const id: string | null = localStorage.getItem("id");
-    const token: string | null = localStorage.getItem("token");
+    const id: string | null = localStorage.getItem(Constants.local.id);
+    const token: string | null = localStorage.getItem(Constants.local.token);
 
     if (id && token) {
       fetchUser(id);
@@ -31,13 +30,11 @@ function App() {
       fetchUserSubscriptions(id);
       fetchTags();
       fetchGenres();
-      fetchUserFavorites(id, token);
     }
   }, []);
   return (
     <div className="App">
       <AppRoutes />
-      {/*<MyMarquee />*/}
     </div>
   );
 }
