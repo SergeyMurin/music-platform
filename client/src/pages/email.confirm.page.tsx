@@ -4,6 +4,7 @@ import { useActions } from "../hooks/useActions";
 import { Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { Loader } from "../components/loader/loader";
+import { Constants } from "../constants";
 
 export const EmailConfirmPage: React.FC = () => {
   const { user, isAuth } = useTypedSelector((state) => state.user);
@@ -19,7 +20,7 @@ export const EmailConfirmPage: React.FC = () => {
 
   const confirmEmail = async (token: string) => {
     await axios
-      .get("http://localhost:5000/auth/confirm", {
+      .get(`${Constants.server_uri}/auth/confirm`, {
         params: { token },
       })
       .then(() => {

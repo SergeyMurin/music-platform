@@ -3,7 +3,7 @@ import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { useActions } from "../../hooks/useActions";
 import { fetchUser } from "../../store/action.creators/user.actions";
 import { Constants } from "../../constants";
-import { googleSignInAsync } from "../../requests/auth";
+import { googleSignInAsync } from "../../requests/requests.auth";
 
 export const GoogleSignIn: React.FC = () => {
   const { setAuth, setToken, fetchUser } = useActions();

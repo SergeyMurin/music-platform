@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { IUser } from "../../types/user";
-import {
-  getUserSubscribersAsyncQ,
-  getUserSubscriptionsAsync,
-  getUserSubscriptionsAsyncQ,
-} from "../../requests/subscribe";
+import { getUserSubscriptionsAsync } from "../../requests/requests.subscribe";
 import { UserItem } from "./user.item";
 
 export const ProfileSubscriptions: React.FC = () => {
@@ -14,7 +10,7 @@ export const ProfileSubscriptions: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      getUserSubscriptionsAsyncQ(id).then((response) => {
+      getUserSubscriptionsAsync(id).then((response) => {
         setUsers(response.data);
       });
     }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { UserItem } from "./user.item";
 import { IUser } from "../../types/user";
-import { getUserSubscribersAsyncQ } from "../../requests/subscribe";
+import { getUserSubscribersAsync } from "../../requests/requests.subscribe";
 
 export const ProfileSubscribers: React.FC = () => {
   const { id } = useParams();
@@ -10,7 +10,7 @@ export const ProfileSubscribers: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      getUserSubscribersAsyncQ(id).then((response) => {
+      getUserSubscribersAsync(id).then((response) => {
         setUsers(response.data);
       });
     }

@@ -3,10 +3,9 @@ import { useTypedSelector } from "../../hooks/useTypedSelector";
 import {
   createFavoriteTrackAsync,
   removeFavoriteTrackAsync,
-} from "../../requests/favorite";
+} from "../../requests/requests.favorite";
 import { useActions } from "../../hooks/useActions";
 import { ITrack } from "../../types/track";
-import { useNavigate } from "react-router-dom";
 import favoriteOnIcon from "../../assets/player/favorite_on-icon.svg";
 import favoriteIcon from "../../assets/player/favorite-icon.svg";
 import "../player/player.css";
@@ -23,12 +22,6 @@ export const LikeButton: React.FC<Props> = ({ isForTrack, track }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteId, setFavoriteId] = useState(null);
 
-  /*useEffect(() => {
-                      if (user && token) {
-                        fetchUserFavorites(user.id, token);
-                      }
-                    }, []);*/
-
   useEffect(() => {
     if (isForTrack && favorites) {
       const favorite = favorites.find((f) => f.id === track?.id);
@@ -43,7 +36,7 @@ export const LikeButton: React.FC<Props> = ({ isForTrack, track }) => {
     likeAccess();
     if (isForTrack && token && favoriteId && user) {
       removeFavoriteTrackAsync(token, favoriteId).then((response) => {
-        fetchUserFavorites(user.id, token);
+        fetchUserFavorites(user.id);
         setIsFavorite(false);
       });
     }
@@ -53,7 +46,7 @@ export const LikeButton: React.FC<Props> = ({ isForTrack, track }) => {
     likeAccess();
     if (isForTrack && token && track && user) {
       createFavoriteTrackAsync(token, track.id).then((response) => {
-        fetchUserFavorites(user.id, token);
+        fetchUserFavorites(user.id);
         setIsFavorite(true);
       });
     }

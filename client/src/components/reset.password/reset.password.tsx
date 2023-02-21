@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ResetPasswordForm } from "./reset.password.form";
 import { Link, useSearchParams } from "react-router-dom";
-import { resetPasswordAsync } from "../../requests/auth";
+import { resetPasswordAsync } from "../../requests/requests.auth";
 
 export const ResetPassword: React.FC = () => {
   const [searchParams] = useSearchParams();

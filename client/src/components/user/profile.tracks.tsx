@@ -5,7 +5,7 @@ import { TrackItem } from "../track/track.item";
 import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
-import { getProfileTracksAsync } from "../../requests/tracks";
+import { getTracksAsync } from "../../requests/requests.tracks";
 
 export const ProfileTracks: React.FC = () => {
   const { id } = useParams();
@@ -14,7 +14,7 @@ export const ProfileTracks: React.FC = () => {
   const { setTracks } = useActions();
   useEffect(() => {
     if (id) {
-      getProfileTracksAsync(id).then((response) => {
+      getTracksAsync(id).then((response) => {
         setTracks(response.data);
       });
     }

@@ -5,7 +5,7 @@ import { LikeButton } from "../button/like.button";
 import { DownloadButton } from "../button/download.button";
 import { Link, useNavigate } from "react-router-dom";
 import { PlayPauseButton } from "../button/play.pause.button";
-import { getAuthorAsync } from "../player/player";
+import { getUserAsync } from "../../requests/requests.user";
 
 type Props = {
   track: ITrack;
@@ -18,7 +18,7 @@ export const TrackItem: React.FC<Props> = ({ track, tracks }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getAuthorAsync(track.user_id).then((response) => {
+    getUserAsync(track.user_id).then((response) => {
       setAuthor(response.data);
     });
   }, []);

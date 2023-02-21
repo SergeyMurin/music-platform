@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, Outlet, useParams } from "react-router-dom";
-import { getAuthorAsync } from "../player/player";
 import { IUser } from "../../types/user";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { ButtonSubscribe } from "../button/button.subscribe";
+import { getUserAsync } from "../../requests/requests.user";
 
 type Props = {};
 export const UserInfo: React.FC<Props> = () => {
@@ -12,7 +12,7 @@ export const UserInfo: React.FC<Props> = () => {
   const [userInfo, setUserInfo] = useState<IUser>();
   useEffect(() => {
     if (id) {
-      getAuthorAsync(id).then((response) => setUserInfo(response.data));
+      getUserAsync(id).then((response) => setUserInfo(response.data));
     }
   }, [id]);
   return (

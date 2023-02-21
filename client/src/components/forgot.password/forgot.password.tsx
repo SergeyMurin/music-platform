@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ForgotPasswordForm } from "./forgot.password.form";
-import { forgotPasswordAsync } from "../../requests/auth";
+import { forgotPasswordAsync } from "../../requests/requests.auth";
 
 export const ForgotPassword: React.FC = () => {
   const [isSubmit, setIsSubmit] = useState(false);

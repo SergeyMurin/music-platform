@@ -25,7 +25,7 @@ function App() {
     if (id && token) {
       fetchUser(id);
       setToken(token);
-      fetchUserFavorites(id, token);
+      fetchUserFavorites(id);
       fetchUserSubscribers(id);
       fetchUserSubscriptions(id);
       fetchTags();

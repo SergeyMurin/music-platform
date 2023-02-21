@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import axios from "axios";
 import downloadIcon from "../../assets/player/download-icon.svg";
+import { Constants } from "../../constants";
 
 type Props = {
   track_id: string;
@@ -11,7 +12,7 @@ type Props = {
 export const DownloadButton: React.FC<Props> = ({ track_id, fileName }) => {
   const { token } = useTypedSelector((state) => state.user);
   const handleDownload = async () => {
-    const response = await axios.get("http://localhost:5000/track/download", {
+    const response = await axios.get(`${Constants.server_uri}/track/download`, {
       params: { id: track_id },
       headers: { Authorization: `Bearer ${token}` },
     });

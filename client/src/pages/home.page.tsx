@@ -11,7 +11,7 @@ export const HomePage: React.FC = () => {
   const { fetchPopularTracks, fetchUserFavorites } = useActions();
   useEffect(() => {
     if (user && token) {
-      fetchUserFavorites(user.id, token);
+      fetchUserFavorites(user.id);
     }
     fetchPopularTracks();
   }, []);

@@ -6,7 +6,7 @@ import { useTypedSelector } from "../../hooks/useTypedSelector";
 import {
   createSubscribeAsync,
   removeSubscribeAsync,
-} from "../../requests/subscribe";
+} from "../../requests/requests.subscribe";
 
 type Props = {
   user: IUser; //on whom

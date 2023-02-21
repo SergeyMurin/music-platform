@@ -4,6 +4,7 @@ import axios from "axios";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 import "./upload.css";
+import { uploadTrackAsync } from "../../requests/request.upload";
 
 export const TrackUpload: React.FC = () => {
   const [uploadTrackError, setUploadTrackError] = useState("");
@@ -21,6 +22,7 @@ export const TrackUpload: React.FC = () => {
 
   const trackUpload = async (dataValues: any) => {
     const formData = new FormData();
+
     formData.append("track", dataValues.track[0]);
     formData.append("picture", dataValues.picture[0]);
     formData.append("title", dataValues.title);
@@ -28,14 +30,12 @@ export const TrackUpload: React.FC = () => {
     formData.append("tags", dataValues.tags);
     formData.append("genres", dataValues.genres);
     formData.append("explicit", dataValues.explicit);
-    debugger;
-    await axios
-      .post("http://localhost:5000/track", formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      })
+
+    if (!token) {
+      return;
+    }
+
+    uploadTrackAsync(formData, token)
       .then((response) => {
         if (response.status >= 200 && response.status <= 299) {
           setUploadSuccess(true);

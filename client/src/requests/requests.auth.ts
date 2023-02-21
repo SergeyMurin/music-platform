@@ -1,14 +1,15 @@
 import axios from "axios";
 import { CredentialResponse } from "@react-oauth/google";
+import { Constants } from "../constants";
 
 export const signInAsync = async (dataValues: any): Promise<any> => {
-  return await axios.post("http://localhost:5000/auth/sign-in", {
+  return await axios.post(`${Constants.server_uri}/auth/sign-in`, {
     ...dataValues,
   });
 };
 
 export const signUpAsync = async (dataValues: any): Promise<any> => {
-  return await axios.post("http://localhost:5000/auth/sign-up", {
+  return await axios.post(`${Constants.server_uri}/auth/sign-up`, {
     ...dataValues,
   });
 };
@@ -16,20 +17,20 @@ export const signUpAsync = async (dataValues: any): Promise<any> => {
 export const googleSignInAsync = async (
   credentialResponse: CredentialResponse
 ): Promise<any> => {
-  return await axios.post("http://localhost:5000/auth/google", {
+  return await axios.post(`${Constants.server_uri}/auth/google`, {
     token: credentialResponse.credential,
   });
 };
 
 export const forgotPasswordAsync = async (dataValues: any): Promise<any> => {
-  return await axios.post("http://localhost:5000/auth/forgot-password", {
+  return await axios.post(`${Constants.server_uri}/auth/forgot-password`, {
     ...dataValues,
   });
 };
 
 export const resetPasswordAsync = async (dataValues: any, token: string) => {
   await axios.patch(
-    "http://localhost:5000/auth/reset-password",
+    `${Constants.server_uri}/auth/reset-password`,
     { password: dataValues?.password },
     {
       headers: {

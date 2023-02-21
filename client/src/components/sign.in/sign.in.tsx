@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { SignInForm } from "./sign.in.form";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { useActions } from "../../hooks/useActions";
 import "./sign.in.css";
-import { signInAsync } from "../../requests/auth";
+import { signInAsync } from "../../requests/requests.auth";
 import { Constants } from "../../constants";
 
 export const SignIn: React.FC = () => {
@@ -31,7 +30,7 @@ export const SignIn: React.FC = () => {
         fetchUser(id);
         setToken(token);
         setAuth(true);
-        fetchUserFavorites(id, token);
+        fetchUserFavorites(id);
         fetchUserSubscribers(id);
         fetchUserSubscriptions(id);
 

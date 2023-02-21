@@ -1,6 +1,11 @@
 import { Dispatch } from "react";
 import { ITrack, TrackAction, TrackActionTypes } from "../../types/track";
 import axios from "axios";
+import { Constants } from "../../constants";
+import {
+  getPopularTracksAsync,
+  getTracksAsync,
+} from "../../requests/requests.tracks";
 
 export const setTracks = (tracks: ITrack[] | null | any) => {
   return (dispatch: Dispatch<TrackAction>) => {
@@ -11,9 +16,8 @@ export const setTracks = (tracks: ITrack[] | null | any) => {
 export const fetchTracks = (id: string) => {
   return async (dispatch: Dispatch<TrackAction>) => {
     try {
-      const response = await axios.get("http://localhost:5000/track/all", {
-        params: { id },
-      });
+      const response = await getTracksAsync(id);
+
       dispatch({
         type: TrackActionTypes.FETCH_TRACKS,
         payload: response.data,
@@ -25,9 +29,7 @@ export const fetchTracks = (id: string) => {
 export const fetchPopularTracks = () => {
   return async (dispatch: Dispatch<TrackAction>) => {
     try {
-      const response = await axios.get(
-        "http://localhost:5000/track/all/popular"
-      );
+      const response = await getPopularTracksAsync();
       dispatch({
         type: TrackActionTypes.FETCH_POPULAR_TRACKS,
         payload: response.data,
@@ -43,7 +45,7 @@ export const fetchPopularTracks = () => {
 export const fetchGenres = () => {
   return async (dispatch: Dispatch<TrackAction>) => {
     try {
-      const response = await axios.get("http://localhost:5000/genre/all");
+      const response = await axios.get(`${Constants.server_uri}/genre/all`);
       dispatch({
         type: TrackActionTypes.FETCH_GENRES,
         payload: response.data,
@@ -55,7 +57,7 @@ export const fetchGenres = () => {
 export const fetchTags = () => {
   return async (dispatch: Dispatch<TrackAction>) => {
     try {
-      const response = await axios.get("http://localhost:5000/tag");
+      const response = await axios.get(`${Constants.server_uri}/tag`);
       dispatch({
         type: TrackActionTypes.FETCH_TAGS,
         payload: response.data,

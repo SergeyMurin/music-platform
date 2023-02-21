@@ -5,21 +5,6 @@ import axios from "axios";
 export const Search: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-  const [searchResults, setSearchResults] = useState([]);
-
-  useEffect(() => {
-    /*const fetchData = async () => {
-      const response = await axios.get(
-        `http://localhost:5000/user/search?term=${searchQuery}&type=all`
-      );
-      setSearchResults(response.data);
-      console.log(response.data);
-    };
-
-    if (searchQuery) {
-      fetchData();
-    }*/
-  }, [searchQuery]);
 
   const handleSearch = (event: any) => {
     event.preventDefault();

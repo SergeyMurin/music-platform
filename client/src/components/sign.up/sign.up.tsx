@@ -5,7 +5,7 @@ import axios from "axios";
 import { useActions } from "../../hooks/useActions";
 import "../sign.in/sign.in.css";
 import { Constants } from "../../constants";
-import { signUpAsync } from "../../requests/auth";
+import { signUpAsync } from "../../requests/requests.auth";
 
 export const SignUp: React.FC = () => {
   const [signUpError, setSignUpError] = useState("");
