@@ -1,7 +1,7 @@
 import { Dispatch } from "react";
 import { ITrack, TrackAction, TrackActionTypes } from "../../types/track";
 import axios from "axios";
-import { Constants } from "../../constants";
+import { ClientConfig } from "../../client.config";
 import {
   getPopularTracksAsync,
   getTracksAsync,
@@ -45,7 +45,7 @@ export const fetchPopularTracks = () => {
 export const fetchGenres = () => {
   return async (dispatch: Dispatch<TrackAction>) => {
     try {
-      const response = await axios.get(`${Constants.server_uri}/genre/all`);
+      const response = await axios.get(`${ClientConfig.server_uri}/genre/all`);
       dispatch({
         type: TrackActionTypes.FETCH_GENRES,
         payload: response.data,
@@ -57,7 +57,7 @@ export const fetchGenres = () => {
 export const fetchTags = () => {
   return async (dispatch: Dispatch<TrackAction>) => {
     try {
-      const response = await axios.get(`${Constants.server_uri}/tag`);
+      const response = await axios.get(`${ClientConfig.server_uri}/tag`);
       dispatch({
         type: TrackActionTypes.FETCH_TAGS,
         payload: response.data,

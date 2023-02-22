@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useActions } from "../../hooks/useActions";
 import "./sign.in.css";
 import { signInAsync } from "../../requests/requests.auth";
-import { Constants } from "../../constants";
+import { ClientConfig } from "../../client.config";
 
 export const SignIn: React.FC = () => {
   const [signInError, setSignInError] = useState("");
@@ -34,8 +34,8 @@ export const SignIn: React.FC = () => {
         fetchUserSubscribers(id);
         fetchUserSubscriptions(id);
 
-        localStorage.setItem(Constants.local.id, response.data.id);
-        localStorage.setItem(Constants.local.token, response.data.token);
+        localStorage.setItem(ClientConfig.local.id, response.data.id);
+        localStorage.setItem(ClientConfig.local.token, response.data.token);
       })
       .catch((error) => {
         setSignInError(error.response.data.message);

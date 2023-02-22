@@ -1,8 +1,8 @@
 import axios from "axios";
-import { Constants } from "../constants";
+import { ClientConfig } from "../client.config";
 
 export const getSearchAll = async (query: string): Promise<any> => {
   return axios.get(
-    `${Constants.server_uri}/user/search?term=${query}&type=all`
+    `${ClientConfig.server_uri}/user/search?term=${query}&type=all`
   );
 };

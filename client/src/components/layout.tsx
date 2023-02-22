@@ -4,13 +4,13 @@ import { Player } from "./player/player";
 import { useTypedSelector } from "../hooks/useTypedSelector";
 import { Search } from "./search/search";
 import "../pages/pages.css";
-import { Constants } from "../constants";
+import { ClientConfig } from "../client.config";
 
 export const Layout: React.FC = () => {
   const { isAuth, user } = useTypedSelector((state) => state.user);
   const signOutHandler = () => {
-    localStorage.removeItem(Constants.local.id);
-    localStorage.removeItem(Constants.local.token);
+    localStorage.removeItem(ClientConfig.local.id);
+    localStorage.removeItem(ClientConfig.local.token);
     window.location.replace(window.location.origin);
   };
   return (

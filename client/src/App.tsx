@@ -5,7 +5,7 @@ import { useActions } from "./hooks/useActions";
 import { useTypedSelector } from "./hooks/useTypedSelector";
 import MyMarquee from "./components/player/marquee";
 import { fetchPopularTracks } from "./store/action.creators/track.actions";
-import { Constants } from "./constants";
+import { ClientConfig } from "./client.config";
 
 function App() {
   const {
@@ -19,8 +19,8 @@ function App() {
   } = useActions();
 
   useEffect(() => {
-    const id: string | null = localStorage.getItem(Constants.local.id);
-    const token: string | null = localStorage.getItem(Constants.local.token);
+    const id: string | null = localStorage.getItem(ClientConfig.local.id);
+    const token: string | null = localStorage.getItem(ClientConfig.local.token);
 
     if (id && token) {
       fetchUser(id);

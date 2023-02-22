@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useActions } from "../../hooks/useActions";
 import "../sign.in/sign.in.css";
-import { Constants } from "../../constants";
+import { ClientConfig } from "../../client.config";
 import { signUpAsync } from "../../requests/requests.auth";
 
 export const SignUp: React.FC = () => {
@@ -21,8 +21,8 @@ export const SignUp: React.FC = () => {
         setToken(response.data.token);
         setAuth(true);
 
-        localStorage.setItem(Constants.local.id, response.data.id);
-        localStorage.setItem(Constants.local.token, response.data.token);
+        localStorage.setItem(ClientConfig.local.id, response.data.id);
+        localStorage.setItem(ClientConfig.local.token, response.data.token);
       })
       .catch((error) => setSignUpError(error.response.data.message));
   };
