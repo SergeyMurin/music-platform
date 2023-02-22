@@ -12,13 +12,12 @@ interface IClientConfig {
 }
 
 export const ClientConfig: IClientConfig = {
-  client_uri: "http://localhost:3000",
-  server_uri: "http://localhost:5000",
-  google_client_id:
-    "836445093751-38eejskvs0diag0stf09j8phaseout.apps.intercontinental.com",
+  client_uri: process.env.REACT_APP_CLIENT_URI,
+  server_uri: process.env.REACT_APP_SERVER_URI,
+  google_client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
   local: {
-    id: "id",
-    token: "token",
+    id: process.env.REACT_APP_LOCAL_ID,
+    token: process.env.REACT_APP_LOCAL_TOKEN,
   },
   server_routes: {
     user: {},
