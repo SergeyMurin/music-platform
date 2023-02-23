@@ -6,6 +6,11 @@ import "./sign.in.css";
 import { signInAsync } from "../../requests/requests.auth";
 import { ClientConfig } from "../../client.config";
 
+enum DisplayedText {
+  SIGN_IN = "Sign In",
+  SIGN_UP = "Sign Up",
+}
+
 export const SignIn: React.FC = () => {
   const [signInError, setSignInError] = useState("");
   const {
@@ -44,11 +49,13 @@ export const SignIn: React.FC = () => {
   return (
     <div className={"sign-in"}>
       <div className={"sign-in-container"}>
-        <h1>Sign In</h1>
-
+        <h1>{DisplayedText.SIGN_IN}</h1>
         <SignInForm submit={onSubmit} error={signInError} />
-        <Link to={"/sign-up"} replace={true}>
-          Sign Up
+        <Link
+          to={`../${ClientConfig.client_routes.auth.sign_up}`}
+          replace={true}
+        >
+          {DisplayedText.SIGN_UP}
         </Link>
       </div>
     </div>

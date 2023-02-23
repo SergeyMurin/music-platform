@@ -43,6 +43,7 @@ export const AppRoutes: React.FC = () => {
           path={ClientConfig.client_routes.auth.sign_up}
           element={<SignUpPage />}
         />
+        {/**/}
         <Route
           path={ClientConfig.client_routes.auth.email}
           element={<EmailPage />}

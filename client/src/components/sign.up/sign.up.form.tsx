@@ -3,6 +3,25 @@ import { useForm, Resolver } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { GoogleSignIn } from "../google/google.sign.in";
 
+enum DisplayedText {
+  SIGN_UP = "Sign Up",
+}
+
+enum FormPlaceholders {
+  EMAIL = "Email",
+  PASSWORD = "Password",
+  REPEAT_PASSWORD = "Repeat password",
+}
+
+enum FormErrors {
+  EMAIL_REQUIRED = "Email is required",
+  EMAIL_NOT_VALID = "Email not valid",
+  PASSWORD_REQUIRED = "Password is required",
+  PASSWORD_NOT_VALID = "Password length must be 8 characters or more",
+  REPEAT_PASSWORD_REQUIRED = "Repeat your password",
+  PASSWORD_MISMATCH = "Password mismatch",
+}
+
 type FormValues = {
   email: string;
   password: string;
@@ -17,42 +36,42 @@ const resolver: Resolver<FormValues> = async (values) => {
       ? {
           email: {
             type: "required",
-            message: "Email is required",
+            message: FormErrors.EMAIL_REQUIRED,
           },
         }
       : !validateEmail(values.email)
       ? {
           email: {
             type: "onBlur",
-            message: "Email not valid",
+            message: FormErrors.EMAIL_NOT_VALID,
           },
         }
       : !values.password
       ? {
           password: {
             type: "required",
-            message: "Password is required",
+            message: FormErrors.PASSWORD_REQUIRED,
           },
         }
       : !values.repeatPassword
       ? {
           file: {
             type: "required",
-            message: "Repeat your password",
+            message: FormErrors.REPEAT_PASSWORD_REQUIRED,
           },
         }
       : values.password.length <= 7
       ? {
           password: {
             type: "onBlur",
-            message: "Password length must be 8 characters or more",
+            message: FormErrors.PASSWORD_NOT_VALID,
           },
         }
       : values.password !== values.repeatPassword
       ? {
           repeatPassword: {
             type: "onBlur",
-            message: "Password mismatch",
+            message: FormErrors.PASSWORD_MISMATCH,
           },
         }
       : {},
@@ -74,7 +93,11 @@ export const SignUpForm: React.FC<Props> = ({ error, submit }) => {
 
   return (
     <form onSubmit={onSubmit}>
-      <input type={"email"} placeholder={"Email"} {...register("email")} />
+      <input
+        type={"email"}
+        placeholder={FormPlaceholders.EMAIL}
+        {...register("email")}
+      />
       {errors?.email ? (
         <p className={"error"}>{errors.email.message}</p>
       ) : (
@@ -83,7 +106,7 @@ export const SignUpForm: React.FC<Props> = ({ error, submit }) => {
 
       <input
         type={"password"}
-        placeholder={"Password"}
+        placeholder={FormPlaceholders.PASSWORD}
         {...register("password")}
       />
       {errors?.password ? (
@@ -94,7 +117,7 @@ export const SignUpForm: React.FC<Props> = ({ error, submit }) => {
 
       <input
         type={"password"}
-        placeholder={"Repeat password"}
+        placeholder={FormPlaceholders.REPEAT_PASSWORD}
         {...register("repeatPassword")}
       />
       {errors?.repeatPassword ? (
@@ -113,7 +136,7 @@ export const SignUpForm: React.FC<Props> = ({ error, submit }) => {
           !!errors.email || !!errors.password || !!errors.repeatPassword
         }
       >
-        Sign Up
+        {DisplayedText.SIGN_UP}
       </button>
 
       <GoogleSignIn />
