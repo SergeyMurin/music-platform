@@ -2,9 +2,6 @@ import React, { useEffect } from "react";
 import "./App.css";
 import { AppRoutes } from "./routes/app.routes";
 import { useActions } from "./hooks/useActions";
-import { useTypedSelector } from "./hooks/useTypedSelector";
-import MyMarquee from "./components/player/marquee";
-import { fetchPopularTracks } from "./store/action.creators/track.actions";
 import { ClientConfig } from "./client.config";
 
 function App() {
@@ -31,7 +28,7 @@ function App() {
       fetchTags();
       fetchGenres();
     }
-  }, []);
+  });
   return (
     <div className="App">
       <AppRoutes />

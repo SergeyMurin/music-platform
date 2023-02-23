@@ -30,7 +30,7 @@ export const LikeButton: React.FC<Props> = ({ isForTrack, track }) => {
         setFavoriteId(favorite.favorite_id);
       } else setIsFavorite(false);
     }
-  }, [favorites, track]);
+  }, [isForTrack, favorites, track]);
 
   const unlikeButtonHandler = () => {
     likeAccess();
@@ -65,6 +65,7 @@ export const LikeButton: React.FC<Props> = ({ isForTrack, track }) => {
           src={favoriteOnIcon}
           className={"btn_action like"}
           onClick={unlikeButtonHandler}
+          alt={"unlike"}
         />
       )}
       {!isFavorite && (
@@ -72,6 +73,7 @@ export const LikeButton: React.FC<Props> = ({ isForTrack, track }) => {
           src={favoriteIcon}
           className={"btn_action like"}
           onClick={likeButtonHandler}
+          alt={"unlike"}
         />
       )}
     </>

@@ -59,6 +59,7 @@ export const ButtonSubscribe: React.FC<Props> = ({ user }) => {
           src={subscribeOnIcon}
           className={"btn_action like subscribe"}
           onClick={unsubscribeButtonHandler}
+          alt={"unsubscribe"}
         />
       )}
       {!isSubscribe && (
@@ -66,6 +67,7 @@ export const ButtonSubscribe: React.FC<Props> = ({ user }) => {
           src={subscribeIcon}
           className={"btn_action like subscribe"}
           onClick={subscribeButtonHandler}
+          alt={"subscribe"}
         />
       )}
     </>

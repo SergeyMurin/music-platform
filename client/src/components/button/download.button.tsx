@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import axios from "axios";
 import downloadIcon from "../../assets/player/download-icon.svg";
@@ -31,6 +31,11 @@ export const DownloadButton: React.FC<Props> = ({ track_id, fileName }) => {
     link.click();
   };
   return (
-    <img src={downloadIcon} className={"btn_action"} onClick={handleDownload} />
+    <img
+      src={downloadIcon}
+      className={"btn_action"}
+      onClick={handleDownload}
+      alt={"download"}
+    />
   );
 };
