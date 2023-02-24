@@ -17,7 +17,7 @@ export const HomePage: React.FC = () => {
       fetchUserFavorites(user.id);
     }
     fetchPopularTracks();
-  }, [fetchPopularTracks, fetchUserFavorites, token, user]);
+  }, [token, user]);
 
   return (
     <div className={"home-page"}>

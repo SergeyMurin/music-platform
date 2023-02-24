@@ -1,9 +1,48 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm, Resolver } from "react-hook-form";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
-import Select from "react-select/base";
-import { IGenre, ITag } from "../../types/track";
 import MultiSelect, { Option } from "../shared/multi.select";
+
+import {
+  formatGenres,
+  formatTags,
+  generateGenreOptions,
+  generateTagOptions,
+} from "./utilities";
+
+enum DisplayedText {
+  TAGS = "(Optional) Select tags or add new tags using. Example:tag1,tag2. Tags limit from select bar:",
+  ADD = "Add",
+  CLEAR = "Clear",
+  SUCCESS = "Success",
+  UPLOAD = "Upload track",
+}
+
+enum FormLabels {
+  TITLE = "Title: ",
+  PICTURE = "Soundtrack picture: ",
+  TRACK = "Soundtrack: ",
+  GENRES = "Genres: ",
+  TAGS = "Tags:",
+  NEW_TAGS = "New tags: ",
+  EXPLICIT = "Explicit:",
+  LYRICS = "Lyrics:",
+}
+
+enum FormFileTypes {
+  IMAGE = "image/",
+  AUDIO = "audio/",
+}
+
+enum FormErrors {
+  TITLE_REQUIRED = "Title is required",
+  PICTURE_REQUIRED = "Picture is required",
+  PICTURE_NOT_VALID = "Invalid type of picture",
+  TRACK_REQUIRED = "Track is required",
+  TRACK_NOT_VALID = "Invalid type of track",
+
+  GENRE_REQUIRED = "Genre is required",
+}
 
 type FormValues = {
   title: string;
@@ -20,35 +59,35 @@ const resolver: Resolver<FormValues> = async (values) => {
       ? {
           title: {
             type: "required",
-            message: "Title is required.",
+            message: FormErrors.TITLE_REQUIRED,
           },
         }
       : !values?.picture[0]
       ? {
           picture: {
             type: "required",
-            message: "Picture is required",
+            message: FormErrors.PICTURE_REQUIRED,
           },
         }
-      : !values?.picture[0]?.type?.startsWith("image/")
+      : !values?.picture[0]?.type?.startsWith(FormFileTypes.IMAGE)
       ? {
           picture: {
             type: "onChange",
-            message: "Invalid type of picture",
+            message: FormErrors.PICTURE_NOT_VALID,
           },
         }
       : !values?.track[0]
       ? {
           track: {
             type: "required",
-            message: "Track is required",
+            message: FormErrors.TRACK_REQUIRED,
           },
         }
-      : !values?.track[0]?.type?.startsWith("audio/")
+      : !values?.track[0]?.type?.startsWith(FormFileTypes.AUDIO)
       ? {
           track: {
             type: "onChange",
-            message: "Invalid type of track",
+            message: FormErrors.TRACK_NOT_VALID,
           },
         }
       : {},
@@ -85,7 +124,7 @@ export const TrackUploadForm: React.FC<Props> = ({
   const [tagOptionSelected, setTagSelected] = useState<Option[] | any | null>(
     null
   );
-  const [tagError, setTagError] = useState<boolean>(false);
+  const [, setTagError] = useState<boolean>(false);
 
   const handleTagChange = (selected: Option[] | any) => {
     if (selected.length <= tagsLimit) {
@@ -122,7 +161,7 @@ export const TrackUploadForm: React.FC<Props> = ({
     <form className={"track-upload-form"} onSubmit={onSubmit}>
       {/*TITLE*/}
       <div className={"form-row"}>
-        <label>Title: </label>
+        <label>{FormLabels.TITLE}</label>
         <input type={"text"} {...register("title")} />
         {errors?.title ? (
           <p className={"error"}>{errors.title.message}</p>
@@ -134,7 +173,7 @@ export const TrackUploadForm: React.FC<Props> = ({
       <div className={"form-row"}>
         {/*PICTURE*/}
 
-        <label>Soundtrack picture: </label>
+        <label>{FormLabels.PICTURE}</label>
         <input type={"file"} {...register("picture")} />
         {errors?.picture ? (
           <p>{errors.picture.message}</p>
@@ -144,7 +183,7 @@ export const TrackUploadForm: React.FC<Props> = ({
       </div>
       <div className={"form-row"}>
         {/*TRACK*/}
-        <label>Soundtrack: </label>
+        <label>{FormLabels.TRACK}</label>
         <input type={"file"} {...register("track")} />
         {errors?.track ? (
           <p className={"error"}>{errors.track.message}</p>
@@ -155,7 +194,9 @@ export const TrackUploadForm: React.FC<Props> = ({
 
       {/*GENRES*/}
       <div className={"form-row"}>
-        <label>Genres: (Limit {genresLimit}) </label>
+        <label>
+          {FormLabels.GENRES}(Limit {genresLimit}){" "}
+        </label>
         <MultiSelect
           key="genre"
           options={generateGenreOptions(genres)}
@@ -165,19 +206,20 @@ export const TrackUploadForm: React.FC<Props> = ({
           menuPlacement={"bottom"}
         />
         {genreError ? (
-          <p className={"error"}>Genre is required</p>
+          <p className={"error"}>{FormErrors.GENRE_REQUIRED}</p>
         ) : (
           <p className={"error"}></p>
         )}
       </div>
+
+      {/*TAGS*/}
+
       <article>
-        (Optional) Select tags or add new tags using. Example:tag1,tag2. Tags
-        limit from select bar: {tagsLimit}
+        {DisplayedText.TAGS}
+        {tagsLimit}
       </article>
       <div className={"form-row"}>
-        {/*TAGS*/}
-
-        <label>Tags:</label>
+        <label>{FormLabels.TAGS}</label>
         <MultiSelect
           key="tag"
           options={generateTagOptions(tags)}
@@ -191,7 +233,8 @@ export const TrackUploadForm: React.FC<Props> = ({
         {/*NEW TAGS*/}
 
         <label>
-          New tags: {newTags && newTags.map((nt: any) => `#${nt} `)}
+          {FormLabels.NEW_TAGS}
+          {newTags && newTags.map((nt: any) => `#${nt} `)}
         </label>
       </div>
       <div className={"form-row"}>
@@ -212,7 +255,7 @@ export const TrackUploadForm: React.FC<Props> = ({
             setNewTagInputValue("");
           }}
         >
-          Add
+          {DisplayedText.ADD}
         </button>
         <button
           onClick={(e) => {
@@ -221,101 +264,31 @@ export const TrackUploadForm: React.FC<Props> = ({
             setNewTagInputValue("");
           }}
         >
-          Clear
+          {DisplayedText.CLEAR}
         </button>
       </div>
 
       <div className={"form-row"}>
         {/*EXPLICIT*/}
-        <label>Explicit:</label>
+        <label>{FormLabels.EXPLICIT}</label>
         <input type={"checkbox"} {...register("explicit")} />
 
         {/*LYRICS*/}
-        <label>Lyrics:</label>
+        <label>{FormLabels.LYRICS}</label>
 
         <textarea {...register("lyrics")} />
       </div>
 
       {error && <p>{error}</p>}
-      {success && <p>Success</p>}
+      {success && <p>{DisplayedText.SUCCESS}</p>}
       <button
         type="submit"
         disabled={
           !!errors.track || !!errors.picture || !!errors.title || genreError
         }
       >
-        Upload track
+        {DisplayedText.UPLOAD}
       </button>
     </form>
   );
-};
-
-export const generateGenreOptions = (genres: IGenre[] | null) => {
-  if (!genres) {
-    return [];
-  }
-  return genres.map((genre) => {
-    return {
-      value: genre.id,
-      label: genre.title,
-    };
-  });
-};
-
-export const generateTagOptions = (tags: ITag[] | null) => {
-  if (!tags) {
-    return [];
-  }
-  return tags.map((tag) => {
-    return {
-      value: tag.title,
-      label: `#${tag.title} - ${tag.amount}`,
-    };
-  });
-};
-
-export const formatTags = (fromSelect: Option[], newTags: any, limit = 10) => {
-  let output = "";
-  let count = 0;
-
-  if (fromSelect) {
-    for (const tagSelect of fromSelect) {
-      if (count > limit) {
-        output = output.replace(/\s+/g, ",").replace(/,+/g, ",").trim();
-        if (output.endsWith(",")) {
-          output = output.slice(0, -1);
-        }
-        return output;
-      }
-      output += (tagSelect.value as string) + " ";
-      count++;
-    }
-  }
-
-  for (const newTag of newTags) {
-    if (count > limit) {
-      output = output.replace(/\s+/g, ",").replace(/,+/g, ",").trim();
-      if (output.endsWith(",")) {
-        output = output.slice(0, -1);
-      }
-      return output;
-    }
-    output += newTag + " ";
-    count++;
-  }
-  output = output.replace(/\s+/g, ",").replace(/,+/g, ",").trim();
-  if (output.endsWith(",")) {
-    output = output.slice(0, -1);
-  }
-  return output;
-};
-
-export const formatGenres = (fromSelect: Option[] | null) => {
-  let output = "";
-  fromSelect?.map((genre) => (output += genre.value + " "));
-  output = output.replace(/\s+/g, ",").replace(/,+/g, ",").trim();
-  if (output.endsWith(",")) {
-    output = output.slice(0, -1);
-  }
-  return output;
 };

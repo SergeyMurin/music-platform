@@ -20,8 +20,8 @@ const MultiSelect = (props: any) => {
   const comparator = (v1: Option, v2: Option) =>
     (v1.value as number) - (v2.value as number);
 
-  let filteredOptions = filterOptions(props.options, selectInput);
-  let filteredSelectedOptions = filterOptions(props.value, selectInput);
+  const filteredOptions = filterOptions(props.options, selectInput);
+  const filteredSelectedOptions = filterOptions(props.value, selectInput);
 
   const Option = (props: any) => (
     <components.Option {...props}>
@@ -40,7 +40,7 @@ const MultiSelect = (props: any) => {
           key={props.value}
           type="checkbox"
           checked={props.isSelected || isAllSelected.current}
-          onChange={() => {}}
+          onChange={() => null}
         />
       )}
       <label style={{ marginLeft: "5px" }}>{props.label}</label>
@@ -109,6 +109,7 @@ const MultiSelect = (props: any) => {
       return props.onChange(selected);
     else
       return props.onChange([
+        // eslint-disable-next-line no-unsafe-optional-chaining
         ...props.value?.filter(
           ({ label }: Option) =>
             !label.toLowerCase().includes(selectInput?.toLowerCase())

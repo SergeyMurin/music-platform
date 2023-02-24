@@ -58,7 +58,7 @@ export const PlayerElement: React.FC<Props> = ({ audioElem, author }) => {
   };
 
   const checkWidth = (e: any) => {
-    let width = clickRef.current.clientWidth;
+    const width = clickRef.current.clientWidth;
     const offset = e.nativeEvent.offsetX;
 
     const divProgress = (offset / width) * 100;
@@ -67,7 +67,7 @@ export const PlayerElement: React.FC<Props> = ({ audioElem, author }) => {
   };
 
   const setVolumeHandler = (e: any) => {
-    let width = volumeRef.current.clientWidth;
+    const width = volumeRef.current.clientWidth;
     const offset = e.nativeEvent.offsetX;
 
     let volume = (offset / width) * 100;

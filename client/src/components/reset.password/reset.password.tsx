@@ -2,6 +2,15 @@ import React, { useState } from "react";
 import { ResetPasswordForm } from "./reset.password.form";
 import { Link, useSearchParams } from "react-router-dom";
 import { resetPasswordAsync } from "../../requests/requests.auth";
+import { ClientConfig } from "../../client.config";
+
+enum DisplayedText {
+  RESET = "Reset password",
+  HEADER = "Password has been reset",
+  LOGIN = "Now you can login",
+  SIGN_IN = "Sign In",
+  HOME = "Home",
+}
 
 export const ResetPassword: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -22,25 +31,29 @@ export const ResetPassword: React.FC = () => {
       })
       .catch((error) => setResetPasswordError(error.response.data.message));
   };
+
   return (
     <div className={"sign-in"}>
       <div className={"sign-in-container"}>
         {!isUpdated && (
           <>
-            <h1>Reset password</h1>
+            <h1>{DisplayedText.RESET}</h1>
             <ResetPasswordForm submit={onSubmit} error={resetPasswordError} />
           </>
         )}
         {isUpdated && (
           <div>
-            <h1 className={"success"}>Password has been reset</h1>
-            <h3>Now you can login</h3>
+            <h1 className={"success"}>{DisplayedText.HEADER}</h1>
+            <h3>{DisplayedText.LOGIN}</h3>
             <div style={{ display: "flex", justifyContent: "center" }}>
-              <Link to={"../sign-in"} className={"button-2"}>
-                Sign In
+              <Link
+                to={`../${ClientConfig.client_routes.auth.sign_in}`}
+                className={"button-2"}
+              >
+                {DisplayedText.SIGN_IN}
               </Link>
               <Link to={"../"} className={"button-2"}>
-                Home
+                {DisplayedText.HOME}
               </Link>
             </div>
           </div>

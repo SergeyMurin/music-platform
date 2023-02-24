@@ -2,45 +2,50 @@ import React, { useEffect } from "react";
 import { useTypedSelector } from "../hooks/useTypedSelector";
 import { useActions } from "../hooks/useActions";
 import { Link, useSearchParams } from "react-router-dom";
-import axios from "axios";
 import { Loader } from "../components/loader/loader";
-import { ClientConfig } from "../client.config";
+import { confirmEmailAsync } from "../requests/requests.auth";
+
+enum DisplayedText {
+  HEADER = "Email confirmed",
+  CONFIRMING = "Confirming email...",
+  HOME = "To home",
+}
+
+enum SearchParams {
+  TOKEN = "token",
+}
 
 export const EmailConfirmPage: React.FC = () => {
   const { user, isAuth } = useTypedSelector((state) => state.user);
   const { fetchUser } = useActions();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    const token: string | null = searchParams.get("token");
+    const confirmEmail = async (token: string) => {
+      confirmEmailAsync(token).then(() => {
+        fetchUser(user?.id as string);
+      });
+    };
+
+    const token: string | null = searchParams.get(SearchParams.TOKEN);
     if (token && !user?.email_confirmed) {
       confirmEmail(token).then();
     }
-  }, [searchParams]);
+  }, [searchParams, user?.email_confirmed, user?.id]);
 
-  const confirmEmail = async (token: string) => {
-    await axios
-      .get(`${ClientConfig.server_uri}/auth/confirm`, {
-        params: { token },
-      })
-      .then(() => {
-        fetchUser(user?.id as string);
-      })
-      .catch((e) => console.error(e));
-  };
   return (
     <div className={"email-confirm-page color-change-2x"}>
       {isAuth && user?.email_confirmed && (
         <>
-          <h1>Email confirmed</h1>
+          <h1>{DisplayedText.HEADER}</h1>
           <Link to={"/"} className={"button"} replace={true}>
-            To home
+            {DisplayedText.HOME}
           </Link>
         </>
       )}
       {isAuth && !user?.email_confirmed && (
         <>
-          <h1>Confirming email...</h1>
+          <h1>{DisplayedText.CONFIRMING}</h1>
           <Loader />
         </>
       )}

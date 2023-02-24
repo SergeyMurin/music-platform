@@ -43,7 +43,6 @@ export const AppRoutes: React.FC = () => {
           path={ClientConfig.client_routes.auth.sign_up}
           element={<SignUpPage />}
         />
-        {/**/}
         <Route
           path={ClientConfig.client_routes.auth.email}
           element={<EmailPage />}
@@ -52,8 +51,6 @@ export const AppRoutes: React.FC = () => {
           path={ClientConfig.client_routes.auth.email_confirm}
           element={<EmailConfirmPage />}
         />
-        {/*?token*/}
-
         <Route
           path={ClientConfig.client_routes.auth.password_forgot}
           element={<ForgotPasswordPage />}
@@ -62,7 +59,6 @@ export const AppRoutes: React.FC = () => {
           path={ClientConfig.client_routes.auth.password_reset}
           element={<ResetPasswordPage />}
         />
-        {/*?token*/}
 
         <Route
           path={ClientConfig.client_routes.admin}

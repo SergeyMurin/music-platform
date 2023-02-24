@@ -16,6 +16,19 @@ export interface ITrack {
   //comments: IComment[];
 }
 
+export const isTrackTypeGuard = (value: any): value is ITrack => {
+  return (
+    (value as ITrack).title !== undefined &&
+    (value as ITrack).id !== undefined &&
+    (value as ITrack).lyrics !== undefined &&
+    (value as ITrack).url !== undefined &&
+    (value as ITrack).picture_url !== undefined &&
+    (value as ITrack).user_id !== undefined &&
+    (value as ITrack).plays !== undefined &&
+    (value as ITrack).album_id !== undefined
+  );
+};
+
 export interface ITag {
   id: string;
   title: string;

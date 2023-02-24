@@ -76,7 +76,7 @@ export class FavoriteService {
   async getFavorites(userId: string) {
     const favorites = await this.favoriteRepository.findAll({
       where: { user_id: userId },
-      order: [['updatedAt', 'ASC']],
+      order: [['updatedAt', 'DESC']],
     });
     if (!favorites) {
       return [];

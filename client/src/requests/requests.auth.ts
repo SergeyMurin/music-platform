@@ -39,3 +39,9 @@ export const resetPasswordAsync = async (dataValues: any, token: string) => {
     }
   );
 };
+
+export const confirmEmailAsync = async (token: string) => {
+  return await axios.get(`${ClientConfig.server_uri}/auth/confirm`, {
+    params: { token },
+  });
+};

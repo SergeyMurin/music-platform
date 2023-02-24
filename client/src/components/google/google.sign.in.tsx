@@ -1,7 +1,6 @@
 import React from "react";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { useActions } from "../../hooks/useActions";
-import { fetchUser } from "../../store/action.creators/user.actions";
 import { ClientConfig } from "../../client.config";
 import { googleSignInAsync } from "../../requests/requests.auth";
 
