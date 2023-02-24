@@ -3,16 +3,17 @@ import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { LikeButton } from "../button/like.button";
 import { DownloadButton } from "../button/download.button";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { PlayPauseButton } from "../button/play.pause.button";
 import { getUserAsync } from "../../requests/requests.user";
+import { ClientConfig } from "../../client.config";
 
 type Props = {
   track: ITrack;
-  tracks: ITrack[];
+  tracks?: ITrack[];
 };
 
-export const TrackItem: React.FC<Props> = ({ track, tracks }) => {
+export const TrackItem: React.FC<Props> = ({ track }) => {
   const { currentTrack } = useTypedSelector((state) => state.player);
   const [author, setAuthor] = useState<any>();
   const navigate = useNavigate();
@@ -23,28 +24,12 @@ export const TrackItem: React.FC<Props> = ({ track, tracks }) => {
     });
   }, []);
 
-  const trackClickHandler = (e: any) => {
-    let href = window.location.href;
-    href = href
-      .split("/")
-      [href.split("/").length - 1].split("?")[0]
-      .split(" ")[0];
-    if (href === "search") {
-      navigate(`../track/${track.id}`);
-    } else if (href === "favorites" || href === "tracks") {
-      navigate(`../../../track/${track.id}`);
-    } else navigate(`track/${track.id}`);
+  const trackClickHandler = () => {
+    navigate(`/${ClientConfig.client_routes.track}/${track.id}`);
   };
 
-  const authorClickHandler = (e: any) => {
-    let href = window.location.href;
-    href = href
-      .split("/")
-      [href.split("/").length - 1].split("?")[0]
-      .split(" ")[0];
-    if (href === "search") {
-      navigate(`../profile/${author.id}`);
-    } else navigate(`profile/${author.id}`);
+  const authorClickHandler = () => {
+    navigate(`/${ClientConfig.client_routes.profile}/${author.id}`);
   };
 
   const isCurrent = (track: ITrack) => {
@@ -57,7 +42,11 @@ export const TrackItem: React.FC<Props> = ({ track, tracks }) => {
       key={track.id}
     >
       <div className={"track_img"}>
-        <img src={track.picture_url} onClick={trackClickHandler}></img>
+        <img
+          src={track.picture_url}
+          onClick={trackClickHandler}
+          alt={"track picture"}
+        ></img>
       </div>
 
       <div className={`track_item_container`}>

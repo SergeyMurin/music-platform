@@ -13,6 +13,7 @@ import {
   getTrackTagsAsync,
 } from "../../requests/requests.tracks";
 import { getUserAsync } from "../../requests/requests.user";
+import { ClientConfig } from "../../client.config";
 
 export const TrackInfo: React.FC = () => {
   const [track, setTrack] = useState<ITrack | null>(null);
@@ -47,12 +48,7 @@ export const TrackInfo: React.FC = () => {
   };
 
   const authorClickHandler = () => {
-    let href = window.location.href;
-    href = href
-      .split("/")
-      [href.split("/").length - 1].split("?")[0]
-      .split(" ")[0];
-    navigate(`../profile/${author?.id}`);
+    navigate(`/${ClientConfig.client_routes.profile}/${author?.id}`);
   };
 
   return (
@@ -62,7 +58,7 @@ export const TrackInfo: React.FC = () => {
         <>
           <div className={"track_card"}>
             <div className={"track_card_img"}>
-              <img src={track.picture_url} />
+              <img src={track.picture_url} alt={"track picture"} />
             </div>
             <div
               className={"card_info"}

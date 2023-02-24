@@ -52,7 +52,7 @@ export const ResetPassword: React.FC = () => {
               >
                 {DisplayedText.SIGN_IN}
               </Link>
-              <Link to={"../"} className={"button-2"}>
+              <Link to={"/"} className={"button-2"}>
                 {DisplayedText.HOME}
               </Link>
             </div>

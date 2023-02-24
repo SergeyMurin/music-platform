@@ -8,9 +8,9 @@ export const SignUpPage: React.FC = () => {
   const { isAuth, user } = useTypedSelector((state) => state.user);
   return (
     <>
-      {isAuth && user?.email_confirmed && <Navigate to={"../"} />}
+      {isAuth && user?.email_confirmed && <Navigate to={"/"} />}
       {isAuth && !user?.email_confirmed && (
-        <Navigate to={"../" + ClientConfig.client_routes.auth.email} />
+        <Navigate to={"/" + ClientConfig.client_routes.auth.email} />
       )}
       <SignUp />
     </>

@@ -4,6 +4,10 @@ import { UserItem } from "./user.item";
 import { IUser } from "../../types/user";
 import { getUserSubscribersAsync } from "../../requests/requests.subscribe";
 
+enum DisplayedText {
+  HEADER = "Subscribers:",
+}
+
 export const ProfileSubscribers: React.FC = () => {
   const { id } = useParams();
   const [users, setUsers] = useState<IUser[]>();
@@ -18,7 +22,7 @@ export const ProfileSubscribers: React.FC = () => {
 
   return (
     <div className={"subscribers"}>
-      <h2>Subscribers:</h2>
+      <h2>{DisplayedText.HEADER}</h2>
       <hr />
       {users &&
         users?.length &&
