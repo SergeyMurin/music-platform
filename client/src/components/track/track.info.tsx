@@ -48,7 +48,7 @@ export const TrackInfo: React.FC = () => {
   };
 
   const authorClickHandler = () => {
-    navigate(`/${ClientConfig.client_routes.profile}/${author?.id}`);
+    navigate(`/${ClientConfig.client_routes.profile.index}/${author?.id}`);
   };
 
   return (

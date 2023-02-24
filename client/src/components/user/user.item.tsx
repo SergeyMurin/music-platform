@@ -10,7 +10,7 @@ export const UserItem: React.FC<Props> = ({ user }) => {
   const navigate = useNavigate();
 
   const authorClickHandler = () => {
-    navigate(`/${ClientConfig.client_routes.profile}/${user.id}`);
+    navigate(`/${ClientConfig.client_routes.profile.index}/${user.id}`);
   };
 
   return (

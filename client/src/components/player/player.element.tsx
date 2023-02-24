@@ -10,9 +10,9 @@ import { useActions } from "../../hooks/useActions";
 import { ITrack } from "../../types/track";
 import { LikeButton } from "../button/like.button";
 import { DownloadButton } from "../button/download.button";
-import axios from "axios";
 import MyMarquee from "./marquee";
-import { useHref, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { ClientConfig } from "../../client.config";
 
 type Props = {
   audioElem: any;
@@ -31,15 +31,9 @@ export const PlayerElement: React.FC<Props> = ({ audioElem, author }) => {
     duration,
     currentTrack,
     onRepeat,
-    isShuffled,
   } = useTypedSelector((state) => state.player);
-  const {
-    setVolume,
-    setOnRepeat,
-    setIsPlaying,
-    setCurrentTrack,
-    setIsShuffled,
-  } = useActions();
+  const { setVolume, setOnRepeat, setIsPlaying, setCurrentTrack } =
+    useActions();
 
   useEffect(() => {
     if (progress === 100) {
@@ -124,14 +118,14 @@ export const PlayerElement: React.FC<Props> = ({ audioElem, author }) => {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
-  const trackHref = useHref({ pathname: "/track" });
-  const userHref = useHref({ pathname: "/profile" });
   const navigate = useNavigate();
   const trackClickHandler = () => {
-    navigate(trackHref + `/${currentTrack.id}`);
+    navigate(`/${ClientConfig.client_routes.track.index}/${currentTrack.id}`);
   };
   const authorClickHandler = () => {
-    navigate(userHref + `/${currentTrack.user_id}`);
+    navigate(
+      `/${ClientConfig.client_routes.profile.index}/${currentTrack.user_id}`
+    );
   };
 
   return (

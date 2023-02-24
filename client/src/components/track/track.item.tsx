@@ -25,11 +25,11 @@ export const TrackItem: React.FC<Props> = ({ track }) => {
   }, []);
 
   const trackClickHandler = () => {
-    navigate(`/${ClientConfig.client_routes.track}/${track.id}`);
+    navigate(`/${ClientConfig.client_routes.track.index}/${track.id}`);
   };
 
   const authorClickHandler = () => {
-    navigate(`/${ClientConfig.client_routes.profile}/${author.id}`);
+    navigate(`/${ClientConfig.client_routes.profile.index}/${author.id}`);
   };
 
   const isCurrent = (track: ITrack) => {
