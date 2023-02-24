@@ -1,20 +1,26 @@
 import React, { useState } from "react";
 import { ForgotPasswordForm } from "./forgot.password.form";
-import axios from "axios";
+import { forgotPasswordAsync } from "../../requests/requests.auth";
+
+enum DisplayedText {
+  FORGOT = "Forgot password?",
+  HEADER = "Enter the email address associated with your account. A confirmation email will be sent to it",
+  SENDING = "Sending link to your email",
+  SENT = "Reset link has been sent to your email",
+}
 
 export const ForgotPassword: React.FC = () => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const [forgotPasswordError, setForgotPasswordError] = useState("");
 
-  const onSubmit = (values: {}) => {
+  const onSubmit = (values: object) => {
     setIsSubmit(true);
     sendResetLink(values).then();
   };
 
-  const sendResetLink = async (values: {}) => {
-    await axios
-      .post("http://localhost:5000/auth/forgot-password", { ...values })
+  const sendResetLink = async (dataValues: any) => {
+    forgotPasswordAsync(dataValues)
       .then(() => {
         setIsSent(true);
       })
@@ -24,15 +30,12 @@ export const ForgotPassword: React.FC = () => {
   return (
     <div className={"sign-in"}>
       <div className={"sign-in-container"}>
-        <h1>Forgot password?</h1>
-        <h3>
-          Enter the email address associated with your account. A confirmation
-          email will be sent to it
-        </h3>
+        <h1>{DisplayedText.FORGOT}</h1>
+        <h3>{DisplayedText.HEADER}</h3>
         <ForgotPasswordForm submit={onSubmit} error={forgotPasswordError} />
-        {!isSent && isSubmit && <div>Sending link to your email</div>}{" "}
+        {!isSent && isSubmit && <div>{DisplayedText.SENDING}</div>}
         {isSent && isSubmit && (
-          <h4 className={"success"}>Reset link has been sent to your email</h4>
+          <h4 className={"success"}>{DisplayedText.SENT}</h4>
         )}
       </div>
     </div>

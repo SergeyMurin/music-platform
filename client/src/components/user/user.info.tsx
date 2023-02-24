@@ -1,18 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { Link, Outlet, useParams } from "react-router-dom";
-import { getAuthorAsync } from "../player/player";
 import { IUser } from "../../types/user";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { ButtonSubscribe } from "../button/button.subscribe";
+import { getUserAsync } from "../../requests/requests.user";
+import { ClientConfig } from "../../client.config";
 
-type Props = {};
-export const UserInfo: React.FC<Props> = () => {
+enum DisplayedText {
+  FAVORITES = "Favorites",
+  TRACKS = "Tracks",
+  SUBSCRIBERS = "Subscribers",
+  SUBSCRIPTIONS = "Subscriptions",
+  UPLOAD = "Upload",
+}
+
+export const UserInfo: React.FC = () => {
   const { id } = useParams();
   const { user } = useTypedSelector((state) => state.user);
   const [userInfo, setUserInfo] = useState<IUser>();
   useEffect(() => {
     if (id) {
-      getAuthorAsync(id).then((response) => setUserInfo(response.data));
+      getUserAsync(id).then((response) => setUserInfo(response.data));
     }
   }, [id]);
   return (
@@ -22,7 +30,7 @@ export const UserInfo: React.FC<Props> = () => {
         <>
           <div className={"profile_card"}>
             <div className={"profile_card_img"}>
-              <img src={userInfo.picture_url} />
+              <img src={userInfo.picture_url} alt={"profile"} />
             </div>
             <div className={"profile_info"}>
               <div className={"profile_info_container"}>
@@ -30,22 +38,40 @@ export const UserInfo: React.FC<Props> = () => {
                 <h2>{userInfo.bio ? userInfo.bio : "No bio"}</h2>
               </div>
               <div className={"buttons"}>
-                <Link to={"favorites"} className={"button"}>
-                  Favorites <small>{userInfo.favorites_count}</small>
+                <Link
+                  to={ClientConfig.client_routes.profile.favorites}
+                  className={"button"}
+                >
+                  {DisplayedText.FAVORITES}{" "}
+                  <small>{userInfo.favorites_count}</small>
                 </Link>
-                <Link to={"tracks"} className={"button"}>
-                  Tracks <small>{userInfo.tracks_count}</small>
+                <Link
+                  to={ClientConfig.client_routes.profile.tracks}
+                  className={"button"}
+                >
+                  {DisplayedText.TRACKS} <small>{userInfo.tracks_count}</small>
                 </Link>
-                <Link to={"subscribers"} className={"button"}>
-                  Subscribers <small>{userInfo.subscribers_count}</small>
+                <Link
+                  to={ClientConfig.client_routes.profile.subscribers}
+                  className={"button"}
+                >
+                  {DisplayedText.SUBSCRIBERS}
+                  <small>{userInfo.subscribers_count}</small>
                 </Link>
-                <Link to={"subscriptions"} className={"button"}>
-                  Subscriptions <small>{userInfo.subscriptions_count}</small>
+                <Link
+                  to={ClientConfig.client_routes.profile.subscriptions}
+                  className={"button"}
+                >
+                  {DisplayedText.SUBSCRIPTIONS}{" "}
+                  <small>{userInfo.subscriptions_count}</small>
                 </Link>
 
                 {userInfo.id === user?.id && (
-                  <Link to={"../upload"} className={"button"}>
-                    Upload
+                  <Link
+                    to={`../${ClientConfig.client_routes.upload.index}`}
+                    className={"button"}
+                  >
+                    {DisplayedText.UPLOAD}
                   </Link>
                 )}
               </div>

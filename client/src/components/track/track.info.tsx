@@ -6,20 +6,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { PlayPauseButton } from "../button/play.pause.button";
 import { LikeButton } from "../button/like.button";
 import { DownloadButton } from "../button/download.button";
-import axios from "axios";
 import "./track.css";
 import {
-  fetchTrackGenres,
-  fetchTrackInfo,
-  fetchTrackTags,
-} from "../../requests/tracks";
-
-export const fetchAuthorInfo = async (id: any) => {
-  const response = await axios.get("http://localhost:5000/user", {
-    params: { id },
-  });
-  return response.data;
-};
+  getTrackGenresAsync,
+  getTrackAsync,
+  getTrackTagsAsync,
+} from "../../requests/requests.tracks";
+import { getUserAsync } from "../../requests/requests.user";
+import { ClientConfig } from "../../client.config";
 
 export const TrackInfo: React.FC = () => {
   const [track, setTrack] = useState<ITrack | null>(null);
@@ -31,8 +25,9 @@ export const TrackInfo: React.FC = () => {
   const { setTracks } = useActions();
   const { id } = useParams();
   const navigate = useNavigate();
+
   useEffect(() => {
-    fetchTrackInfo(id as string).then((data) => {
+    getTrackAsync(id as string).then((data) => {
       setTrack(data);
       setTracks([data]);
     });
@@ -40,9 +35,11 @@ export const TrackInfo: React.FC = () => {
 
   useEffect(() => {
     if (track) {
-      fetchAuthorInfo(track.user_id).then((data) => setAuthor(data));
-      fetchTrackGenres(track.id).then((data) => setGenres(data));
-      fetchTrackTags(track.id).then((data) => setTags(data));
+      getUserAsync(track.user_id).then((response) => setAuthor(response.data));
+      getTrackGenresAsync(track.id).then((response) =>
+        setGenres(response.data)
+      );
+      getTrackTagsAsync(track.id).then((response) => setTags(response.data));
     }
   }, [track]);
 
@@ -51,12 +48,7 @@ export const TrackInfo: React.FC = () => {
   };
 
   const authorClickHandler = () => {
-    let href = window.location.href;
-    href = href
-      .split("/")
-      [href.split("/").length - 1].split("?")[0]
-      .split(" ")[0];
-    navigate(`../profile/${author?.id}`);
+    navigate(`/${ClientConfig.client_routes.profile.index}/${author?.id}`);
   };
 
   return (
@@ -66,7 +58,7 @@ export const TrackInfo: React.FC = () => {
         <>
           <div className={"track_card"}>
             <div className={"track_card_img"}>
-              <img src={track.picture_url} />
+              <img src={track.picture_url} alt={"track picture"} />
             </div>
             <div
               className={"card_info"}

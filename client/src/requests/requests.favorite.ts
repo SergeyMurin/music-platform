@@ -1,13 +1,12 @@
 import axios from "axios";
-import { Simulate } from "react-dom/test-utils";
-import error = Simulate.error;
+import { ClientConfig } from "../client.config";
 
 export const createFavoriteTrackAsync = async (
   token: string,
   track_id: string
-) => {
+): Promise<any> => {
   return axios.post(
-    "http://localhost:5000/favorite-track",
+    `${ClientConfig.server_uri}/favorite-track`,
     { track_id: track_id },
     {
       headers: {
@@ -20,8 +19,8 @@ export const createFavoriteTrackAsync = async (
 export const removeFavoriteTrackAsync = async (
   token: string,
   favorite_id: string
-) => {
-  return axios.delete("http://localhost:5000/favorite", {
+): Promise<any> => {
+  return axios.delete(`${ClientConfig.server_uri}/favorite`, {
     data: { favorite_id },
     headers: {
       Authorization: `Bearer ${token}`,
@@ -29,8 +28,8 @@ export const removeFavoriteTrackAsync = async (
   });
 };
 
-export const getFavoritesAsync = async (id: string) => {
-  return await axios.get("http://localhost:5000/favorite/all", {
+export const getFavoritesAsync = async (id: string): Promise<any> => {
+  return await axios.get(`${ClientConfig.server_uri}/favorite/all`, {
     params: { id },
   });
 };

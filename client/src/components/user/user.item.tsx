@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { IUser } from "../../types/user";
+import { ClientConfig } from "../../client.config";
 
 type Props = {
   user: IUser;
@@ -8,23 +9,18 @@ type Props = {
 export const UserItem: React.FC<Props> = ({ user }) => {
   const navigate = useNavigate();
 
-  const authorClickHandler = (e: any) => {
-    let href = window.location.href;
-    href = href
-      .split("/")
-      [href.split("/").length - 1].split("?")[0]
-      .split(" ")[0];
-    if (href === "search") {
-      navigate(`../profile/${user.id}`);
-    } else if (href === "subscribers" || href === "subscriptions") {
-      navigate(`../../profile/${user.id}`);
-    } else navigate(`profile/${user.id}`);
+  const authorClickHandler = () => {
+    navigate(`/${ClientConfig.client_routes.profile.index}/${user.id}`);
   };
 
   return (
     <div className={`track_item fade-in-fwd`}>
       <div className={"track_img"}>
-        <img src={user.picture_url} onClick={authorClickHandler}></img>
+        <img
+          src={user.picture_url}
+          onClick={authorClickHandler}
+          alt={"profile"}
+        ></img>
       </div>
 
       <div className={`track_item_container`}>

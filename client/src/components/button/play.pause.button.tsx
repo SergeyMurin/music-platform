@@ -31,6 +31,7 @@ export const PlayPauseButton: React.FC<Props> = ({ track }) => {
   const ButtonPlay: React.FC = () => {
     return (
       <img
+        alt={"play"}
         src={playIcon}
         className={"btn_action"}
         onClick={() => {
@@ -46,6 +47,7 @@ export const PlayPauseButton: React.FC<Props> = ({ track }) => {
   const ButtonPause: React.FC = () => {
     return (
       <img
+        alt={"pause"}
         src={pauseIcon}
         className={"btn_action"}
         onClick={() => {

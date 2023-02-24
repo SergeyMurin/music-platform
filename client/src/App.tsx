@@ -2,42 +2,36 @@ import React, { useEffect } from "react";
 import "./App.css";
 import { AppRoutes } from "./routes/app.routes";
 import { useActions } from "./hooks/useActions";
-import { useTypedSelector } from "./hooks/useTypedSelector";
-import MyMarquee from "./components/player/marquee";
-import { fetchPopularTracks } from "./store/action.creators/track.actions";
+import { ClientConfig } from "./client.config";
 
 function App() {
-  const { isAuth } = useTypedSelector((state) => state.user);
   const {
     fetchUser,
     setToken,
-    fetchTags,
     fetchUserFavorites,
     fetchUserSubscribers,
     fetchUserSubscriptions,
+    fetchTags,
     fetchGenres,
-    fetchTracks,
   } = useActions();
 
   useEffect(() => {
-    const id: string | null = localStorage.getItem("id");
-    const token: string | null = localStorage.getItem("token");
+    const id: string | null = localStorage.getItem(ClientConfig.local.id);
+    const token: string | null = localStorage.getItem(ClientConfig.local.token);
 
     if (id && token) {
       fetchUser(id);
       setToken(token);
-      fetchUserFavorites(id, token);
+      fetchUserFavorites(id);
       fetchUserSubscribers(id);
       fetchUserSubscriptions(id);
       fetchTags();
       fetchGenres();
-      fetchUserFavorites(id, token);
     }
-  }, []);
+  });
   return (
     <div className="App">
       <AppRoutes />
-      {/*<MyMarquee />*/}
     </div>
   );
 }

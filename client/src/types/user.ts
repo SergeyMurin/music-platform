@@ -23,6 +23,24 @@ export interface IUser {
   playlists_count: number;
 }
 
+export const isUserTypeGuard = (value: any): value is IUser => {
+  return (
+    (value as IUser).id !== undefined &&
+    (value as IUser).picture_url !== undefined &&
+    (value as IUser).bio !== undefined &&
+    (value as IUser).subscriptions_count !== undefined &&
+    (value as IUser).email !== undefined &&
+    (value as IUser).email_confirmed !== undefined &&
+    (value as IUser).subscribers_count !== undefined &&
+    (value as IUser).username !== undefined &&
+    (value as IUser).favorites_count !== undefined &&
+    (value as IUser).reposts_count !== undefined &&
+    (value as IUser).tracks_count !== undefined &&
+    (value as IUser).albums_count !== undefined &&
+    (value as IUser).playlists_count !== undefined
+  );
+};
+
 export enum UserActionTypes {
   SET_USER = "SET_USER",
   SET_TOKEN = "SET_TOKEN",

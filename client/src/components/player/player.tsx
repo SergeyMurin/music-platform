@@ -3,11 +3,7 @@ import { PlayerElement } from "./player.element";
 import "./player.css";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
-import axios from "axios";
-
-export const getAuthorAsync = async (id: string) => {
-  return await axios.get("http://localhost:5000/user", { params: { id } });
-};
+import { getUserAsync } from "../../requests/requests.user";
 
 export const Player: React.FC = () => {
   const audioElem: any = useRef();
@@ -20,7 +16,7 @@ export const Player: React.FC = () => {
 
   useEffect(() => {
     if (currentTrack) {
-      getAuthorAsync(currentTrack.user_id).then((response) => {
+      getUserAsync(currentTrack.user_id).then((response) => {
         setAuthor(response.data);
       });
     }

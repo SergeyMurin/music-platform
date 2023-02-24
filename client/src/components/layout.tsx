@@ -1,15 +1,22 @@
 import React from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { Player } from "./player/player";
 import { useTypedSelector } from "../hooks/useTypedSelector";
 import { Search } from "./search/search";
 import "../pages/pages.css";
+import { ClientConfig } from "../client.config";
+
+enum DisplayedText {
+  LOGO = "TrackTornado",
+  SIGN_IN = "Sign In",
+  SIGN_OUT = "Sign Out",
+}
 
 export const Layout: React.FC = () => {
   const { isAuth, user } = useTypedSelector((state) => state.user);
   const signOutHandler = () => {
-    localStorage.removeItem("id");
-    localStorage.removeItem("token");
+    localStorage.removeItem(ClientConfig.local.id);
+    localStorage.removeItem(ClientConfig.local.token);
     window.location.replace(window.location.origin);
   };
   return (
@@ -17,23 +24,26 @@ export const Layout: React.FC = () => {
       <header>
         <div className={"logo_panel"}>
           <Link to={""} className={""}>
-            TrackTornado
+            {DisplayedText.LOGO}
           </Link>
         </div>
         <Search />
         <div className={"user_panel"}>
           {!isAuth && (
-            <Link to={"/sign-in"} replace={true}>
-              Sign In
+            <Link to={ClientConfig.client_routes.auth.sign_in} replace={true}>
+              {DisplayedText.SIGN_IN}
             </Link>
           )}
           {isAuth && user && (
             <>
-              <Link to={`profile/${user.id}`} className={"profile_link"}>
+              <Link
+                to={`${ClientConfig.client_routes.profile.index}/${user.id}`}
+                className={"profile_link"}
+              >
                 {user.username}
               </Link>
               <Link to={""} onClick={signOutHandler}>
-                Sign Out
+                {DisplayedText.SIGN_OUT}
               </Link>
             </>
           )}

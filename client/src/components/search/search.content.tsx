@@ -1,32 +1,51 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
 import { useActions } from "../../hooks/useActions";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { TrackItem } from "../track/track.item";
 import { Loader } from "../loader/loader";
-import { UserItem } from "../user/user.item";
 import { IUser } from "../../types/user";
+import { getSearchAllAsync } from "../../requests/request.search";
+import { SearchList } from "./search.list";
+
+enum DisplayedText {
+  TRACKS = "Soundtracks",
+  USERS = "Users",
+}
+
+enum Search {
+  DISPLAYED_COUNT = 3,
+  PARAM = "q",
+}
 
 export const SearchContent: React.FC = () => {
   const { tracks } = useTypedSelector((state) => state.track);
   const { setTracks } = useActions();
   const location = useLocation();
+
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [showTracksAll, setShowTracksAll] = useState(false);
-  const [showUsersAll, setShowUsersAll] = useState(false);
-  const params = new URLSearchParams(location.search);
+  const [searchTerm, setSearchTerm] = useState(
+    new URLSearchParams(location.search).get(Search.PARAM)
+  );
 
-  const displayedCount = 3;
-
-  const [albums, setAlbums] = useState();
+  //const [albums, setAlbums] = useState();
   const [users, setUsers] = useState<IUser[]>();
 
   useEffect(() => {
-    const query = params.get("q");
+    const fetchSearch = async (query: string) => {
+      await getSearchAllAsync(query).then((response) => {
+        setTracks(response.data.tracks);
+        setUsers(response.data.users);
+        setSearchResults(response.data);
+      });
+    };
+
+    const params = new URLSearchParams(location.search);
+    const query = params.get(Search.PARAM);
     if (!query) return;
+
+    setSearchTerm(query);
 
     setIsLoading(true);
     fetchSearch(query).then(() => {
@@ -34,27 +53,9 @@ export const SearchContent: React.FC = () => {
     });
   }, [location.search]);
 
-  const fetchSearch = async (query: string) => {
-    await axios
-      .get(`http://localhost:5000/user/search?term=${query}&type=all`)
-      .then((response) => {
-        setTracks(response.data.tracks);
-        setUsers(response.data.users);
-        setSearchResults(response.data);
-      });
-  };
-
-  const handleShowTracksAll = () => {
-    setShowTracksAll(!showTracksAll);
-  };
-
-  const handleShowUsersAll = () => {
-    setShowUsersAll(!showUsersAll);
-  };
-
   return (
     <>
-      <div className={"page_header"}>Results for "{params.get("q")}"</div>
+      <div className={"page_header"}>{`Results for "${searchTerm}"`}</div>
       <hr />
       {isLoading && (
         <div
@@ -66,42 +67,18 @@ export const SearchContent: React.FC = () => {
       {!isLoading && searchResults && (
         <>
           {/*Tracks*/}
-
-          <h1>Soundtracks</h1>
-
-          {!tracks?.length && <h2>No matches</h2>}
-          {!showTracksAll && tracks && tracks.length > displayedCount && (
-            <button onClick={handleShowTracksAll}>Show All</button>
-          )}
-          {showTracksAll && tracks && tracks.length > displayedCount && (
-            <button onClick={handleShowTracksAll}>Hide</button>
-          )}
-          {tracks &&
-            tracks
-              .slice(0, showTracksAll ? tracks.length : displayedCount)
-              .map((track) => {
-                return (
-                  <TrackItem track={track} key={track.id} tracks={tracks} />
-                );
-              })}
-
+          <h1>{DisplayedText.TRACKS}</h1>
+          <SearchList
+            list={tracks}
+            displayedCount={Search.DISPLAYED_COUNT as number}
+          />
           {/*Users*/}
           <hr />
-          <h1>Users</h1>
-
-          {!users?.length && <h2>No matches</h2>}
-          {!showUsersAll && users && users.length > displayedCount && (
-            <button onClick={handleShowUsersAll}>Show All</button>
-          )}
-          {showUsersAll && users && users.length > displayedCount && (
-            <button onClick={handleShowUsersAll}>Hide</button>
-          )}
-          {users &&
-            users
-              .slice(0, showUsersAll ? users.length : displayedCount)
-              .map((user) => {
-                return <UserItem user={user} key={user.id} />;
-              })}
+          <h1>{DisplayedText.USERS}</h1>
+          <SearchList
+            list={users}
+            displayedCount={Search.DISPLAYED_COUNT as number}
+          />
         </>
       )}
     </>

@@ -1,20 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import { TrackItem } from "../track/track.item";
 import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
-import { getProfileTracksAsync } from "../../requests/tracks";
+import { getTracksAsync } from "../../requests/requests.tracks";
+
+enum DisplayedText {
+  HEADER = "Tracks:",
+}
 
 export const ProfileTracks: React.FC = () => {
   const { id } = useParams();
-
   const { tracks } = useTypedSelector((state) => state.track);
   const { setTracks } = useActions();
   useEffect(() => {
     if (id) {
-      getProfileTracksAsync(id).then((response) => {
+      getTracksAsync(id).then((response) => {
         setTracks(response.data);
       });
     }
@@ -22,7 +24,7 @@ export const ProfileTracks: React.FC = () => {
 
   return (
     <div className={"tracks"}>
-      <h2>Tracks:</h2>
+      <h2>{DisplayedText.HEADER}</h2>
       <hr />
       {tracks &&
         tracks.map((t: ITrack) => {

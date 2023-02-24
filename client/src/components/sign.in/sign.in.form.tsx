@@ -3,6 +3,23 @@ import { useForm, Resolver } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { validateEmail } from "../sign.up/sign.up.form";
 import { GoogleSignIn } from "../google/google.sign.in";
+import { ClientConfig } from "../../client.config";
+
+enum DisplayedText {
+  FORGOT_PASSWORD = "Forgot password?",
+  SIGN_IN = "Sign In",
+}
+
+enum FormPlaceholders {
+  EMAIL = "Email",
+  PASSWORD = "Password",
+}
+
+enum FormErrors {
+  EMAIL_REQUIRED = "Email is required",
+  EMAIL_NOT_VALID = "Email not valid",
+  PASSWORD_REQUIRED = "Password is required",
+}
 
 type FormValues = {
   email: string;
@@ -16,21 +33,21 @@ const resolver: Resolver<FormValues> = async (values) => {
       ? {
           email: {
             type: "required",
-            message: "Email is required",
+            message: FormErrors.EMAIL_REQUIRED,
           },
         }
       : !validateEmail(values.email)
       ? {
           email: {
             type: "onChange",
-            message: "Email not valid",
+            message: FormErrors.EMAIL_NOT_VALID,
           },
         }
       : !values.password
       ? {
           password: {
             type: "required",
-            message: "Password is required",
+            message: FormErrors.PASSWORD_REQUIRED,
           },
         }
       : {},
@@ -39,7 +56,6 @@ const resolver: Resolver<FormValues> = async (values) => {
 
 type Props = {
   error: string;
-
   submit: (values: any) => void;
 };
 export const SignInForm: React.FC<Props> = ({ error, submit }) => {
@@ -52,7 +68,11 @@ export const SignInForm: React.FC<Props> = ({ error, submit }) => {
 
   return (
     <form onSubmit={onSubmit}>
-      <input type={"email"} placeholder={"Email"} {...register("email")} />
+      <input
+        type={"email"}
+        placeholder={FormPlaceholders.EMAIL}
+        {...register("email")}
+      />
       {errors?.email ? (
         <p className={"error"}>{errors.email.message}</p>
       ) : (
@@ -61,7 +81,7 @@ export const SignInForm: React.FC<Props> = ({ error, submit }) => {
 
       <input
         type={"password"}
-        placeholder={"Password"}
+        placeholder={FormPlaceholders.PASSWORD}
         {...register("password")}
       />
       {errors?.password ? (
@@ -75,10 +95,12 @@ export const SignInForm: React.FC<Props> = ({ error, submit }) => {
       )}
 
       <button type="submit" disabled={!!errors.email || !!errors.password}>
-        Sign In
+        {DisplayedText.SIGN_IN}
       </button>
 
-      <Link to={"../password/forgot"}>Forgot password?</Link>
+      <Link to={`../${ClientConfig.client_routes.auth.password_forgot}`}>
+        {DisplayedText.FORGOT_PASSWORD}
+      </Link>
       <GoogleSignIn />
     </form>
   );

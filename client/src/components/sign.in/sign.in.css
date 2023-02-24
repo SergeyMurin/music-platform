@@ -28,7 +28,7 @@
 .sign-in {
     color: var(--base-page-background-color);
     width: 50%;
-    min-height: 100vh;
+    min-height: 100;
     display: flex;
     justify-content: center;
     flex-direction: column;
