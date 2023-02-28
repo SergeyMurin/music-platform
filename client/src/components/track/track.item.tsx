@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { LikeButton } from "../button/like.button";
+import { ToggleLikeButton } from "../button/toggleLikeButton/ToggleLikeButton";
 import { DownloadButton } from "../button/download.button";
 import { useNavigate } from "react-router-dom";
 import { PlayPauseButton } from "../button/play.pause.button";
@@ -62,10 +62,7 @@ export const TrackItem: React.FC<Props> = ({ track }) => {
           </span>
         </div>
         <div className={"like"}>
-          <LikeButton
-            isForTrack={true}
-            track={isCurrent(track) ? currentTrack : track}
-          />
+          <ToggleLikeButton track={isCurrent(track) ? currentTrack : track} />
 
           <DownloadButton trackId={track.id} fileName={track.title} />
         </div>

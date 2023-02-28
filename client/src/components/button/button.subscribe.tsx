@@ -1,15 +1,16 @@
 import { IUser } from "../../types/user";
 import React, { useEffect, useState } from "react";
-import subscribeOnIcon from "../../../public/assets/user/subscribe-on-icon.svg";
-import subscribeIcon from "../../../public/assets/user/subscribe-icon.svg";
+import subscribeOnIcon from "../../assets/user/subscribe-on-icon.svg";
+import subscribeIcon from "../../assets/user/subscribe-icon.svg";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import {
   createSubscribeAsync,
   removeSubscribeAsync,
 } from "../../helpers/requests/requests.subscribe";
+import { authGuard } from "../../helpers/helpers";
 
 type Props = {
-  user: IUser; //on whom
+  user: IUser;
 };
 
 export const ButtonSubscribe: React.FC<Props> = ({ user }) => {
@@ -28,14 +29,8 @@ export const ButtonSubscribe: React.FC<Props> = ({ user }) => {
     }
   }, [user, subscriptions]);
 
-  const subscribeAccess = () => {
-    if (!isAuth) {
-      window.location.replace(window.location.origin + "/sign-in");
-    }
-  };
-
-  const subscribeButtonAsyncHandler = async () => {
-    subscribeAccess();
+  const handlerAsyncSubscribeButton = async () => {
+    authGuard(isAuth);
     if (token && user) {
       createSubscribeAsync(user.id, token).then(() =>
         setIsSubscribe(!isSubscribe)
@@ -43,8 +38,8 @@ export const ButtonSubscribe: React.FC<Props> = ({ user }) => {
     }
   };
 
-  const unsubscribeButtonHandler = () => {
-    subscribeAccess();
+  const handlerUnsubscribeButton = () => {
+    authGuard(isAuth);
     if (token && user) {
       removeSubscribeAsync(user.id, token).then(() =>
         setIsSubscribe(!isSubscribe)
@@ -58,7 +53,7 @@ export const ButtonSubscribe: React.FC<Props> = ({ user }) => {
         <img
           src={subscribeOnIcon}
           className={"btn_action like subscribe"}
-          onClick={unsubscribeButtonHandler}
+          onClick={handlerUnsubscribeButton}
           alt={"unsubscribe"}
         />
       )}
@@ -66,7 +61,7 @@ export const ButtonSubscribe: React.FC<Props> = ({ user }) => {
         <img
           src={subscribeIcon}
           className={"btn_action like subscribe"}
-          onClick={subscribeButtonAsyncHandler}
+          onClick={handlerAsyncSubscribeButton}
           alt={"subscribe"}
         />
       )}

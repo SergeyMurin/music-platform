@@ -1,5 +1,5 @@
 import React from "react";
-import notFoundImage from "../../public/assets/img/not-found.jpg";
+import notFoundImage from "../assets/img/not-found.jpg";
 
 export const NotFoundPage: React.FC = () => {
   return (

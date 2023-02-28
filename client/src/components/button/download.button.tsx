@@ -1,5 +1,5 @@
 import React from "react";
-import downloadIcon from "../../../public/assets/player/download-icon.svg";
+import downloadIcon from "../../assets/player/download-icon.svg";
 import { downloadTrackAsync } from "../../helpers/requests/requests.tracks";
 import { createBlob, downloadBlob } from "../../helpers/helpers";
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { ResetPassword } from "../components/reset.password/reset.password";
+import { ResetPassword } from "../components/resetPassword/reset.password";
 
 export const ResetPasswordPage: React.FC = () => {
   return (

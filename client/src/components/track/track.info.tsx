@@ -4,7 +4,7 @@ import { IUser } from "../../types/user";
 import { useActions } from "../../hooks/useActions";
 import { useNavigate, useParams } from "react-router-dom";
 import { PlayPauseButton } from "../button/play.pause.button";
-import { LikeButton } from "../button/like.button";
+import { ToggleLikeButton } from "../button/toggleLikeButton/ToggleLikeButton";
 import { DownloadButton } from "../button/download.button";
 import "./track.css";
 import {
@@ -95,7 +95,7 @@ export const TrackInfo: React.FC = () => {
                 <PlayPauseButton track={track} />
 
                 <div className={"like-download"}>
-                  <LikeButton isForTrack={true} track={track} />
+                  <ToggleLikeButton track={track} />
                   <DownloadButton trackId={track.id} fileName={track.title} />
                 </div>
               </div>

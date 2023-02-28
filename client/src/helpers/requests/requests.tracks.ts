@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ClientConfig } from "../../client.config";
-import { getLocalToken, getLocalTokenAuthorizationField } from "../helpers";
+import { getLocalToken, authorizationFieldWithLocalToken } from "../helpers";
 
 export const getTracksAsync = async (id: string): Promise<any> => {
   return axios.get(`${ClientConfig.server_uri}/track/all`, { params: { id } });
@@ -36,7 +36,7 @@ export const downloadTrackAsync = async (id: string): Promise<any> => {
     `${ClientConfig.server_uri}/track/download`,
     {
       params: { id },
-      headers: { ...getLocalTokenAuthorizationField() },
+      headers: { ...authorizationFieldWithLocalToken() },
     }
   );
   return response.data;

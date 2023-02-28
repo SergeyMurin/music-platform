@@ -31,7 +31,9 @@ export const fetchUser = (id: string) => {
       const response = await getUserAsync(id);
       dispatch({ type: UserActionTypes.SET_USER, payload: response.data });
       dispatch({ type: UserActionTypes.SET_AUTH, payload: true });
-    } catch (e) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 };
 
@@ -43,7 +45,9 @@ export const fetchUserSubscriptions = (id: string) => {
         type: UserActionTypes.FETCH_SUBSCRIPTIONS,
         payload: response.data,
       });
-    } catch (e) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 };
 
@@ -55,7 +59,9 @@ export const fetchUserSubscribers = (id: string) => {
         type: UserActionTypes.FETCH_SUBSCRIBERS,
         payload: response.data,
       });
-    } catch (e) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 };
 
@@ -67,6 +73,8 @@ export const fetchUserFavorites = (id: string) => {
         type: UserActionTypes.FETCH_FAVORITES,
         payload: response.data,
       });
-    } catch (e) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 };

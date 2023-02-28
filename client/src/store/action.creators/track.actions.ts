@@ -22,7 +22,9 @@ export const fetchTracks = (id: string) => {
         type: TrackActionTypes.FETCH_TRACKS,
         payload: response.data,
       });
-    } catch (e) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 };
 
@@ -38,7 +40,9 @@ export const fetchPopularTracks = () => {
         type: TrackActionTypes.SET_TRACKS,
         payload: response.data,
       });
-    } catch (e) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 };
 
@@ -50,7 +54,9 @@ export const fetchGenres = () => {
         type: TrackActionTypes.FETCH_GENRES,
         payload: response.data,
       });
-    } catch (e) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 };
 
@@ -62,6 +68,8 @@ export const fetchTags = () => {
         type: TrackActionTypes.FETCH_TAGS,
         payload: response.data,
       });
-    } catch (e) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 };

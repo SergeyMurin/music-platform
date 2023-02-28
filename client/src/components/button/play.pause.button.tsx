@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
-import pauseIcon from "../../../public/assets/player/pause-icon.svg";
-import playIcon from "../../../public/assets/player/play-icon.svg";
+import pauseIcon from "../../assets/player/pause-icon.svg";
+import playIcon from "../../assets/player/play-icon.svg";
 import "./../player/player.css";
 
 type Props = {

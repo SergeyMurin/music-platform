@@ -1,10 +1,11 @@
 import { ClientConfig } from "../client.config";
+import { useNavigate } from "react-router-dom";
 
 export const getLocalToken = () => {
   return localStorage.getItem(ClientConfig.local.token);
 };
 
-export const getLocalTokenAuthorizationField = () => {
+export const authorizationFieldWithLocalToken = () => {
   const token = getLocalToken();
   if (token) {
     return { Authorization: `Bearer ${token}` };
@@ -24,4 +25,11 @@ export const downloadBlob = (blob: Blob, fileName: string) => {
   link.setAttribute("download", fileName);
   document.body.appendChild(link);
   link.click();
+};
+
+export const authGuard = (isAuth: boolean) => {
+  if (!isAuth) {
+    const navigate = useNavigate();
+    navigate(`/${ClientConfig.client_routes.auth.sign_in}`);
+  }
 };

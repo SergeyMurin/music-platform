@@ -228,8 +228,13 @@ input:focus {
     color: var(--base-player-light-color);
 }
 
+button{
+    border-radius: 0;
+    border: none;
+    background: none;
+}
 
-button, .button, .button-2 {
+.button, .button-2 {
     color: var(--base-page-background-color);
     border-radius: 0;
     border: none;
@@ -248,7 +253,7 @@ button, .button, .button-2 {
     background-color: var(--base-page-background-color);
 }
 
-button:hover, .button:hover, .button-2:hover {
+.button:hover, .button-2:hover {
     transition: background-color 0.2s ease-in-out;
     background-color: var(--base-seekbar-color);
     -webkit-box-shadow: var(--base-shadow);
@@ -256,7 +261,7 @@ button:hover, .button:hover, .button-2:hover {
     box-shadow: var(--base-shadow);
 }
 
-button:disabled, .button:disabled, .button-2:disabled {
+.button:disabled, .button-2:disabled {
     background-color: var(--base-player-light-color);
 }
 
