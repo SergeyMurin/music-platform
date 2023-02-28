@@ -1,11 +1,11 @@
 import axios from "axios";
-import { ClientConfig } from "../client.config";
+import { ClientConfig } from "../../client.config";
 
 export const createSubscribeAsync = async (
   id: string,
   token: string
 ): Promise<any> => {
-  return await axios.post(
+  const response = await axios.post(
     `${ClientConfig.server_uri}/subscribe`,
     {
       user_id: id,
@@ -14,6 +14,7 @@ export const createSubscribeAsync = async (
       headers: { Authorization: `Bearer ${token}` },
     }
   );
+  return response.data;
 };
 
 export const removeSubscribeAsync = async (

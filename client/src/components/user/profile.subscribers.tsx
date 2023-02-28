@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { UserItem } from "./user.item";
 import { IUser } from "../../types/user";
-import { getUserSubscribersAsync } from "../../requests/requests.subscribe";
+import { getUserSubscribersAsync } from "../../helpers/requests/requests.subscribe";
 
 enum DisplayedText {
   HEADER = "Subscribers:",

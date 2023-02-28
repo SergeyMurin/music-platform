@@ -4,7 +4,7 @@ import { TrackItem } from "../track/track.item";
 import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
-import { getTracksAsync } from "../../requests/requests.tracks";
+import { getTracksAsync } from "../../helpers/requests/requests.tracks";
 
 enum DisplayedText {
   HEADER = "Tracks:",

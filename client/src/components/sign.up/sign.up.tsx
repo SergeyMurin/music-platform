@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useActions } from "../../hooks/useActions";
 import "../sign.in/sign.in.css";
 import { ClientConfig } from "../../client.config";
-import { signUpAsync } from "../../requests/requests.auth";
+import { signUpAsync } from "../../helpers/requests/requests.auth";
 
 enum displayedText {
   SIGN_IN = "Sign In",

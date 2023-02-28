@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { IUser } from "../../types/user";
-import { getUserSubscriptionsAsync } from "../../requests/requests.subscribe";
+import { getUserSubscriptionsAsync } from "../../helpers/requests/requests.subscribe";
 import { UserItem } from "./user.item";
 
 export const ProfileSubscriptions: React.FC = () => {

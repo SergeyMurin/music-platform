@@ -11,8 +11,8 @@ import {
   getTrackGenresAsync,
   getTrackAsync,
   getTrackTagsAsync,
-} from "../../requests/requests.tracks";
-import { getUserAsync } from "../../requests/requests.user";
+} from "../../helpers/requests/requests.tracks";
+import { getUserAsync } from "../../helpers/requests/requests.user";
 import { ClientConfig } from "../../client.config";
 
 export const TrackInfo: React.FC = () => {
@@ -96,7 +96,7 @@ export const TrackInfo: React.FC = () => {
 
                 <div className={"like-download"}>
                   <LikeButton isForTrack={true} track={track} />
-                  <DownloadButton track_id={track.id} fileName={track.title} />
+                  <DownloadButton trackId={track.id} fileName={track.title} />
                 </div>
               </div>
             </div>

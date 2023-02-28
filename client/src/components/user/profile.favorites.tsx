@@ -4,7 +4,7 @@ import { TrackItem } from "../track/track.item";
 import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
-import { getFavoritesAsync } from "../../requests/requests.favorite";
+import { getFavoritesAsync } from "../../helpers/requests/requests.favorite";
 
 enum DisplayedText {
   HEADER = "Favorites:",

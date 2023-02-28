@@ -3,7 +3,7 @@ import { Link, Outlet, useParams } from "react-router-dom";
 import { IUser } from "../../types/user";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { ButtonSubscribe } from "../button/button.subscribe";
-import { getUserAsync } from "../../requests/requests.user";
+import { getUserAsync } from "../../helpers/requests/requests.user";
 import { ClientConfig } from "../../client.config";
 
 enum DisplayedText {

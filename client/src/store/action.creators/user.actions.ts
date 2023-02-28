@@ -3,9 +3,9 @@ import { IUser, UserAction, UserActionTypes } from "../../types/user";
 import {
   getUserSubscribersAsync,
   getUserSubscriptionsAsync,
-} from "../../requests/requests.subscribe";
-import { getFavoritesAsync } from "../../requests/requests.favorite";
-import { getUserAsync } from "../../requests/requests.user";
+} from "../../helpers/requests/requests.subscribe";
+import { getFavoritesAsync } from "../../helpers/requests/requests.favorite";
+import { getUserAsync } from "../../helpers/requests/requests.user";
 
 export const setUser = (user: IUser | null) => {
   return (dispatch: Dispatch<UserAction>) => {

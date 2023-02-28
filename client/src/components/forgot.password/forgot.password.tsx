@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ForgotPasswordForm } from "./forgot.password.form";
-import { forgotPasswordAsync } from "../../requests/requests.auth";
+import { forgotPasswordAsync } from "../../helpers/requests/requests.auth";
 
 enum DisplayedText {
   FORGOT = "Forgot password?",

@@ -4,7 +4,7 @@ import { useActions } from "../../hooks/useActions";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { Loader } from "../loader/loader";
 import { IUser } from "../../types/user";
-import { getSearchAllAsync } from "../../requests/request.search";
+import { getSearchAllAsync } from "../../helpers/requests/request.search";
 import { SearchList } from "./search.list";
 
 enum DisplayedText {

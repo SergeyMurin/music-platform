@@ -3,7 +3,7 @@ import { TrackUploadForm } from "./track.upload.form";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 import "./upload.css";
-import { uploadTrackAsync } from "../../requests/request.upload";
+import { uploadTrackAsync } from "../../helpers/requests/request.upload";
 
 enum DisplayedText {
   HEADER = "Soundtrack upload form",

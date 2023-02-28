@@ -3,7 +3,7 @@ import { PlayerElement } from "./player.element";
 import "./player.css";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
-import { getUserAsync } from "../../requests/requests.user";
+import { getUserAsync } from "../../helpers/requests/requests.user";
 
 export const Player: React.FC = () => {
   const audioElem: any = useRef();

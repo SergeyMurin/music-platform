@@ -3,11 +3,11 @@ import { useTypedSelector } from "../../hooks/useTypedSelector";
 import {
   createFavoriteTrackAsync,
   removeFavoriteTrackAsync,
-} from "../../requests/requests.favorite";
+} from "../../helpers/requests/requests.favorite";
 import { useActions } from "../../hooks/useActions";
 import { ITrack } from "../../types/track";
-import favoriteOnIcon from "../../assets/player/favorite_on-icon.svg";
-import favoriteIcon from "../../assets/player/favorite-icon.svg";
+import favoriteOnIcon from "../../../public/assets/player/favorite_on-icon.svg";
+import favoriteIcon from "../../../public/assets/player/favorite-icon.svg";
 import "../player/player.css";
 
 type Props = {

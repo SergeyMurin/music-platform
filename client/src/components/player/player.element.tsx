@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import playIcon from "../../assets/player/play-icon.svg";
-import pauseIcon from "../../assets/player/pause-icon.svg";
-import nextIcon from "../../assets/player/next-icon.svg";
-import previousIcon from "../../assets/player/previous-icon.svg";
-import repeatIcon from "../../assets/player/repeat-icon.svg";
-import repeatOnIcon from "../../assets/player/repeat-on-icon.svg";
+import playIcon from "../../../public/assets/player/play-icon.svg";
+import pauseIcon from "../../../public/assets/player/pause-icon.svg";
+import nextIcon from "../../../public/assets/player/next-icon.svg";
+import previousIcon from "../../../public/assets/player/previous-icon.svg";
+import repeatIcon from "../../../public/assets/player/repeat-icon.svg";
+import repeatOnIcon from "../../../public/assets/player/repeat-on-icon.svg";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 import { ITrack } from "../../types/track";
@@ -241,7 +241,7 @@ export const PlayerElement: React.FC<Props> = ({ audioElem, author }) => {
           <div className={"like-download"}>
             <LikeButton isForTrack={true} track={currentTrack} />
             <DownloadButton
-              track_id={currentTrack?.id}
+              trackId={currentTrack?.id}
               fileName={currentTrack?.title}
             />
           </div>

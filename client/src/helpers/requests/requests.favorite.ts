@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ClientConfig } from "../client.config";
+import { ClientConfig } from "../../client.config";
 
 export const createFavoriteTrackAsync = async (
   token: string,

@@ -1,12 +1,12 @@
 import { IUser } from "../../types/user";
 import React, { useEffect, useState } from "react";
-import subscribeOnIcon from "../../assets/user/subscribe-on-icon.svg";
-import subscribeIcon from "../../assets/user/subscribe-icon.svg";
+import subscribeOnIcon from "../../../public/assets/user/subscribe-on-icon.svg";
+import subscribeIcon from "../../../public/assets/user/subscribe-icon.svg";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import {
   createSubscribeAsync,
   removeSubscribeAsync,
-} from "../../requests/requests.subscribe";
+} from "../../helpers/requests/requests.subscribe";
 
 type Props = {
   user: IUser; //on whom
@@ -34,7 +34,7 @@ export const ButtonSubscribe: React.FC<Props> = ({ user }) => {
     }
   };
 
-  const subscribeButtonHandler = () => {
+  const subscribeButtonAsyncHandler = async () => {
     subscribeAccess();
     if (token && user) {
       createSubscribeAsync(user.id, token).then(() =>
@@ -66,7 +66,7 @@ export const ButtonSubscribe: React.FC<Props> = ({ user }) => {
         <img
           src={subscribeIcon}
           className={"btn_action like subscribe"}
-          onClick={subscribeButtonHandler}
+          onClick={subscribeButtonAsyncHandler}
           alt={"subscribe"}
         />
       )}

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ResetPasswordForm } from "./reset.password.form";
 import { Link, useSearchParams } from "react-router-dom";
-import { resetPasswordAsync } from "../../requests/requests.auth";
+import { resetPasswordAsync } from "../../helpers/requests/requests.auth";
 import { ClientConfig } from "../../client.config";
 
 enum DisplayedText {

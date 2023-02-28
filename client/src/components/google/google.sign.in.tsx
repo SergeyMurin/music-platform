@@ -2,7 +2,7 @@ import React from "react";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { useActions } from "../../hooks/useActions";
 import { ClientConfig } from "../../client.config";
-import { googleSignInAsync } from "../../requests/requests.auth";
+import { googleSignInAsync } from "../../helpers/requests/requests.auth";
 
 export const GoogleSignIn: React.FC = () => {
   const { setAuth, setToken, fetchUser } = useActions();

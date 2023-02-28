@@ -5,7 +5,7 @@ import { LikeButton } from "../button/like.button";
 import { DownloadButton } from "../button/download.button";
 import { useNavigate } from "react-router-dom";
 import { PlayPauseButton } from "../button/play.pause.button";
-import { getUserAsync } from "../../requests/requests.user";
+import { getUserAsync } from "../../helpers/requests/requests.user";
 import { ClientConfig } from "../../client.config";
 
 type Props = {
@@ -67,7 +67,7 @@ export const TrackItem: React.FC<Props> = ({ track }) => {
             track={isCurrent(track) ? currentTrack : track}
           />
 
-          <DownloadButton track_id={track.id} fileName={track.title} />
+          <DownloadButton trackId={track.id} fileName={track.title} />
         </div>
       </div>
     </div>

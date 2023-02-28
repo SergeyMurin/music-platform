@@ -3,7 +3,7 @@ import { SignInForm } from "./sign.in.form";
 import { Link } from "react-router-dom";
 import { useActions } from "../../hooks/useActions";
 import "./sign.in.css";
-import { signInAsync } from "../../requests/requests.auth";
+import { signInAsync } from "../../helpers/requests/requests.auth";
 import { ClientConfig } from "../../client.config";
 
 enum DisplayedText {

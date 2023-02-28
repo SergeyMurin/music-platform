@@ -1,6 +1,6 @@
 import axios from "axios";
 import { CredentialResponse } from "@react-oauth/google";
-import { ClientConfig } from "../client.config";
+import { ClientConfig } from "../../client.config";
 
 export const signInAsync = async (dataValues: any): Promise<any> => {
   return await axios.post(`${ClientConfig.server_uri}/auth/sign-in`, {

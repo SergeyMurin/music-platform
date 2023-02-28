@@ -5,7 +5,7 @@ import { ClientConfig } from "../../client.config";
 import {
   getPopularTracksAsync,
   getTracksAsync,
-} from "../../requests/requests.tracks";
+} from "../../helpers/requests/requests.tracks";
 
 export const setTracks = (tracks: ITrack[] | null | any) => {
   return (dispatch: Dispatch<TrackAction>) => {

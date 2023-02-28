@@ -3,7 +3,7 @@ import { useTypedSelector } from "../hooks/useTypedSelector";
 import { useActions } from "../hooks/useActions";
 import { Link, useSearchParams } from "react-router-dom";
 import { Loader } from "../components/loader/loader";
-import { confirmEmailAsync } from "../requests/requests.auth";
+import { confirmEmailAsync } from "../helpers/requests/requests.auth";
 
 enum DisplayedText {
   HEADER = "Email confirmed",
