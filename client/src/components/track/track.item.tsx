@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { ToggleLikeButton } from "../button/toggleLikeButton/ToggleLikeButton";
 import { DownloadButton } from "../button/download.button";
 import { useNavigate } from "react-router-dom";
 import { PlayPauseButton } from "../button/play.pause.button";
 import { getUserAsync } from "../../helpers/requests/requests.user";
 import { ClientConfig } from "../../client.config";
+import { ButtonUser, UserButtonType } from "../button/ButtonUser";
 
 type Props = {
   track: ITrack;
@@ -62,7 +62,10 @@ export const TrackItem: React.FC<Props> = ({ track }) => {
           </span>
         </div>
         <div className={"like"}>
-          <ToggleLikeButton track={isCurrent(track) ? currentTrack : track} />
+          <ButtonUser
+            type={UserButtonType.LIKE}
+            payload={isCurrent(track) ? currentTrack : track}
+          />
 
           <DownloadButton trackId={track.id} fileName={track.title} />
         </div>

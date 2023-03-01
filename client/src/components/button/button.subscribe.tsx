@@ -8,6 +8,7 @@ import {
   removeSubscribeAsync,
 } from "../../helpers/requests/requests.subscribe";
 import { authGuard } from "../../helpers/helpers";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   user: IUser;
@@ -19,6 +20,7 @@ export const ButtonSubscribe: React.FC<Props> = ({ user }) => {
   );
 
   const [isSubscribe, setIsSubscribe] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (subscriptions) {
@@ -30,7 +32,7 @@ export const ButtonSubscribe: React.FC<Props> = ({ user }) => {
   }, [user, subscriptions]);
 
   const handlerAsyncSubscribeButton = async () => {
-    authGuard(isAuth);
+    authGuard(isAuth, navigate);
     if (token && user) {
       createSubscribeAsync(user.id, token).then(() =>
         setIsSubscribe(!isSubscribe)
@@ -39,7 +41,7 @@ export const ButtonSubscribe: React.FC<Props> = ({ user }) => {
   };
 
   const handlerUnsubscribeButton = () => {
-    authGuard(isAuth);
+    authGuard(isAuth, navigate);
     if (token && user) {
       removeSubscribeAsync(user.id, token).then(() =>
         setIsSubscribe(!isSubscribe)

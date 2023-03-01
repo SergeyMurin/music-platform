@@ -1,5 +1,5 @@
 import { ClientConfig } from "../client.config";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 
 export const getLocalToken = () => {
   return localStorage.getItem(ClientConfig.local.token);
@@ -27,9 +27,8 @@ export const downloadBlob = (blob: Blob, fileName: string) => {
   link.click();
 };
 
-export const authGuard = (isAuth: boolean) => {
+export const authGuard = (isAuth: boolean, navigate: NavigateFunction) => {
   if (!isAuth) {
-    const navigate = useNavigate();
     navigate(`/${ClientConfig.client_routes.auth.sign_in}`);
   }
 };

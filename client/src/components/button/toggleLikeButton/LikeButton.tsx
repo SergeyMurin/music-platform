@@ -4,6 +4,7 @@ import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import favoriteIcon from "../../../assets/player/favorite-icon.svg";
 import { ITrack } from "../../../types/track";
 import { authGuard } from "../../../helpers/helpers";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   buttonType: string;
@@ -12,8 +13,9 @@ type Props = {
 };
 export const LikeButton: React.FC<Props> = ({ onToggle, track }) => {
   const { user, isAuth } = useTypedSelector((state) => state.user);
+  const navigate = useNavigate();
   const handlerClick = async () => {
-    authGuard(isAuth);
+    authGuard(isAuth, navigate);
 
     if (!(track && user)) {
       return;
