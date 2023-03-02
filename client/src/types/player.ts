@@ -1,8 +1,8 @@
 import { ITrack } from "./track";
 
 export interface PlayerState {
-  queue: ITrack[] | null | any;
-  currentTrack: ITrack | null | any;
+  queue: ITrack[] | null;
+  currentTrack: ITrack | null;
   currentTime: number;
   duration: number;
   volume: number;

@@ -1,26 +1,28 @@
-import favoriteOnIcon from "../../../assets/player/favorite_on-icon.svg";
+import { createFavoriteTrackAsync } from "../../../helpers/requests/requests.favorite";
 import React from "react";
-import { removeFavoriteTrackAsync } from "../../../helpers/requests/requests.favorite";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
+import favoriteIcon from "../../../assets/player/favorite-icon.svg";
+import { ITrack } from "../../../types/track";
 import { authGuard } from "../../../helpers/helpers";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
-  favoriteId: string;
-  buttonType: string;
+  buttonPurpose: string;
   onToggle: () => void;
+  track: ITrack;
 };
-export const UnlikeButton: React.FC<Props> = ({ favoriteId, onToggle }) => {
+export const LikeButtonView: React.FC<Props> = ({ onToggle, track }) => {
   const { user, isAuth } = useTypedSelector((state) => state.user);
   const navigate = useNavigate();
-  const handlerUnlikeButtonAsync = async () => {
-    if (!(favoriteId && user)) {
-      return;
-    }
+  const handlerClick = async () => {
     authGuard(isAuth, navigate);
 
+    if (!(track && user)) {
+      return;
+    }
+
     try {
-      await removeFavoriteTrackAsync(favoriteId);
+      await createFavoriteTrackAsync(track.id);
       onToggle();
     } catch (error) {
       console.error(error);
@@ -30,9 +32,9 @@ export const UnlikeButton: React.FC<Props> = ({ favoriteId, onToggle }) => {
   return (
     <button>
       <img
-        src={favoriteOnIcon}
+        src={favoriteIcon}
         className={"btn_action like"}
-        onClick={handlerUnlikeButtonAsync}
+        onClick={handlerClick}
         alt={"unlike"}
       />
     </button>

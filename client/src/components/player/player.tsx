@@ -4,10 +4,11 @@ import "./player.css";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 import { getUserAsync } from "../../helpers/requests/requests.user";
+import { IUser } from "../../types/user";
 
 export const Player: React.FC = () => {
   const audioElem: any = useRef();
-  const [author, setAuthor] = useState();
+  const [author, setAuthor] = useState<IUser | null>(null);
 
   const { currentTrack, isPlaying, volume } = useTypedSelector(
     (state) => state.player

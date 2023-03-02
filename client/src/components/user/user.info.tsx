@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Link, Outlet, useParams } from "react-router-dom";
 import { IUser } from "../../types/user";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { ButtonSubscribe } from "../button/button.subscribe";
 import { getUserAsync } from "../../helpers/requests/requests.user";
 import { ClientConfig } from "../../client.config";
+import { ButtonManager, ButtonManagerType } from "../button/ButtonManager";
 
 enum DisplayedText {
   FAVORITES = "Favorites",
@@ -77,7 +77,12 @@ export const UserInfo: React.FC = () => {
               </div>
             </div>
 
-            {userInfo.id !== user?.id && <ButtonSubscribe user={userInfo} />}
+            {userInfo.id !== user?.id && (
+              <ButtonManager
+                type={ButtonManagerType.SUBSCRIBE}
+                payload={{ user: userInfo }}
+              />
+            )}
           </div>
 
           <div className={"after-card"}>

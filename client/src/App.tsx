@@ -3,7 +3,7 @@ import "./App.css";
 import { AppRoutes } from "./routes/app.routes";
 import { useActions } from "./hooks/useActions";
 import { ClientConfig } from "./client.config";
-import { ButtonUser } from "./components/button/ButtonUser";
+import { ButtonManager } from "./components/button/ButtonManager";
 
 function App() {
   const {

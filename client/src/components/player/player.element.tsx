@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import playIcon from "../../assets/player/play-icon.svg";
 import pauseIcon from "../../assets/player/pause-icon.svg";
 import nextIcon from "../../assets/player/next-icon.svg";
@@ -8,15 +8,15 @@ import repeatOnIcon from "../../assets/player/repeat-on-icon.svg";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 import { ITrack } from "../../types/track";
-import { ToggleLikeButton } from "../button/toggleLikeButton/ToggleLikeButton";
-import { DownloadButton } from "../button/download.button";
 import MyMarquee from "./marquee";
 import { useNavigate } from "react-router-dom";
 import { ClientConfig } from "../../client.config";
+import { ButtonManager, ButtonManagerType } from "../button/ButtonManager";
+import { IUser } from "../../types/user";
 
 type Props = {
   audioElem: any;
-  author: any;
+  author: IUser | null;
 };
 
 export const PlayerElement: React.FC<Props> = ({ audioElem, author }) => {
@@ -77,6 +77,8 @@ export const PlayerElement: React.FC<Props> = ({ audioElem, author }) => {
     if (onRepeat) {
       audioElem.current.currentTime = 0;
       return;
+    } else if (!queue) {
+      return;
     }
 
     const index = queue.findIndex((x: ITrack) => x.id === currentTrack?.id);
@@ -91,6 +93,8 @@ export const PlayerElement: React.FC<Props> = ({ audioElem, author }) => {
   const skipToNext = () => {
     if (onRepeat) {
       audioElem.current.currentTime = 0;
+      return;
+    } else if (!queue) {
       return;
     }
 
@@ -120,9 +124,11 @@ export const PlayerElement: React.FC<Props> = ({ audioElem, author }) => {
 
   const navigate = useNavigate();
   const trackClickHandler = () => {
+    if (!currentTrack) return;
     navigate(`/${ClientConfig.client_routes.track.index}/${currentTrack.id}`);
   };
   const authorClickHandler = () => {
+    if (!currentTrack) return;
     navigate(
       `/${ClientConfig.client_routes.profile.index}/${currentTrack.user_id}`
     );
@@ -137,16 +143,17 @@ export const PlayerElement: React.FC<Props> = ({ audioElem, author }) => {
               onClick={trackClickHandler}
               style={{ cursor: "pointer" }}
               src={currentTrack?.picture_url}
+              alt={"track picture"}
             />
           </div>
           <div className="title">
             <MyMarquee
-              text={currentTrack?.title}
+              text={currentTrack ? currentTrack.title : ""}
               activateLength={20}
               onClickEvent={trackClickHandler}
             />
             <MyMarquee
-              text={author?.username}
+              text={author ? author.username : ""}
               activateLength={20}
               onClickEvent={authorClickHandler}
             />
@@ -239,10 +246,16 @@ export const PlayerElement: React.FC<Props> = ({ audioElem, author }) => {
           </div>
 
           <div className={"like-download"}>
-            <ToggleLikeButton track={currentTrack} />
-            <DownloadButton
-              trackId={currentTrack?.id}
-              fileName={currentTrack?.title}
+            <ButtonManager
+              type={ButtonManagerType.LIKE}
+              payload={{ track: currentTrack }}
+            />
+            <ButtonManager
+              type={ButtonManagerType.DOWNLOAD}
+              payload={{
+                trackId: currentTrack ? currentTrack.id : "",
+                fileName: currentTrack ? currentTrack.title : "",
+              }}
             />
           </div>
         </div>

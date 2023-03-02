@@ -3,10 +3,10 @@ import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import { useActions } from "../../../hooks/useActions";
 import { ITrack } from "../../../types/track";
 import "../../player/player.css";
-import { UnlikeButton } from "./UnlikeButton";
-import { LikeButton } from "./LikeButton";
+import { UnlikeButtonView } from "./UnlikeButtonView";
+import { LikeButtonView } from "./LikeButtonView";
 
-enum BUTTON_TYPES {
+enum BUTTON_PURPOSES {
   TRACK = "TRACK",
   ALBUM = "ALBUM",
   PLAYLIST = "PLAYLIST",
@@ -46,15 +46,15 @@ export const ToggleLikeButton: React.FC<Props> = ({ track }) => {
   return (
     <>
       {toggle && favoriteId && (
-        <UnlikeButton
+        <UnlikeButtonView
           favoriteId={favoriteId}
-          buttonType={BUTTON_TYPES.TRACK}
+          buttonPurpose={BUTTON_PURPOSES.TRACK}
           onToggle={handlerToggle}
         />
       )}
       {!toggle && (
-        <LikeButton
-          buttonType={BUTTON_TYPES.TRACK}
+        <LikeButtonView
+          buttonPurpose={BUTTON_PURPOSES.TRACK}
           onToggle={handlerToggle}
           track={track}
         />

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { DownloadButton } from "../button/download.button";
 import { useNavigate } from "react-router-dom";
 import { PlayPauseButton } from "../button/play.pause.button";
 import { getUserAsync } from "../../helpers/requests/requests.user";
 import { ClientConfig } from "../../client.config";
-import { ButtonUser, UserButtonType } from "../button/ButtonUser";
+import { ButtonManager, ButtonManagerType } from "../button/ButtonManager";
 
 type Props = {
   track: ITrack;
@@ -51,7 +50,10 @@ export const TrackItem: React.FC<Props> = ({ track }) => {
 
       <div className={`track_item_container`}>
         <div className={"play"}>
-          <PlayPauseButton track={isCurrent(track) ? currentTrack : track} />
+          <ButtonManager
+            type={ButtonManagerType.PLAY}
+            payload={isCurrent(track) ? { track: currentTrack } : { track }}
+          />
         </div>
         <div className={"info"}>
           <span className={"fake-link"} onClick={trackClickHandler}>
@@ -62,12 +64,15 @@ export const TrackItem: React.FC<Props> = ({ track }) => {
           </span>
         </div>
         <div className={"like"}>
-          <ButtonUser
-            type={UserButtonType.LIKE}
-            payload={isCurrent(track) ? currentTrack : track}
+          <ButtonManager
+            type={ButtonManagerType.LIKE}
+            payload={isCurrent(track) ? { track: currentTrack } : { track }}
           />
 
-          <DownloadButton trackId={track.id} fileName={track.title} />
+          <ButtonManager
+            type={ButtonManagerType.DOWNLOAD}
+            payload={{ trackId: track.id, fileName: track.title }}
+          />
         </div>
       </div>
     </div>

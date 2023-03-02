@@ -1,13 +1,12 @@
-import React, { ReactNode, useState } from "react";
-import { LikeButton } from "./toggleLikeButton/LikeButton";
+import React from "react";
 import { ToggleLikeButton } from "./toggleLikeButton/ToggleLikeButton";
 import { ITrack } from "../../types/track";
 import { DownloadButton } from "./download.button";
-import { ButtonSubscribe } from "./button.subscribe";
 import { PlayPauseButton } from "./play.pause.button";
 import { IUser } from "../../types/user";
+import { ToggleSubscribeButton } from "./toggleSubscribeButton/ToggleSubscribeButton";
 
-export enum UserButtonType {
+export enum ButtonManagerType {
   LIKE = "like",
   SUBSCRIBE = "subscribe",
   PLAY = "play",
@@ -15,14 +14,14 @@ export enum UserButtonType {
 }
 
 type ButtonPlayPausePayload = {
-  track: ITrack;
+  track: ITrack | null;
 };
 
 type ButtonLikePayload = {
-  track: ITrack;
+  track: ITrack | null;
 };
 
-type ButtonSubscribePayload = { user: IUser };
+type ButtonSubscribePayload = { user: IUser | null };
 
 type ButtonDownloadPayload = {
   trackId: string;
@@ -30,7 +29,7 @@ type ButtonDownloadPayload = {
 };
 
 type Props = {
-  type: UserButtonType;
+  type: ButtonManagerType;
   payload:
     | ButtonDownloadPayload
     | ButtonSubscribePayload
@@ -38,22 +37,26 @@ type Props = {
     | ButtonLikePayload;
 };
 
-export const ButtonUser: React.FC<Props> = ({ type, payload }) => {
+export const ButtonManager: React.FC<Props> = ({ type, payload }) => {
   switch (type) {
-    case UserButtonType.LIKE: {
+    case ButtonManagerType.LIKE: {
       const { track } = payload as ButtonLikePayload;
+      if (!track) return null;
       return <ToggleLikeButton track={track} />;
     }
-    case UserButtonType.DOWNLOAD: {
+    case ButtonManagerType.DOWNLOAD: {
       const { trackId, fileName } = payload as ButtonDownloadPayload;
+      if (!trackId && !fileName) return null;
       return <DownloadButton trackId={trackId} fileName={fileName} />;
     }
-    case UserButtonType.SUBSCRIBE: {
+    case ButtonManagerType.SUBSCRIBE: {
       const { user } = payload as ButtonSubscribePayload;
-      return <ButtonSubscribe user={user} />;
+      if (!user) return null;
+      return <ToggleSubscribeButton user={user} />;
     }
-    case UserButtonType.PLAY: {
+    case ButtonManagerType.PLAY: {
       const { track } = payload as ButtonPlayPausePayload;
+      if (!track) return null;
       return <PlayPauseButton track={track} />;
     }
     default: {
