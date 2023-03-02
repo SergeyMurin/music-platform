@@ -45,14 +45,13 @@ export const ToggleLikeButton: React.FC<Props> = ({ track }) => {
 
   return (
     <>
-      {toggle && favoriteId && (
+      {toggle && favoriteId ? (
         <UnlikeButtonView
           favoriteId={favoriteId}
           buttonPurpose={BUTTON_PURPOSES.TRACK}
           onToggle={handlerToggle}
         />
-      )}
-      {!toggle && (
+      ) : (
         <LikeButtonView
           buttonPurpose={BUTTON_PURPOSES.TRACK}
           onToggle={handlerToggle}

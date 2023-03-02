@@ -1,6 +1,6 @@
 import React from "react";
 import downloadIcon from "../../assets/player/download-icon.svg";
-import { downloadTrackAsync } from "../../helpers/requests/requests.tracks";
+import { downloadTrackAsync } from "../../helpers/requests/tracksRequests";
 import { createBlob, downloadBlob } from "../../helpers/helpers";
 
 type Props = {

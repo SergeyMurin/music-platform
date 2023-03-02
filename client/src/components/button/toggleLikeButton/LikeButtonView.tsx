@@ -1,4 +1,4 @@
-import { createFavoriteTrackAsync } from "../../../helpers/requests/requests.favorite";
+import { createFavoriteTrackAsync } from "../../../helpers/requests/favoriteRequests";
 import React from "react";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import favoriteIcon from "../../../assets/player/favorite-icon.svg";

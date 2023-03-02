@@ -5,7 +5,7 @@ import * as process from 'process';
 dotenv.config();
 
 /**
- * Editing default.json file that must be in init folder of the module root
+ * Editing defaultGenres.json file that must be in init folder of the module root
  *
  * Usage:
  *

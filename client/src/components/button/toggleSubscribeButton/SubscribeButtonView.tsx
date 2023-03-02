@@ -1,7 +1,7 @@
 import React from "react";
 import { IUser } from "../../../types/user";
 import { authGuard } from "../../../helpers/helpers";
-import { createSubscribeAsync } from "../../../helpers/requests/requests.subscribe";
+import { createSubscribeAsync } from "../../../helpers/requests/subscribeRequests";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import { useNavigate } from "react-router-dom";
 import subscribeIcon from "../../../assets/user/subscribe-icon.svg";

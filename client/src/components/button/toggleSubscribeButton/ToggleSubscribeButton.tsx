@@ -1,7 +1,7 @@
 import { IUser } from "../../../types/user";
 import React, { useEffect, useState } from "react";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
-import { fetchUserSubscriptions } from "../../../store/action.creators/user.actions";
+import { fetchUserSubscriptions } from "../../../store/actionCreators/userActions";
 import { UnsubscribeButtonView } from "./UnsubscribeButtonView";
 import { SubscribeButtonView } from "./SubscribeButtonView";
 
@@ -36,8 +36,11 @@ export const ToggleSubscribeButton: React.FC<Props> = ({ user }) => {
 
   return (
     <>
-      {toggle && <UnsubscribeButtonView user={user} onToggle={handlerToggle} />}
-      {!toggle && <SubscribeButtonView user={user} onToggle={handlerToggle} />}
+      {toggle ? (
+        <UnsubscribeButtonView user={user} onToggle={handlerToggle} />
+      ) : (
+        <SubscribeButtonView user={user} onToggle={handlerToggle} />
+      )}
     </>
   );
 };

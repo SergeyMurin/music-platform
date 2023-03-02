@@ -1,4 +1,4 @@
-import { ClientConfig } from "../client.config";
+import { ClientConfig } from "../clientConfig";
 import { NavigateFunction } from "react-router-dom";
 
 export const getLocalToken = () => {

@@ -1,5 +1,5 @@
 import { IGenre, ITag } from "../../types/track";
-import { Option } from "../shared/multi.select";
+import { Option } from "../shared/MultiSelect";
 
 export const generateGenreOptions = (genres: IGenre[] | null) => {
   if (!genres) {

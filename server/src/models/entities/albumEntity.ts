@@ -1,0 +1,61 @@
+import {
+  BelongsTo,
+  Column,
+  DataType,
+  Default,
+  ForeignKey,
+  HasMany,
+  IsUUID,
+  Model,
+  PrimaryKey,
+  Table,
+} from 'sequelize-typescript';
+import { Track } from './trackEntity';
+import { TagAlbum } from './tagAlbumEntity';
+import { GenreAlbum } from './genreAlbumEntity';
+import { User } from './userEntity';
+import { Length } from 'class-validator';
+
+@Table
+export class Album extends Model<Album> {
+  @PrimaryKey
+  @IsUUID(4)
+  @Default(DataType.UUIDV4)
+  @Column({
+    type: DataType.UUID,
+    comment: 'UUID primary key',
+    allowNull: false,
+  })
+  id: string;
+
+  @Length(5, 64)
+  @Column({ allowNull: false })
+  title: string;
+
+  @Column
+  picture_url: string;
+
+  @Column({ defaultValue: 0 })
+  likes: number;
+
+  @Column({ defaultValue: 0 })
+  tracks_count: number;
+
+  @HasMany(() => Track)
+  tracks: Track[];
+
+  @HasMany(() => GenreAlbum)
+  genres: GenreAlbum[];
+
+  @HasMany(() => TagAlbum)
+  tags: TagAlbum[];
+
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.UUID,
+    allowNull: false,
+  })
+  user_id: string;
+  @BelongsTo(() => User)
+  user: User;
+}

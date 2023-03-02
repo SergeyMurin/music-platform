@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { PlayerElement } from "./player.element";
+import { PlayerView } from "./PlayerView";
 import "./player.css";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
-import { getUserAsync } from "../../helpers/requests/requests.user";
+import { getUserAsync } from "../../helpers/requests/userRequests";
 import { IUser } from "../../types/user";
 
 export const Player: React.FC = () => {
@@ -48,7 +48,7 @@ export const Player: React.FC = () => {
           ref={audioElem}
           onTimeUpdate={onPlaying}
         />
-        <PlayerElement audioElem={audioElem} author={author} />
+        <PlayerView audioElem={audioElem} author={author} />
       </div>
     </>
   );

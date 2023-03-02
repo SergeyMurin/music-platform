@@ -1,6 +1,6 @@
 import React from "react";
 import { authGuard } from "../../../helpers/helpers";
-import { removeSubscribeAsync } from "../../../helpers/requests/requests.subscribe";
+import { removeSubscribeAsync } from "../../../helpers/requests/subscribeRequests";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 import { useNavigate } from "react-router-dom";
 import { IUser } from "../../../types/user";

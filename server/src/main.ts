@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { AppModule } from './appModule';
 import cors from 'cors';
 import * as process from 'process';
 import * as dotenv from 'dotenv';

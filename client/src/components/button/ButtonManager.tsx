@@ -2,7 +2,7 @@ import React from "react";
 import { ToggleLikeButton } from "./toggleLikeButton/ToggleLikeButton";
 import { ITrack } from "../../types/track";
 import { DownloadButton } from "./download.button";
-import { PlayPauseButton } from "./play.pause.button";
+import { PlayPauseButton } from "./togglePlayButton/play.pause.button";
 import { IUser } from "../../types/user";
 import { ToggleSubscribeButton } from "./toggleSubscribeButton/ToggleSubscribeButton";
 

@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import { AppRoutes } from "./routes/app.routes";
+import { AppRoutes } from "./routes/AppRoutes";
 import { useActions } from "./hooks/useActions";
-import { ClientConfig } from "./client.config";
+import { ClientConfig } from "./clientConfig";
 import { ButtonManager } from "./components/button/ButtonManager";
 
 function App() {
