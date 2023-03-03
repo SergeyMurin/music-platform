@@ -1,5 +1,5 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { DatabaseModule } from '../../database/databaseModule';
+import { DatabaseModule } from '../../shared/database/databaseModule';
 import { AlbumTrackController } from '../controllers/albumTrackController';
 import { AlbumTrackService } from '../services/albumTrackService';
 import { albumTrackProvider } from '../providers/albumTrackProvider';

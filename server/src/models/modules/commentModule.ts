@@ -1,6 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
 
-import { DatabaseModule } from '../../database/databaseModule';
+import { DatabaseModule } from '../../shared/database/databaseModule';
 import { CommentController } from '../controllers/commentController';
 import { CommentService } from '../services/commentService';
 import { commentProviders } from '../providers/commentProviders';

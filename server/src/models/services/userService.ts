@@ -10,7 +10,7 @@ import { GetUserDTO } from '../DTO/user/getUserDTO';
 import { AuthService } from './authService';
 import process from 'process';
 import dotenv from 'dotenv';
-import { DigitalOceanService } from '../../digitalOcean/digitalOceanService';
+import { DigitalOceanService } from '../../shared/digitalOcean/digitalOceanService';
 import { EditUserDTO } from '../DTO/user/editUserDTO';
 import { SearchDTO, searchType } from '../DTO/user/searchDTO';
 import { TrackService } from './trackService';

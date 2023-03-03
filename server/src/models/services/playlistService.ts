@@ -3,7 +3,7 @@ import { Playlist } from '../entities/playlistEntity';
 import { PlaylistTrackService } from './playlistTrackService';
 import { TrackService } from './trackService';
 import { AuthService } from './authService';
-import { DigitalOceanService } from '../../digitalOcean/digitalOceanService';
+import { DigitalOceanService } from '../../shared/digitalOcean/digitalOceanService';
 import process from 'process';
 import { AddTrackToPlaylistDTO } from '../DTO/playlist/addTrackToPlaylistDTO';
 import { RemoveTrackFromPlaylistDTO } from '../DTO/playlist/removeTrackFromPlaylistDTO';

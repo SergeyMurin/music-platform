@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from '../../database/databaseModule';
+import { DatabaseModule } from '../../shared/database/databaseModule';
 import { UserTokenService } from '../services/userTokenService';
 import { userTokenProviders } from '../providers/userTokenProviders';
 

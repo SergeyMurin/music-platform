@@ -1,6 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
 
-import { DatabaseModule } from '../../database/databaseModule';
+import { DatabaseModule } from '../../shared/database/databaseModule';
 import { RepostController } from '../controllers/repostController';
 import { RepostService } from '../services/repostService';
 import { repostProviders } from '../providers/repostProviders';

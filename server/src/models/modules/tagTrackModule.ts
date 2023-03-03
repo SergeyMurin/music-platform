@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from '../../database/databaseModule';
+import { DatabaseModule } from '../../shared/database/databaseModule';
 import { TagTrackController } from '../controllers/tagTrackController';
 import { TagTrackService } from '../services/tagTrackService';
 import { tagTrackProvider } from '../providers/tagTrackProvider';

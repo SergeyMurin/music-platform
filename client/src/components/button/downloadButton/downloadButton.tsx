@@ -1,7 +1,7 @@
 import React from "react";
-import downloadIcon from "../../assets/player/download-icon.svg";
-import { downloadTrackAsync } from "../../helpers/requests/tracksRequests";
-import { createBlob, downloadBlob } from "../../helpers/helpers";
+import downloadIcon from "../../../assets/player/download-icon.svg";
+import { downloadTrackAsync } from "../../../helpers/requests/tracksRequests";
+import { createBlob, downloadBlob } from "../../../helpers/helpers";
 
 type Props = {
   trackId: string;
@@ -20,11 +20,13 @@ export const DownloadButton: React.FC<Props> = ({ trackId, fileName }) => {
   };
 
   return (
-    <img
-      src={downloadIcon}
-      className={"btn_action"}
-      onClick={handleDownload}
-      alt={"download"}
-    />
+    <button>
+      <img
+        src={downloadIcon}
+        className={"btn_action"}
+        onClick={handleDownload}
+        alt={"download"}
+      />
+    </button>
   );
 };

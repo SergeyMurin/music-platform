@@ -15,13 +15,20 @@ export const Player: React.FC = () => {
   );
   const { setDuration, setProgress, setCurrentTime } = useActions();
 
-  useEffect(() => {
-    if (currentTrack) {
-      getUserAsync(currentTrack.user_id).then((response) => {
+  const effectCurrentTrack = () => {
+    if (!currentTrack) return;
+    const request = async () => {
+      try {
+        const response = await getUserAsync(currentTrack.user_id);
         setAuthor(response.data);
-      });
-    }
-  }, [currentTrack]);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    request();
+  };
+
+  useEffect(effectCurrentTrack, [currentTrack]);
 
   useEffect(() => {
     if (isPlaying) {

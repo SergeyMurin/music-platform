@@ -14,17 +14,22 @@ export const ForgotPassword: React.FC = () => {
   const [isSent, setIsSent] = useState(false);
   const [forgotPasswordError, setForgotPasswordError] = useState("");
 
-  const onSubmit = (values: object) => {
+  const onSubmit = async (values: object) => {
     setIsSubmit(true);
-    sendResetLink(values).then();
+    await sendResetLink(values);
   };
 
   const sendResetLink = async (dataValues: any) => {
-    forgotPasswordAsync(dataValues)
-      .then(() => {
-        setIsSent(true);
-      })
-      .catch((error) => setForgotPasswordError(error.response.data.message));
+    try {
+      const response = await forgotPasswordAsync(dataValues);
+      if (response.error) {
+        setForgotPasswordError(response.error.response.data.message);
+        return;
+      }
+      setIsSent(true);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

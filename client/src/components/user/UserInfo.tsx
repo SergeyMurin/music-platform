@@ -80,7 +80,7 @@ export const UserInfo: React.FC = () => {
             {userInfo.id !== user?.id && (
               <ButtonManager
                 type={ButtonManagerType.SUBSCRIBE}
-                payload={{ user: userInfo }}
+                user={userInfo}
               />
             )}
           </div>

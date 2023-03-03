@@ -246,16 +246,11 @@ export const PlayerView: React.FC<Props> = ({ audioElem, author }) => {
           </div>
 
           <div className={"like-download"}>
-            <ButtonManager
-              type={ButtonManagerType.LIKE}
-              payload={{ track: currentTrack }}
-            />
+            <ButtonManager type={ButtonManagerType.LIKE} track={currentTrack} />
             <ButtonManager
               type={ButtonManagerType.DOWNLOAD}
-              payload={{
-                trackId: currentTrack ? currentTrack.id : "",
-                fileName: currentTrack ? currentTrack.title : "",
-              }}
+              trackId={currentTrack ? currentTrack.id : ""}
+              fileName={currentTrack ? currentTrack.title : ""}
             />
           </div>
         </div>

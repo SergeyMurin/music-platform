@@ -4,7 +4,7 @@ import { UserRoleService } from '../services/userRoleService';
 import { userRoleProviders } from '../providers/userRoleProviders';
 import { UserModule } from './userModule';
 import { RoleModule } from './roleModule';
-import { DatabaseModule } from '../../database/databaseModule';
+import { DatabaseModule } from '../../shared/database/databaseModule';
 import { AuthModule } from './authModule';
 import { JwtStrategy } from '../../shared/jwt/jwtStrategy';
 import { JwtModule, JwtService } from '@nestjs/jwt';

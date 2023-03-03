@@ -5,7 +5,7 @@ import { useActions } from "../../hooks/useActions";
 import { useNavigate, useParams } from "react-router-dom";
 import { PlayPauseButton } from "../button/togglePlayButton/play.pause.button";
 import { ToggleLikeButton } from "../button/toggleLikeButton/ToggleLikeButton";
-import { DownloadButton } from "../button/download.button";
+import { DownloadButton } from "../button/downloadButton/downloadButton";
 import "./Track.css";
 import {
   getTrackGenresAsync,

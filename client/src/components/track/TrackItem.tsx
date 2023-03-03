@@ -52,7 +52,7 @@ export const TrackItem: React.FC<Props> = ({ track }) => {
         <div className={"play"}>
           <ButtonManager
             type={ButtonManagerType.PLAY}
-            payload={isCurrent(track) ? { track: currentTrack } : { track }}
+            track={isCurrent(track) ? currentTrack : track}
           />
         </div>
         <div className={"info"}>
@@ -66,12 +66,19 @@ export const TrackItem: React.FC<Props> = ({ track }) => {
         <div className={"like"}>
           <ButtonManager
             type={ButtonManagerType.LIKE}
-            payload={isCurrent(track) ? { track: currentTrack } : { track }}
+            track={isCurrent(track) ? currentTrack : track}
           />
 
           <ButtonManager
             type={ButtonManagerType.DOWNLOAD}
-            payload={{ trackId: track.id, fileName: track.title }}
+            trackId={
+              isCurrent(track) && currentTrack ? currentTrack?.id : track.id
+            }
+            fileName={
+              isCurrent(track) && currentTrack
+                ? currentTrack?.title
+                : track.title
+            }
           />
         </div>
       </div>

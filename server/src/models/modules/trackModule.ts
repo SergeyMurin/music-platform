@@ -1,12 +1,12 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { DatabaseModule } from '../../database/databaseModule';
+import { DatabaseModule } from '../../shared/database/databaseModule';
 import { TrackService } from '../services/trackService';
 import { trackProviders } from '../providers/trackProviders';
 import { TrackController } from '../controllers/trackController';
 import { AuthModule } from './authModule';
 import { TagTrackModule } from './tagTrackModule';
 import { GenreTrackModule } from './genreTrackModule';
-import { DigitalOceanModule } from '../../digitalOcean/digitalOceanModule';
+import { DigitalOceanModule } from '../../shared/digitalOcean/digitalOceanModule';
 import { TagModule } from './tagModule';
 import { UserModule } from './userModule';
 import { AlbumTrackModule } from './albumTrackModule';

@@ -1,7 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
 
 import { FavoriteModule } from './favoriteModule';
-import { DatabaseModule } from '../../database/databaseModule';
+import { DatabaseModule } from '../../shared/database/databaseModule';
 import { FavoriteTrackController } from '../controllers/favoriteTrackController';
 import { FavoriteTrackService } from '../services/favoriteTrackService';
 import { favoriteTrackProviders } from '../providers/favoriteTrackProviders';

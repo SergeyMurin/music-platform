@@ -4,7 +4,7 @@ import { genSalt, hash, compare } from 'bcrypt';
 import { ConfigService } from '../../shared/config/configService';
 import { JwtService } from '@nestjs/jwt';
 import { UserTokenService } from './userTokenService';
-import { MailService } from '../../mail/mailService';
+import { MailService } from '../../shared/mail/mailService';
 import { OAuth2Client } from 'google-auth-library';
 import { UserSignInResponseDTO } from '../DTO/auth/userSignInResponseDTO';
 import { UserSignInRequestDTO } from '../DTO/auth/userSignInRequestDTO';
@@ -19,7 +19,7 @@ import { ForgotPasswordDTO } from '../DTO/auth/forgotPasswordDTO';
 import { ResetPasswordDTO } from '../DTO/auth/resetPasswordDTO';
 import { UserRoleService } from './userRoleService';
 import { RoleTitleEnum } from '../../shared/enum/roleTitleEnum';
-import { DigitalOceanService } from '../../digitalOcean/digitalOceanService';
+import { DigitalOceanService } from '../../shared/digitalOcean/digitalOceanService';
 
 dotenv.config();
 

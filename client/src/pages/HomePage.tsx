@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useTypedSelector } from "../hooks/useTypedSelector";
 import { useActions } from "../hooks/useActions";
 import { TrackItem } from "../components/track/TrackItem";
-import { Loader } from "../components/loader/loader";
+import { Loader } from "../components/loader/Loader";
 
 enum displayedText {
   PAGE_HEADER = "Popular Soundtracks",

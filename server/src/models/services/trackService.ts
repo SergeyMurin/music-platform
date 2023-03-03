@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { Track } from '../entities/trackEntity';
 
-import { DigitalOceanService } from '../../digitalOcean/digitalOceanService';
+import { DigitalOceanService } from '../../shared/digitalOcean/digitalOceanService';
 import * as dotenv from 'dotenv';
 import * as process from 'process';
 import { GenreTrackService } from './genreTrackService';

@@ -4,7 +4,7 @@ import { FavoriteAlbumController } from '../controllers/favoriteAlbumController'
 import { FavoriteAlbumService } from '../services/favoriteAlbumService';
 import { favoriteAlbumProviders } from '../providers/favoriteAlbumProviders';
 import { FavoriteModule } from './favoriteModule';
-import { DatabaseModule } from '../../database/databaseModule';
+import { DatabaseModule } from '../../shared/database/databaseModule';
 import { UserModule } from './userModule';
 import { AlbumModule } from './albumModule';
 import { AuthModule } from './authModule';

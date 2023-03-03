@@ -1,5 +1,5 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { DatabaseModule } from '../../database/databaseModule';
+import { DatabaseModule } from '../../shared/database/databaseModule';
 import { GenreModule } from './genreModule';
 import { genreTrackProviders } from '../providers/genreTrackProviders';
 import { GenreTrackService } from '../services/genreTrackService';

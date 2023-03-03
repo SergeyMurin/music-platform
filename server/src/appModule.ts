@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { DatabaseModule } from './database/databaseModule';
+import { DatabaseModule } from './shared/database/databaseModule';
 import { TrackModule } from './models/modules/trackModule';
 import { UserModule } from './models/modules/userModule';
 import { PlaylistModule } from './models/modules/playlistModule';
@@ -20,9 +20,9 @@ import { FavoriteTrackModule } from './models/modules/favoriteTrackModule';
 import { RepostModule } from './models/modules/repostModule';
 import { AlbumTrackModule } from './models/modules/albumTrackModule';
 import { SharedModule } from './shared/sharedModule';
-import { DigitalOceanModule } from './digitalOcean/digitalOceanModule';
+import { DigitalOceanModule } from './shared/digitalOcean/digitalOceanModule';
 import { UserTokenModule } from './models/modules/userTokenModule';
-import { MailModule } from './mail/mailModule';
+import { MailModule } from './shared/mail/mailModule';
 import { AuthModule } from './models/modules/authModule';
 import { GenreTrackModule } from './models/modules/genreTrackModule';
 import { GenreAlbumModule } from './models/modules/genreAlbumModule';

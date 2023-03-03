@@ -10,9 +10,7 @@ type Props = {
 };
 
 export const ToggleSubscribeButton: React.FC<Props> = ({ user }) => {
-  const { token, isAuth, subscriptions } = useTypedSelector(
-    (state) => state.user
-  );
+  const { subscriptions } = useTypedSelector((state) => state.user);
 
   const [toggle, setToggle] = useState(false);
 
@@ -24,7 +22,7 @@ export const ToggleSubscribeButton: React.FC<Props> = ({ user }) => {
       } else setToggle(false);
     }
   };
-  useEffect(effectSubscriptions, []);
+  useEffect(effectSubscriptions, [subscriptions]);
 
   const handlerToggle = () => {
     if (!user) {

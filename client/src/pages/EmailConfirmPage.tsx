@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useTypedSelector } from "../hooks/useTypedSelector";
 import { useActions } from "../hooks/useActions";
 import { Link, useSearchParams } from "react-router-dom";
-import { Loader } from "../components/loader/loader";
+import { Loader } from "../components/loader/Loader";
 import { confirmEmailAsync } from "../helpers/requests/authRequests";
 
 enum DisplayedText {

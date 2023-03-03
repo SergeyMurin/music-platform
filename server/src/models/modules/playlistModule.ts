@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from '../../database/databaseModule';
+import { DatabaseModule } from '../../shared/database/databaseModule';
 import { PlaylistController } from '../controllers/playlistController';
 import { PlaylistService } from '../services/playlistService';
 import { playlistProviders } from '../providers/playlistProviders';
 import { PlaylistTrackModule } from './playlistTrackModule';
 import { TrackModule } from './trackModule';
 import { AuthModule } from './authModule';
-import { DigitalOceanModule } from '../../digitalOcean/digitalOceanModule';
+import { DigitalOceanModule } from '../../shared/digitalOcean/digitalOceanModule';
 import { UserModule } from './userModule';
 
 @Module({

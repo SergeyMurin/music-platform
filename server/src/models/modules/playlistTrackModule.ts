@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from '../../database/databaseModule';
+import { DatabaseModule } from '../../shared/database/databaseModule';
 import { PlaylistTrackController } from '../controllers/playlistTrackController';
 import { PlaylistTrackService } from '../services/playlistTrackService';
 import { playlistTrackProviders } from '../providers/playlistTrackProviders';

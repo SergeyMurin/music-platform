@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useActions } from "../../hooks/useActions";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { Loader } from "../loader/loader";
+import { Loader } from "../loader/Loader";
 import { IUser } from "../../types/user";
 import { getSearchAllAsync } from "../../helpers/requests/searchRequests";
 import { SearchList } from "./SearchList";
