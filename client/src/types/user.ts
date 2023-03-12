@@ -2,9 +2,17 @@ export interface UserState {
   user: IUser | null;
   isAuth: boolean;
   token: string | null;
-  subscriptions: string[] | null | any;
-  subscribers: string[] | null | any;
-  favorites: any[] | null;
+  subscriptions: ISubscription[] | null;
+  subscribers: ISubscription[] | null;
+  favorites: IFavorite[] | null;
+}
+
+export interface ISubscription {
+  id: string;
+}
+
+export interface IFavorite {
+  id: string;
 }
 
 export interface IUser {
@@ -74,17 +82,17 @@ interface IFetchUserAction {
 
 interface IFetchSubscriptions {
   type: UserActionTypes.FETCH_SUBSCRIPTIONS;
-  payload: string[] | null;
+  payload: ISubscription[] | null;
 }
 
 interface IFetchFavorites {
   type: UserActionTypes.FETCH_FAVORITES;
-  payload: any[] | null;
+  payload: IFavorite[] | null;
 }
 
 interface IFetchSubscribers {
   type: UserActionTypes.FETCH_SUBSCRIBERS;
-  payload: any[] | null;
+  payload: ISubscription[] | null;
 }
 
 interface IFetchUserErrorAction {
@@ -99,4 +107,5 @@ export type UserAction =
   | IFetchSubscriptions
   | IFetchFavorites
   | IFetchSubscribers
-  | IFetchUserAction;
+  | IFetchUserAction
+  | IFetchUserErrorAction;

@@ -1,5 +1,5 @@
 import { IGenre, ITag } from "../../types/track";
-import { Option } from "../shared/multi.select";
+import { Option } from "../shared/MultiSelect";
 
 export const generateGenreOptions = (genres: IGenre[] | null) => {
   if (!genres) {
@@ -25,7 +25,11 @@ export const generateTagOptions = (tags: ITag[] | null) => {
   });
 };
 
-export const formatTags = (fromSelect: Option[], newTags: any, limit = 10) => {
+export const formatTags = (
+  fromSelect: Option[] | null,
+  newTags: string[],
+  limit = 10
+) => {
   let output = "";
   let count = 0;
 

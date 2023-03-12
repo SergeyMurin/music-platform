@@ -1,10 +1,10 @@
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
-import { Player } from "./player/player";
+import { Player } from "./player/Player";
 import { useTypedSelector } from "../hooks/useTypedSelector";
 import { Search } from "./search/search";
-import "../pages/pages.css";
-import { ClientConfig } from "../client.config";
+import "../pages/Pages.css";
+import { ClientConfig } from "../clientConfig";
 
 enum DisplayedText {
   LOGO = "TrackTornado",

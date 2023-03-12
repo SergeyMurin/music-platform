@@ -3,7 +3,7 @@ import Marquee from "react-fast-marquee";
 
 type Props = {
   text: string;
-  onClickEvent: () => any;
+  onClickEvent: () => void;
   activateLength: number;
 };
 const MyMarquee: React.FC<Props> = ({ text, activateLength, onClickEvent }) => {

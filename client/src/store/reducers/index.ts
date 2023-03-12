@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
-import { trackReducer } from "./track.reducer";
-import { playerReducer } from "./player.reducer";
-import { userReducer } from "./user.reducer";
+import { trackReducer } from "./trackReducer";
+import { playerReducer } from "./playerReducer";
+import { userReducer } from "./userReducer";
 
 export const rootReducer = combineReducers({
   track: trackReducer,

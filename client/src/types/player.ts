@@ -1,8 +1,8 @@
 import { ITrack } from "./track";
 
 export interface PlayerState {
-  queue: ITrack[] | null | any;
-  currentTrack: ITrack | null | any;
+  queue: ITrack[] | null;
+  currentTrack: ITrack | null;
   currentTime: number;
   duration: number;
   volume: number;
@@ -26,12 +26,12 @@ export enum PlayerActionTypes {
 
 interface SetQueueAction {
   type: PlayerActionTypes.SET_QUEUE;
-  payload: ITrack[] | null | any;
+  payload: ITrack[] | null;
 }
 
 interface SetCurrentTrackAction {
   type: PlayerActionTypes.SET_CURRENT_TRACK;
-  payload: ITrack | null | any;
+  payload: ITrack | null;
 }
 
 interface SetIsPlayingAction {
