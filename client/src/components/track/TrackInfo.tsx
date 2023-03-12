@@ -23,25 +23,37 @@ export const TrackInfo: React.FC = () => {
   const [showLyrics, setShowLyrics] = useState(false);
 
   const { setTracks } = useActions();
-  const { id } = useParams();
+  const { id } = useParams<string>();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    getTrackAsync(id as string).then((data) => {
+  const trackEffect = () => {
+    if (!id) return;
+
+    const trackEffectAsync = async () => {
+      const data = await getTrackAsync(id);
       setTrack(data);
       setTracks([data]);
-    });
-  }, [id]);
+    };
+    trackEffectAsync().catch((error) => console.error(error));
+  };
 
-  useEffect(() => {
-    if (track) {
-      getUserAsync(track.user_id).then((response) => setAuthor(response.data));
-      getTrackGenresAsync(track.id).then((response) =>
-        setGenres(response.data)
-      );
-      getTrackTagsAsync(track.id).then((response) => setTags(response.data));
-    }
-  }, [track]);
+  const trackInfoEffect = () => {
+    if (!track) return;
+    const trackInfoEffectAsync = async () => {
+      const userResponse = await getUserAsync(track.user_id);
+      setAuthor(userResponse.data);
+
+      const genresResponse = await getTrackGenresAsync(track.id);
+      setGenres(genresResponse.data);
+
+      const tagsResponse = await getTrackTagsAsync(track.id);
+      setTags(tagsResponse.data);
+    };
+    trackInfoEffectAsync().catch((error) => console.error(error));
+  };
+
+  useEffect(trackEffect, [id]);
+  useEffect(trackInfoEffect, [track]);
 
   const lyricsHandler = () => {
     setShowLyrics(!showLyrics);

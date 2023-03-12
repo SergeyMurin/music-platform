@@ -5,6 +5,8 @@ import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 import { getTracksAsync } from "../../helpers/requests/tracksRequests";
+import { Simulate } from "react-dom/test-utils";
+import error = Simulate.error;
 
 enum DisplayedText {
   HEADER = "Tracks:",
@@ -14,13 +16,16 @@ export const ProfileTracks: React.FC = () => {
   const { id } = useParams();
   const { tracks } = useTypedSelector((state) => state.track);
   const { setTracks } = useActions();
-  useEffect(() => {
-    if (id) {
-      getTracksAsync(id).then((response) => {
-        setTracks(response.data);
-      });
-    }
-  }, []);
+
+  const profileTracksEffect = () => {
+    if (!id) return;
+    const profileTracksEffectAsync = async () => {
+      const response = await getTracksAsync(id);
+      setTracks(response.data);
+    };
+    profileTracksEffectAsync().catch((error) => console.error(error));
+  };
+  useEffect(profileTracksEffect, []);
 
   return (
     <div className={"tracks"}>

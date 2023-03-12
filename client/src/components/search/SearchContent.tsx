@@ -6,6 +6,8 @@ import { Loader } from "../loader/Loader";
 import { IUser } from "../../types/user";
 import { getSearchAllAsync } from "../../helpers/requests/searchRequests";
 import { SearchList } from "./SearchList";
+import { Simulate } from "react-dom/test-utils";
+import error = Simulate.error;
 
 enum DisplayedText {
   TRACKS = "Soundtracks",
@@ -23,7 +25,7 @@ export const SearchContent: React.FC = () => {
   const location = useLocation();
 
   const [searchResults, setSearchResults] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [searchTerm, setSearchTerm] = useState(
     new URLSearchParams(location.search).get(Search.PARAM)
@@ -32,13 +34,13 @@ export const SearchContent: React.FC = () => {
   //const [albums, setAlbums] = useState();
   const [users, setUsers] = useState<IUser[]>();
 
-  useEffect(() => {
+  const searchEffect = () => {
     const fetchSearch = async (query: string) => {
-      await getSearchAllAsync(query).then((response) => {
-        setTracks(response.data.tracks);
-        setUsers(response.data.users);
-        setSearchResults(response.data);
-      });
+      const response = await getSearchAllAsync(query);
+      setTracks(response.data.tracks);
+      setUsers(response.data.users);
+      setSearchResults(response.data);
+      setIsLoading(false);
     };
 
     const params = new URLSearchParams(location.search);
@@ -47,11 +49,13 @@ export const SearchContent: React.FC = () => {
 
     setSearchTerm(query);
 
-    setIsLoading(true);
-    fetchSearch(query).then(() => {
-      setIsLoading(false);
+    fetchSearch(query).catch((error) => {
+      console.error(error);
+      setIsLoading(true);
     });
-  }, [location.search]);
+  };
+
+  useEffect(searchEffect, [location.search]);
 
   return (
     <>

@@ -22,29 +22,27 @@ export const SignIn: React.FC = () => {
     fetchUserSubscribers,
   } = useActions();
 
-  const onSubmit = (dataValues: any) => {
-    signIn(dataValues).then();
+  const onSubmit = async (dataValues: any) => {
+    await signIn(dataValues);
   };
 
   const signIn = async (dataValues: any) => {
-    signInAsync(dataValues)
-      .then((response) => {
-        const id = response.data.id;
-        const token = response.data.token;
+    const response = await signInAsync(dataValues).catch((error) => {
+      setSignInError(error.response.data.message);
+    });
 
-        fetchUser(id);
-        setToken(token);
-        setAuth(true);
-        fetchUserFavorites(id);
-        fetchUserSubscribers(id);
-        fetchUserSubscriptions(id);
+    const id = response.data.id;
+    const token = response.data.token;
 
-        localStorage.setItem(ClientConfig.local.id, response.data.id);
-        localStorage.setItem(ClientConfig.local.token, response.data.token);
-      })
-      .catch((error) => {
-        setSignInError(error.response.data.message);
-      });
+    fetchUser(id);
+    setToken(token);
+    setAuth(true);
+    fetchUserFavorites(id);
+    fetchUserSubscribers(id);
+    fetchUserSubscriptions(id);
+
+    localStorage.setItem(ClientConfig.local.id, response.data.id);
+    localStorage.setItem(ClientConfig.local.token, response.data.token);
   };
   return (
     <div className={"sign-in"}>

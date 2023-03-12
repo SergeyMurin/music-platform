@@ -4,6 +4,8 @@ import { useActions } from "../hooks/useActions";
 import { Link, useSearchParams } from "react-router-dom";
 import { Loader } from "../components/loader/Loader";
 import { confirmEmailAsync } from "../helpers/requests/authRequests";
+import { Simulate } from "react-dom/test-utils";
+import error = Simulate.error;
 
 enum DisplayedText {
   HEADER = "Email confirmed",
@@ -20,18 +22,21 @@ export const EmailConfirmPage: React.FC = () => {
   const { fetchUser } = useActions();
   const [searchParams] = useSearchParams();
 
-  useEffect(() => {
+  const confirmEffect = () => {
     const confirmEmail = async (token: string) => {
-      confirmEmailAsync(token).then(() => {
-        fetchUser(user?.id as string);
-      });
+      await confirmEmailAsync(token);
+      fetchUser(user?.id as string);
     };
 
     const token: string | null = searchParams.get(SearchParams.TOKEN);
     if (token && !user?.email_confirmed) {
-      confirmEmail(token).then();
+      confirmEmail(token).catch((error) => {
+        console.error(error);
+      });
     }
-  }, [searchParams, user?.email_confirmed, user?.id]);
+  };
+
+  useEffect(confirmEffect, [searchParams, user?.email_confirmed, user?.id]);
 
   return (
     <div className={"email-confirm-page color-change-2x"}>

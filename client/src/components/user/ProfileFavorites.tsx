@@ -5,6 +5,8 @@ import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 import { getFavoritesAsync } from "../../helpers/requests/favoriteRequests";
+import { Simulate } from "react-dom/test-utils";
+import error = Simulate.error;
 
 enum DisplayedText {
   HEADER = "Favorites:",
@@ -16,14 +18,17 @@ export const ProfileFavorites: React.FC = () => {
   const { tracks } = useTypedSelector((state) => state.track);
   const { setTracks } = useActions();
 
-  useEffect(() => {
-    if (id) {
-      getFavoritesAsync(id).then((response) => {
-        setFavorites(response.data);
-        setTracks(response.data);
-      });
-    }
-  }, []);
+  const profileFavoritesEffect = () => {
+    if (!id) return;
+    const profileFavoritesEffectAsync = async () => {
+      const response = await getFavoritesAsync(id);
+      setFavorites(response.data);
+      setTracks(response.data);
+    };
+    profileFavoritesEffectAsync().catch((error) => console.error(error));
+  };
+
+  useEffect(profileFavoritesEffect, [id]);
 
   return (
     <div className={"favorites"}>

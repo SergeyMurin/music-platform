@@ -5,6 +5,8 @@ import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { getUserAsync } from "../../helpers/requests/userRequests";
 import { ClientConfig } from "../../clientConfig";
 import { ButtonManager, ButtonManagerType } from "../button/ButtonManager";
+import { Simulate } from "react-dom/test-utils";
+import error = Simulate.error;
 
 enum DisplayedText {
   FAVORITES = "Favorites",
@@ -18,11 +20,20 @@ export const UserInfo: React.FC = () => {
   const { id } = useParams();
   const { user } = useTypedSelector((state) => state.user);
   const [userInfo, setUserInfo] = useState<IUser>();
-  useEffect(() => {
-    if (id) {
-      getUserAsync(id).then((response) => setUserInfo(response.data));
-    }
-  }, [id]);
+
+  const getUserEffect = () => {
+    if (!id) return;
+    const getUserAsyncEffect = async () => {
+      const response = await getUserAsync(id);
+      setUserInfo(response.data);
+    };
+    getUserAsyncEffect().catch((error) => {
+      console.error(error);
+    });
+  };
+
+  useEffect(getUserEffect, [id]);
+
   return (
     <div className={"profile_page"}>
       {!userInfo && <div className={"profile_card"}></div>}

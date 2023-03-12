@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useNavigate } from "react-router-dom";
-import { PlayPauseButton } from "../button/togglePlayButton/play.pause.button";
 import { getUserAsync } from "../../helpers/requests/userRequests";
 import { ClientConfig } from "../../clientConfig";
 import { ButtonManager, ButtonManagerType } from "../button/ButtonManager";
@@ -17,11 +16,15 @@ export const TrackItem: React.FC<Props> = ({ track }) => {
   const [author, setAuthor] = useState<any>();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    getUserAsync(track.user_id).then((response) => {
+  const trackItemEffect = () => {
+    const trackItemEffectAsync = async () => {
+      const response = await getUserAsync(track.user_id);
       setAuthor(response.data);
-    });
-  }, []);
+    };
+    trackItemEffectAsync().catch((error) => console.error(error));
+  };
+
+  useEffect(trackItemEffect, []);
 
   const trackClickHandler = () => {
     navigate(`/${ClientConfig.client_routes.track.index}/${track.id}`);

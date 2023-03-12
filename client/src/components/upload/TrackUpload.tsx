@@ -29,8 +29,8 @@ export const TrackUpload: React.FC = () => {
     fetchTags();
     fetchGenres();
   }, [fetchGenres, fetchTags]);
-  const onSubmit = (dataValues: any) => {
-    trackUpload(dataValues).then();
+  const onSubmit = async (dataValues: any) => {
+    await trackUpload(dataValues);
   };
 
   const trackUpload = async (dataValues: any) => {
@@ -44,19 +44,14 @@ export const TrackUpload: React.FC = () => {
     formData.append(FormDataFields.GENRES, dataValues.genres);
     formData.append(FormDataFields.EXPLICIT, dataValues.explicit);
 
-    if (!token) {
-      return;
-    }
+    if (!token) return;
 
-    uploadTrackAsync(formData, token)
-      .then((response) => {
-        if (response.status >= 200 && response.status <= 299) {
-          setUploadSuccess(true);
-        }
-      })
-      .catch((error) =>
-        error ? setUploadTrackError(error?.response?.data.message) : null
-      );
+    const response = await uploadTrackAsync(formData, token).catch((error) =>
+      setUploadTrackError(error?.response?.data.message)
+    );
+    if (response.status >= 200 && response.status <= 299) {
+      setUploadSuccess(true);
+    }
   };
 
   return (

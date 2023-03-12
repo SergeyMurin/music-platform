@@ -15,20 +15,21 @@ export const SignUp: React.FC = () => {
   const [signUpError, setSignUpError] = useState("");
   const { fetchUser, setToken, setAuth } = useActions();
   const submitHandler = (formValues: any) => {
-    signUp(formValues).then();
+    signUp(formValues).catch((error) => console.error(error));
   };
 
   const signUp = async (formValues: any) => {
-    signUpAsync(formValues)
-      .then((response) => {
-        fetchUser(response.data.id);
-        setToken(response.data.token);
-        setAuth(true);
+    const response = await signUpAsync(formValues).catch((error) => {
+      setSignUpError(error.response.data.message);
+      return;
+    });
 
-        localStorage.setItem(ClientConfig.local.id, response.data.id);
-        localStorage.setItem(ClientConfig.local.token, response.data.token);
-      })
-      .catch((error) => setSignUpError(error.response.data.message));
+    fetchUser(response.data.id);
+    setToken(response.data.token);
+    setAuth(true);
+
+    localStorage.setItem(ClientConfig.local.id, response.data.id);
+    localStorage.setItem(ClientConfig.local.token, response.data.token);
   };
 
   return (

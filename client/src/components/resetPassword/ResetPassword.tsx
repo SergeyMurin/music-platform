@@ -3,6 +3,8 @@ import { ResetPasswordForm } from "./ResetPasswordForm";
 import { Link, useSearchParams } from "react-router-dom";
 import { resetPasswordAsync } from "../../helpers/requests/authRequests";
 import { ClientConfig } from "../../clientConfig";
+import { Simulate } from "react-dom/test-utils";
+import error = Simulate.error;
 
 enum DisplayedText {
   RESET = "Reset password",
@@ -19,17 +21,15 @@ export const ResetPassword: React.FC = () => {
 
   const onSubmit = (dataValues: any) => {
     const token: string | null = searchParams.get("token");
-    if (token) {
-      resetPassword(token, dataValues).then();
-    }
+    if (!token) return;
+    resetPassword(token, dataValues).catch((error) => console.error(error));
   };
 
   const resetPassword = async (token: string, dataValues: any) => {
-    resetPasswordAsync(dataValues, token)
-      .then(() => {
-        setIsUpdated(true);
-      })
-      .catch((error) => setResetPasswordError(error.response.data.message));
+    await resetPasswordAsync(dataValues, token).catch((error) =>
+      setResetPasswordError(error.response.data.message)
+    );
+    setIsUpdated(true);
   };
 
   return (
