@@ -5,8 +5,6 @@ import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 import { getTracksAsync } from "../../helpers/requests/tracksRequests";
-import { Simulate } from "react-dom/test-utils";
-import error = Simulate.error;
 
 enum DisplayedText {
   HEADER = "Tracks:",

@@ -13,6 +13,7 @@ export interface ITrack {
   picture_url: string;
   url: string;
   album_id: string;
+  likes: number;
   //comments: IComment[];
 }
 

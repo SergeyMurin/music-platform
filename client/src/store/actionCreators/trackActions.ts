@@ -7,7 +7,7 @@ import {
   getTracksAsync,
 } from "../../helpers/requests/tracksRequests";
 
-export const setTracks = (tracks: ITrack[] | null | any) => {
+export const setTracks = (tracks: ITrack[]) => {
   return (dispatch: Dispatch<TrackAction>) => {
     dispatch({ type: TrackActionTypes.SET_TRACKS, payload: tracks });
   };

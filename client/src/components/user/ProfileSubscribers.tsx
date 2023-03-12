@@ -3,8 +3,6 @@ import { useParams } from "react-router-dom";
 import { UserItem } from "./UserItem";
 import { IUser } from "../../types/user";
 import { getUserSubscribersAsync } from "../../helpers/requests/subscribeRequests";
-import { Simulate } from "react-dom/test-utils";
-import error = Simulate.error;
 
 enum DisplayedText {
   HEADER = "Subscribers:",

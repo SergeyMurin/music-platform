@@ -19,6 +19,16 @@ enum FormDataFields {
   EXPLICIT = "explicit",
 }
 
+export interface IUploadTrackFormValues {
+  title: string;
+  picture: File[];
+  track: File[];
+  lyrics: string;
+  explicit: boolean | string;
+  tags: string;
+  genres: string;
+}
+
 export const TrackUpload: React.FC = () => {
   const [uploadTrackError, setUploadTrackError] = useState("");
   const [uploadSuccess, setUploadSuccess] = useState(false);
@@ -29,11 +39,11 @@ export const TrackUpload: React.FC = () => {
     fetchTags();
     fetchGenres();
   }, [fetchGenres, fetchTags]);
-  const onSubmit = async (dataValues: any) => {
+  const onSubmit = async (dataValues: IUploadTrackFormValues) => {
     await trackUpload(dataValues);
   };
 
-  const trackUpload = async (dataValues: any) => {
+  const trackUpload = async (dataValues: IUploadTrackFormValues) => {
     const formData = new FormData();
 
     formData.append(FormDataFields.TRACK, dataValues.track[0]);
@@ -42,14 +52,14 @@ export const TrackUpload: React.FC = () => {
     formData.append(FormDataFields.LYRICS, dataValues.lyrics);
     formData.append(FormDataFields.TAGS, dataValues.tags);
     formData.append(FormDataFields.GENRES, dataValues.genres);
-    formData.append(FormDataFields.EXPLICIT, dataValues.explicit);
+    formData.append(FormDataFields.EXPLICIT, dataValues.explicit as string);
 
     if (!token) return;
 
     const response = await uploadTrackAsync(formData, token).catch((error) =>
       setUploadTrackError(error?.response?.data.message)
     );
-    if (response.status >= 200 && response.status <= 299) {
+    if (response && response.status >= 200 && response.status <= 299) {
       setUploadSuccess(true);
     }
   };

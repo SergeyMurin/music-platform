@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ITrack } from "../../types/track";
+import { IGenre, ITag, ITrack } from "../../types/track";
 import { IUser } from "../../types/user";
 import { useActions } from "../../hooks/useActions";
 import { useNavigate, useParams } from "react-router-dom";
@@ -18,8 +18,8 @@ import { ClientConfig } from "../../clientConfig";
 export const TrackInfo: React.FC = () => {
   const [track, setTrack] = useState<ITrack | null>(null);
   const [author, setAuthor] = useState<IUser>();
-  const [genres, setGenres] = useState<any>();
-  const [tags, setTags] = useState<any>();
+  const [genres, setGenres] = useState<IGenre[]>();
+  const [tags, setTags] = useState<ITag[]>();
   const [showLyrics, setShowLyrics] = useState(false);
 
   const { setTracks } = useActions();
@@ -30,9 +30,9 @@ export const TrackInfo: React.FC = () => {
     if (!id) return;
 
     const trackEffectAsync = async () => {
-      const data = await getTrackAsync(id);
-      setTrack(data);
-      setTracks([data]);
+      const response = await getTrackAsync(id);
+      setTrack(response.data);
+      setTracks([response.data]);
     };
     trackEffectAsync().catch((error) => console.error(error));
   };
@@ -87,7 +87,7 @@ export const TrackInfo: React.FC = () => {
 
                 {genres && (
                   <div id={"genres"}>
-                    {genres.map((g: any) => {
+                    {genres.map((g: IGenre) => {
                       return <small key={g.id}>{g.title + " "}</small>;
                     })}
                   </div>
@@ -95,14 +95,14 @@ export const TrackInfo: React.FC = () => {
 
                 {tags && (
                   <div id={"tags"}>
-                    {tags.map((t: any) => {
+                    {tags.map((t: ITag) => {
                       return <small key={t.id}>{"#" + t.title + " "}</small>;
                     })}
                   </div>
                 )}
               </div>
               <div className={"card_buttons"}>
-                <div>Likes: {(track as any).likes}</div>
+                <div>Likes: {track.likes}</div>
 
                 <PlayPauseButton track={track} />
 

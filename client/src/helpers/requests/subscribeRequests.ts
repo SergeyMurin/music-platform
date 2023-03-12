@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { ClientConfig } from "../../clientConfig";
 
 export const createSubscribeAsync = async (
   id: string,
   token: string
-): Promise<any> => {
+): Promise<AxiosResponse> => {
   const response = await axios.post(
     `${ClientConfig.server_uri}/subscribe`,
     {
@@ -20,20 +20,24 @@ export const createSubscribeAsync = async (
 export const removeSubscribeAsync = async (
   id: string,
   token: string
-): Promise<any> => {
+): Promise<AxiosResponse> => {
   return await axios.delete(`${ClientConfig.server_uri}/subscribe`, {
     data: { user_id: id },
     headers: { Authorization: `Bearer ${token}` },
   });
 };
 
-export const getUserSubscribersAsync = async (id: string): Promise<any> => {
+export const getUserSubscribersAsync = async (
+  id: string
+): Promise<AxiosResponse> => {
   return await axios.get(`${ClientConfig.server_uri}/subscribe/subscribers`, {
     params: { id },
   });
 };
 
-export const getUserSubscriptionsAsync = async (id: string): Promise<any> => {
+export const getUserSubscriptionsAsync = async (
+  id: string
+): Promise<AxiosResponse> => {
   return await axios.get(`${ClientConfig.server_uri}/subscribe/subscriptions`, {
     params: { id },
   });

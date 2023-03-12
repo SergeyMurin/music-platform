@@ -3,8 +3,6 @@ import { ResetPasswordForm } from "./ResetPasswordForm";
 import { Link, useSearchParams } from "react-router-dom";
 import { resetPasswordAsync } from "../../helpers/requests/authRequests";
 import { ClientConfig } from "../../clientConfig";
-import { Simulate } from "react-dom/test-utils";
-import error = Simulate.error;
 
 enum DisplayedText {
   RESET = "Reset password",
@@ -14,18 +12,26 @@ enum DisplayedText {
   HOME = "Home",
 }
 
+export interface IResetPasswordFormValues {
+  password: string;
+  repeatPassword: string;
+}
+
 export const ResetPassword: React.FC = () => {
   const [searchParams] = useSearchParams();
   const [resetPasswordError, setResetPasswordError] = useState("");
   const [isUpdated, setIsUpdated] = useState(false);
 
-  const onSubmit = (dataValues: any) => {
+  const onSubmit = (dataValues: IResetPasswordFormValues) => {
     const token: string | null = searchParams.get("token");
     if (!token) return;
     resetPassword(token, dataValues).catch((error) => console.error(error));
   };
 
-  const resetPassword = async (token: string, dataValues: any) => {
+  const resetPassword = async (
+    token: string,
+    dataValues: IResetPasswordFormValues
+  ) => {
     await resetPasswordAsync(dataValues, token).catch((error) =>
       setResetPasswordError(error.response.data.message)
     );

@@ -9,21 +9,25 @@ enum DisplayedText {
   SENT = "Reset link has been sent to your email",
 }
 
+export interface IForgotPasswordDataValues {
+  email: string;
+}
+
 export const ForgotPassword: React.FC = () => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const [forgotPasswordError, setForgotPasswordError] = useState("");
 
-  const onSubmit = async (values: object) => {
+  const onSubmit = async (values: IForgotPasswordDataValues) => {
     setIsSubmit(true);
     await sendResetLink(values);
   };
 
-  const sendResetLink = async (dataValues: any) => {
+  const sendResetLink = async (dataValues: IForgotPasswordDataValues) => {
     try {
       const response = await forgotPasswordAsync(dataValues);
-      if (response.error) {
-        setForgotPasswordError(response.error.response.data.message);
+      if (response.data.error) {
+        setForgotPasswordError(response.data.error.response.data.message);
         return;
       }
       setIsSent(true);

@@ -6,8 +6,6 @@ import { Loader } from "../loader/Loader";
 import { IUser } from "../../types/user";
 import { getSearchAllAsync } from "../../helpers/requests/searchRequests";
 import { SearchList } from "./SearchList";
-import { Simulate } from "react-dom/test-utils";
-import error = Simulate.error;
 
 enum DisplayedText {
   TRACKS = "Soundtracks",
@@ -80,7 +78,7 @@ export const SearchContent: React.FC = () => {
           <hr />
           <h1>{DisplayedText.USERS}</h1>
           <SearchList
-            list={users}
+            list={users ? users : null}
             displayedCount={Search.DISPLAYED_COUNT as number}
           />
         </>

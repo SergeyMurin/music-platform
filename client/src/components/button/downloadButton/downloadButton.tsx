@@ -11,8 +11,8 @@ type Props = {
 export const DownloadButton: React.FC<Props> = ({ trackId, fileName }) => {
   const handleDownload = async () => {
     try {
-      const data = await downloadTrackAsync(trackId);
-      const blob = createBlob(data.data, "audio/mpeg");
+      const response = await downloadTrackAsync(trackId);
+      const blob = createBlob(response.data, "audio/mpeg");
       downloadBlob(blob, fileName);
     } catch (error) {
       console.error(error);

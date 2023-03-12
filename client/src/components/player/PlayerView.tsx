@@ -15,13 +15,13 @@ import { ButtonManager, ButtonManagerType } from "../button/ButtonManager";
 import { IUser } from "../../types/user";
 
 type Props = {
-  audioElem: any;
+  audioElem: React.RefObject<HTMLAudioElement>;
   author: IUser | null;
 };
 
 export const PlayerView: React.FC<Props> = ({ audioElem, author }) => {
-  const clickRef: any = useRef();
-  const volumeRef: any = useRef();
+  const clickRef = useRef<HTMLDivElement>(null);
+  const volumeRef = useRef<HTMLDivElement>(null);
 
   const {
     queue,
@@ -35,23 +35,30 @@ export const PlayerView: React.FC<Props> = ({ audioElem, author }) => {
   const { setVolume, setOnRepeat, setIsPlaying, setCurrentTrack } =
     useActions();
 
-  useEffect(() => {
-    if (progress === 100) {
+  const autoNextEffect = () => {
+    const autoNextEffectAsync = async () => {
+      if (!audioElem.current) return;
+      if (progress !== 100) return;
+
       if (onRepeat) {
         audioElem.current.currentTime = 0;
-        audioElem.current.play();
+        await audioElem.current.play();
         return;
       }
       skipToNext();
       setIsPlaying(isPlaying);
-    }
-  }, [progress]);
+    };
+    autoNextEffectAsync().catch((error) => console.error(error));
+  };
+  useEffect(autoNextEffect, [progress]);
 
   const PlayPause = () => {
     setIsPlaying(!isPlaying);
   };
 
-  const checkWidth = (e: any) => {
+  const checkWidth = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (!audioElem.current || !clickRef.current) return;
+
     const width = clickRef.current.clientWidth;
     const offset = e.nativeEvent.offsetX;
 
@@ -60,7 +67,11 @@ export const PlayerView: React.FC<Props> = ({ audioElem, author }) => {
       (divProgress > 100 ? 100 : divProgress / 100) * duration;
   };
 
-  const setVolumeHandler = (e: any) => {
+  const setVolumeHandler = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    if (!audioElem.current || !volumeRef.current) return;
+
     const width = volumeRef.current.clientWidth;
     const offset = e.nativeEvent.offsetX;
 
@@ -68,12 +79,13 @@ export const PlayerView: React.FC<Props> = ({ audioElem, author }) => {
     if (volume < 0) {
       volume = 0;
     }
-
     audioElem.current.volume = volume > 100 ? 1 : volume / 100;
     setVolume(volume > 100 ? 1 : volume / 100);
   };
 
   const skipBack = () => {
+    if (!audioElem.current) return;
+
     if (onRepeat) {
       audioElem.current.currentTime = 0;
       return;
@@ -91,6 +103,8 @@ export const PlayerView: React.FC<Props> = ({ audioElem, author }) => {
   };
 
   const skipToNext = () => {
+    if (!audioElem.current) return;
+
     if (onRepeat) {
       audioElem.current.currentTime = 0;
       return;
@@ -98,7 +112,7 @@ export const PlayerView: React.FC<Props> = ({ audioElem, author }) => {
       return;
     }
 
-    const index = queue.findIndex((x: any) => x.id === currentTrack?.id);
+    const index = queue.findIndex((x: ITrack) => x.id === currentTrack?.id);
 
     if (index === queue.length - 1) {
       setCurrentTrack(queue[0]);
@@ -112,7 +126,7 @@ export const PlayerView: React.FC<Props> = ({ audioElem, author }) => {
     setOnRepeat(!onRepeat);
   };
 
-  const convertToTime = (progress: any, totalTime: any) => {
+  const convertToTime = (progress: number, totalTime: number) => {
     progress = progress ? progress : 0;
     totalTime = totalTime ? totalTime : 0;
     const timeInSeconds = (progress / 100) * totalTime;

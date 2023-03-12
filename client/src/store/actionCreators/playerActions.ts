@@ -2,13 +2,13 @@ import { Dispatch } from "react";
 import { PlayerAction, PlayerActionTypes } from "../../types/player";
 import { ITrack } from "../../types/track";
 
-export const setQueue = (tracks: ITrack[] | null | any) => {
+export const setQueue = (tracks: ITrack[] | null) => {
   return (dispatch: Dispatch<PlayerAction>) => {
     dispatch({ type: PlayerActionTypes.SET_QUEUE, payload: tracks });
   };
 };
 
-export const setCurrentTrack = (track: ITrack | null | any) => {
+export const setCurrentTrack = (track: ITrack | null) => {
   return (dispatch: Dispatch<PlayerAction>) => {
     dispatch({ type: PlayerActionTypes.SET_CURRENT_TRACK, payload: track });
   };

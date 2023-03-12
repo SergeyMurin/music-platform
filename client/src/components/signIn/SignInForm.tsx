@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { validateEmail } from "../signUp/SignUpForm";
 import { GoogleSignIn } from "../google/GoogleSignIn";
 import { ClientConfig } from "../../clientConfig";
+import { ISignInFormValues } from "./SignIn";
 
 enum DisplayedText {
   FORGOT_PASSWORD = "Forgot password?",
@@ -21,12 +22,7 @@ enum FormErrors {
   PASSWORD_REQUIRED = "Password is required",
 }
 
-type FormValues = {
-  email: string;
-  password: string;
-};
-
-const resolver: Resolver<FormValues> = async (values) => {
+const resolver: Resolver<ISignInFormValues> = async (values) => {
   return {
     values: values.email && values.password ? values : {},
     errors: !values.email
@@ -56,14 +52,14 @@ const resolver: Resolver<FormValues> = async (values) => {
 
 type Props = {
   error: string;
-  submit: (values: any) => void;
+  submit: (values: ISignInFormValues) => void;
 };
 export const SignInForm: React.FC<Props> = ({ error, submit }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({ resolver });
+  } = useForm<ISignInFormValues>({ resolver });
   const onSubmit = handleSubmit((data) => submit(data));
 
   return (

@@ -5,8 +5,6 @@ import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { getUserAsync } from "../../helpers/requests/userRequests";
 import { ClientConfig } from "../../clientConfig";
 import { ButtonManager, ButtonManagerType } from "../button/ButtonManager";
-import { Simulate } from "react-dom/test-utils";
-import error = Simulate.error;
 
 enum DisplayedText {
   FAVORITES = "Favorites",

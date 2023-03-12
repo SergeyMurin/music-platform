@@ -11,18 +11,25 @@ enum displayedText {
   SIGN_UP = "Sign Up",
 }
 
+export interface ISignUpFormValues {
+  email: string;
+  password: string;
+  repeatPassword: string;
+}
+
 export const SignUp: React.FC = () => {
   const [signUpError, setSignUpError] = useState("");
   const { fetchUser, setToken, setAuth } = useActions();
-  const submitHandler = (formValues: any) => {
+  const submitHandler = (formValues: ISignUpFormValues) => {
     signUp(formValues).catch((error) => console.error(error));
   };
 
-  const signUp = async (formValues: any) => {
+  const signUp = async (formValues: ISignUpFormValues) => {
     const response = await signUpAsync(formValues).catch((error) => {
       setSignUpError(error.response.data.message);
       return;
     });
+    if (!response?.data) return;
 
     fetchUser(response.data.id);
     setToken(response.data.token);

@@ -1,5 +1,6 @@
 import React from "react";
 import { Resolver, useForm } from "react-hook-form";
+import { IResetPasswordFormValues } from "./ResetPassword";
 
 enum DisplayedText {
   RESET = "Reset password",
@@ -17,12 +18,7 @@ enum FormErrors {
   PASSWORD_MISMATCH = "Password mismatch",
 }
 
-type FormValues = {
-  password: string;
-  repeatPassword: string;
-};
-
-const resolver: Resolver<FormValues> = async (values) => {
+const resolver: Resolver<IResetPasswordFormValues> = async (values) => {
   return {
     values: values.password && values.repeatPassword ? values : {},
     errors: !values.password
@@ -59,7 +55,7 @@ const resolver: Resolver<FormValues> = async (values) => {
 
 type Props = {
   error: string;
-  submit: (values: any) => void;
+  submit: (values: IResetPasswordFormValues) => void;
 };
 
 export const ResetPasswordForm: React.FC<Props> = ({ error, submit }) => {
@@ -67,7 +63,7 @@ export const ResetPasswordForm: React.FC<Props> = ({ error, submit }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({ resolver });
+  } = useForm<IResetPasswordFormValues>({ resolver });
   const onSubmit = handleSubmit((data) => submit(data));
 
   return (

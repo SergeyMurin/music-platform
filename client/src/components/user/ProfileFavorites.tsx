@@ -5,8 +5,6 @@ import { ITrack } from "../../types/track";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { useActions } from "../../hooks/useActions";
 import { getFavoritesAsync } from "../../helpers/requests/favoriteRequests";
-import { Simulate } from "react-dom/test-utils";
-import error = Simulate.error;
 
 enum DisplayedText {
   HEADER = "Favorites:",

@@ -7,7 +7,7 @@ import { getUserAsync } from "../../helpers/requests/userRequests";
 import { IUser } from "../../types/user";
 
 export const Player: React.FC = () => {
-  const audioElem: any = useRef();
+  const audioElem = useRef<HTMLAudioElement>(null);
   const [author, setAuthor] = useState<IUser | null>(null);
 
   const { currentTrack, isPlaying, volume } = useTypedSelector(
@@ -25,23 +25,31 @@ export const Player: React.FC = () => {
         console.error(error);
       }
     };
-    request();
+    request().catch((error) => console.error(error));
   };
 
   useEffect(effectCurrentTrack, [currentTrack]);
 
-  useEffect(() => {
-    if (isPlaying) {
-      audioElem?.current?.play();
-    } else {
-      audioElem?.current?.pause();
-    }
-  }, [isPlaying, currentTrack]);
+  const effectPlayPauseTrack = () => {
+    const effectPlayPauseTrackAsync = async () => {
+      if (isPlaying) {
+        await audioElem?.current?.play();
+      } else {
+        audioElem?.current?.pause();
+      }
+    };
+    effectPlayPauseTrackAsync().catch((error) => console.error(error));
+  };
+
+  useEffect(effectPlayPauseTrack, [isPlaying, currentTrack]);
 
   const onPlaying = () => {
-    const duration = audioElem?.current?.duration;
-    const ct = audioElem?.current?.currentTime;
+    if (!audioElem.current) return;
+
+    const duration = audioElem.current.duration;
+    const ct = audioElem.current.currentTime;
     audioElem.current.volume = volume;
+
     setCurrentTime(ct);
     setDuration(duration);
     setProgress(ct, duration);

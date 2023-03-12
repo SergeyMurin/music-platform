@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm, Resolver } from "react-hook-form";
-import { Link } from "react-router-dom";
 import { GoogleSignIn } from "../google/GoogleSignIn";
+import { ISignUpFormValues } from "./SignUp";
 
 enum DisplayedText {
   SIGN_UP = "Sign Up",
@@ -22,13 +22,7 @@ enum FormErrors {
   PASSWORD_MISMATCH = "Password mismatch",
 }
 
-type FormValues = {
-  email: string;
-  password: string;
-  repeatPassword: string;
-};
-
-const resolver: Resolver<FormValues> = async (values) => {
+const resolver: Resolver<ISignUpFormValues> = async (values) => {
   return {
     values:
       values.email && values.password && values.repeatPassword ? values : {},
@@ -80,15 +74,14 @@ const resolver: Resolver<FormValues> = async (values) => {
 
 type Props = {
   error: string;
-
-  submit: (values: any) => void;
+  submit: (values: ISignUpFormValues) => void;
 };
 export const SignUpForm: React.FC<Props> = ({ error, submit }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({ resolver });
+  } = useForm<ISignUpFormValues>({ resolver });
   const onSubmit = handleSubmit((data) => submit(data));
 
   return (
@@ -148,6 +141,6 @@ export const validateEmail = (email: string) => {
   return String(email)
     .toLowerCase()
     .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
 };

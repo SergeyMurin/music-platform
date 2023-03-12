@@ -7,7 +7,7 @@ import { UserItem } from "../user/UserItem";
 type Types = ITrack | IUser;
 
 type Props = {
-  list: [] | any;
+  list: ITrack[] | IUser[] | null;
   displayedCount: number;
 };
 
@@ -32,7 +32,9 @@ export const SearchList: React.FC<Props> = ({ list, displayedCount }) => {
           .slice(0, showAll ? list.length : displayedCount)
           .map((i: Types) => {
             if (isTrackTypeGuard(i)) {
-              return <TrackItem track={i} key={i.id} tracks={list} />;
+              return (
+                <TrackItem track={i} key={i.id} tracks={list as ITrack[]} />
+              );
             }
             if (isUserTypeGuard(i)) {
               return <UserItem user={i} key={i.id} />;

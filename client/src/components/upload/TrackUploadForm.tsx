@@ -9,6 +9,7 @@ import {
   generateGenreOptions,
   generateTagOptions,
 } from "./utilities";
+import { IUploadTrackFormValues } from "./TrackUpload";
 
 enum DisplayedText {
   TAGS = "(Optional) Select tags or add new tags using. Example:tag1,tag2. Tags limit from select bar:",
@@ -44,15 +45,7 @@ enum FormErrors {
   GENRE_REQUIRED = "Genre is required",
 }
 
-type FormValues = {
-  title: string;
-  picture: File[];
-  track: File[];
-  lyrics: string;
-  explicit: boolean;
-};
-
-const resolver: Resolver<FormValues> = async (values) => {
+const resolver: Resolver<IUploadTrackFormValues> = async (values) => {
   return {
     values: values.title ? values : {},
     errors: !values.title
@@ -99,7 +92,7 @@ const tagsLimit = 10;
 
 type Props = {
   error: string;
-  onsubmit: (dataValues: any) => void;
+  onsubmit: (dataValues: IUploadTrackFormValues) => void;
   success: boolean;
 };
 export const TrackUploadForm: React.FC<Props> = ({
@@ -121,12 +114,10 @@ export const TrackUploadForm: React.FC<Props> = ({
 
   const [newTags, setNewTags] = useState<string[]>([]);
   const [newTagInputValue, setNewTagInputValue] = useState("");
-  const [tagOptionSelected, setTagSelected] = useState<Option[] | any | null>(
-    null
-  );
+  const [tagOptionSelected, setTagSelected] = useState<Option[] | null>(null);
   const [, setTagError] = useState<boolean>(false);
 
-  const handleTagChange = (selected: Option[] | any) => {
+  const handleTagChange = (selected: Option[]) => {
     if (selected.length <= tagsLimit) {
       setTagSelected(selected);
     }
@@ -136,7 +127,7 @@ export const TrackUploadForm: React.FC<Props> = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({ resolver });
+  } = useForm<IUploadTrackFormValues>({ resolver });
 
   const onSubmit = handleSubmit((data) => {
     if (!tagOptionSelected) {
@@ -172,7 +163,6 @@ export const TrackUploadForm: React.FC<Props> = ({
 
       <div className={"form-row"}>
         {/*PICTURE*/}
-
         <label>{FormLabels.PICTURE}</label>
         <input type={"file"} {...register("picture")} />
         {errors?.picture ? (
@@ -234,7 +224,7 @@ export const TrackUploadForm: React.FC<Props> = ({
 
         <label>
           {FormLabels.NEW_TAGS}
-          {newTags && newTags.map((nt: any) => `#${nt} `)}
+          {newTags && newTags.map((nt: string) => `#${nt} `)}
         </label>
       </div>
       <div className={"form-row"}>

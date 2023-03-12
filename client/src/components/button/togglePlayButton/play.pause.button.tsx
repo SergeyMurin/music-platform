@@ -35,9 +35,10 @@ export const PlayPauseButton: React.FC<Props> = ({ track }) => {
         src={playIcon}
         className={"btn_action"}
         onClick={() => {
-          const idx: any = tracks?.findIndex((x) => x.id === track.id);
+          const idx = tracks?.findIndex((x) => x.id === track.id);
+          if (!idx) return;
           setQueue(tracks);
-          setCurrentTrack(tracks?.[idx]);
+          setCurrentTrack(tracks?.[idx] ? tracks?.[idx] : null);
           setIsPlaying(true);
         }}
       />
@@ -51,17 +52,18 @@ export const PlayPauseButton: React.FC<Props> = ({ track }) => {
         src={pauseIcon}
         className={"btn_action"}
         onClick={() => {
-          const idx: any = tracks?.findIndex((x) => x.id === track.id);
-          setCurrentTrack(tracks?.[idx]);
+          const idx = tracks?.findIndex((x) => x.id === track.id);
+          if (!idx) return;
+          setCurrentTrack(tracks?.[idx] ? tracks?.[idx] : null);
           setIsPlaying(false);
         }}
       />
     );
   };
 
-  const isCurrent = (track: ITrack) => {
-    return track.id === currentTrack?.id;
-  };
+  /*const isCurrent = (track: ITrack) => {
+        return track.id === currentTrack?.id;
+      };*/
 
   const [button, setButton] = useState(<ButtonPlay />);
   return <>{button}</>;

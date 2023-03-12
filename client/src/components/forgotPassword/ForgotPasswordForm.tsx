@@ -1,6 +1,7 @@
 import React from "react";
 import { Resolver, useForm } from "react-hook-form";
 import { validateEmail } from "../signUp/SignUpForm";
+import { IForgotPasswordDataValues } from "./ForgotPassword";
 
 type FormValues = {
   email: string;
@@ -29,7 +30,7 @@ const resolver: Resolver<FormValues> = async (values) => {
 
 type Props = {
   error: string;
-  submit: (values: any) => void;
+  submit: (values: IForgotPasswordDataValues) => void;
 };
 export const ForgotPasswordForm: React.FC<Props> = ({ error, submit }) => {
   const {

@@ -11,6 +11,11 @@ enum DisplayedText {
   SIGN_UP = "Sign Up",
 }
 
+export interface ISignInFormValues {
+  email: string;
+  password: string;
+}
+
 export const SignIn: React.FC = () => {
   const [signInError, setSignInError] = useState("");
   const {
@@ -22,14 +27,15 @@ export const SignIn: React.FC = () => {
     fetchUserSubscribers,
   } = useActions();
 
-  const onSubmit = async (dataValues: any) => {
+  const onSubmit = async (dataValues: ISignInFormValues) => {
     await signIn(dataValues);
   };
 
-  const signIn = async (dataValues: any) => {
+  const signIn = async (dataValues: ISignInFormValues) => {
     const response = await signInAsync(dataValues).catch((error) => {
       setSignInError(error.response.data.message);
     });
+    if (!response?.data) return;
 
     const id = response.data.id;
     const token = response.data.token;

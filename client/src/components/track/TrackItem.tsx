@@ -5,15 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { getUserAsync } from "../../helpers/requests/userRequests";
 import { ClientConfig } from "../../clientConfig";
 import { ButtonManager, ButtonManagerType } from "../button/ButtonManager";
+import { IUser } from "../../types/user";
 
 type Props = {
   track: ITrack;
-  tracks?: ITrack[];
+  tracks: ITrack[];
 };
 
 export const TrackItem: React.FC<Props> = ({ track }) => {
   const { currentTrack } = useTypedSelector((state) => state.player);
-  const [author, setAuthor] = useState<any>();
+  const [author, setAuthor] = useState<IUser>();
   const navigate = useNavigate();
 
   const trackItemEffect = () => {
@@ -31,6 +32,7 @@ export const TrackItem: React.FC<Props> = ({ track }) => {
   };
 
   const authorClickHandler = () => {
+    if (!author) return;
     navigate(`/${ClientConfig.client_routes.profile.index}/${author.id}`);
   };
 

@@ -21,16 +21,14 @@ export const ToggleLikeButton: React.FC<Props> = ({ track }) => {
   const { fetchUserFavorites } = useActions();
 
   const [toggle, setToggle] = useState(false);
-  const [favoriteId, setFavoriteId] = useState(null);
+  const [favoriteId, setFavoriteId] = useState<null | string>(null);
 
   const effectFavorites = () => {
-    if (!favorites) {
-      return;
-    }
+    if (!favorites) return;
     const favorite = favorites.find((f) => f.id === track?.id);
     if (favorite) {
       setToggle(true);
-      setFavoriteId(favorite.favorite_id);
+      setFavoriteId(favorite.id);
     } else setToggle(false);
   };
 

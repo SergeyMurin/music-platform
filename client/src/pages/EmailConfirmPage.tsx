@@ -4,8 +4,6 @@ import { useActions } from "../hooks/useActions";
 import { Link, useSearchParams } from "react-router-dom";
 import { Loader } from "../components/loader/Loader";
 import { confirmEmailAsync } from "../helpers/requests/authRequests";
-import { Simulate } from "react-dom/test-utils";
-import error = Simulate.error;
 
 enum DisplayedText {
   HEADER = "Email confirmed",
