@@ -19,7 +19,6 @@ import { ForgotPasswordDto } from '../../common/dto/auth/forgot-password.dto';
 import { ResetPasswordDto } from '../../common/dto/auth/reset-password.dto';
 import { UserRoleService } from '../user/user-role/user-role.service';
 import { RoleTitleEnum } from '../../common/constants/role-title.enum';
-import { DigitalOceanService } from '../../shared/digitalOcean/digital-ocean.service';
 
 dotenv.config();
 
