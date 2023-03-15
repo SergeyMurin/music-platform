@@ -3,17 +3,15 @@ import { IGenre, ITag, ITrack } from "../../types/track";
 import { IUser } from "../../types/user";
 import { useActions } from "../../hooks/useActions";
 import { useNavigate, useParams } from "react-router-dom";
-import { PlayPauseButton } from "../button/togglePlayButton/play.pause.button";
-import { ToggleLikeButton } from "../button/toggleLikeButton/ToggleLikeButton";
-import { DownloadButton } from "../button/downloadButton/downloadButton";
 import "./Track.css";
 import {
-  getTrackGenresAsync,
   getTrackAsync,
+  getTrackGenresAsync,
   getTrackTagsAsync,
 } from "../../helpers/requests/tracksRequests";
 import { getUserAsync } from "../../helpers/requests/userRequests";
 import { ClientConfig } from "../../clientConfig";
+import { ButtonManager, ButtonManagerType } from "../button/ButtonManager";
 
 export const TrackInfo: React.FC = () => {
   const [track, setTrack] = useState<ITrack | null>(null);
@@ -104,11 +102,15 @@ export const TrackInfo: React.FC = () => {
               <div className={"card_buttons"}>
                 <div>Likes: {track.likes}</div>
 
-                <PlayPauseButton track={track} />
+                <ButtonManager type={ButtonManagerType.PLAY} track={track} />
 
                 <div className={"like-download"}>
-                  <ToggleLikeButton track={track} />
-                  <DownloadButton trackId={track.id} fileName={track.title} />
+                  <ButtonManager type={ButtonManagerType.LIKE} track={track} />
+                  <ButtonManager
+                    type={ButtonManagerType.DOWNLOAD}
+                    trackId={track.id}
+                    fileName={track.title}
+                  />
                 </div>
               </div>
             </div>

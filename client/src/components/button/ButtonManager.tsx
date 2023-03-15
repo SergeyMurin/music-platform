@@ -1,7 +1,7 @@
 import React from "react";
 import { ToggleLikeButton } from "./toggleLikeButton/ToggleLikeButton";
 import { ITrack } from "../../types/track";
-import { PlayPauseButton } from "./togglePlayButton/play.pause.button";
+import { TogglePlayButton } from "./togglePlayButton/TogglePlayButton";
 import { IUser } from "../../types/user";
 import { ToggleSubscribeButton } from "./toggleSubscribeButton/ToggleSubscribeButton";
 import { DownloadButton } from "./downloadButton/downloadButton";
@@ -60,7 +60,7 @@ export const ButtonManager: React.FC<Props> = (payload) => {
     case ButtonManagerType.PLAY: {
       const { track } = payload;
       if (!track) return null;
-      return <PlayPauseButton track={track} />;
+      return <TogglePlayButton track={track} />;
     }
     default: {
       return null;
