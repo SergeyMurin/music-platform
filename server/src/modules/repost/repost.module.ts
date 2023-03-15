@@ -1,0 +1,24 @@
+import { forwardRef, Module } from '@nestjs/common';
+
+import { DatabaseModule } from '../../shared/database/database.module';
+import { RepostController } from './repost.controller';
+import { RepostService } from './repost.service';
+import { repostProviders } from './repost.providers';
+import { AuthModule } from '../auth/auth.module';
+import { UserModule } from '../user/user.module';
+import { TrackModule } from '../track/track.module';
+import { AlbumModule } from '../album/album.module';
+
+@Module({
+  imports: [
+    DatabaseModule,
+    forwardRef(() => AuthModule),
+    forwardRef(() => UserModule),
+    forwardRef(() => TrackModule),
+    forwardRef(() => AlbumModule),
+  ],
+  controllers: [RepostController],
+  providers: [RepostService, ...repostProviders],
+  exports: [RepostService, ...repostProviders],
+})
+export class RepostModule {}
