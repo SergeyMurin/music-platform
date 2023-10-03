@@ -37,9 +37,11 @@ import { GenreAlbumModule } from './modules/genre/genre-album/genre-album.module
     SubscribeModule,
     RoleModule,
     UserRoleModule,
+
     TagAlbumModule,
     TagTrackModule,
     TagModule,
+
     AlbumModule,
     AlbumTrackModule,
     GenreModule,

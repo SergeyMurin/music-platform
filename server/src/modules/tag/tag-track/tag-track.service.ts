@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { TagTrack } from './tag-track.entity';
 import { Tag } from '../tag.entity';
 import { TagService } from '../tag.service';
-import { isArray } from 'class-validator';
 import { TrackTagsDto } from '../../../common/dto/tag-track/track-tags.dto';
 
 @Injectable()
