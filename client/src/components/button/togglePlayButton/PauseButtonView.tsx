@@ -18,7 +18,7 @@ export const PauseButtonView: React.FC<Props> = ({ track }) => {
         className={"btn_action"}
         onClick={() => {
           const idx = tracks?.findIndex((x) => x.id === track.id);
-          if (!idx) return;
+          if (!idx && idx !== 0) return;
           setCurrentTrack(tracks?.[idx] ? tracks?.[idx] : null);
           setIsPlaying(false);
         }}

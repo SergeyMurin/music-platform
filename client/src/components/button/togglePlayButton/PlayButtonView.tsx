@@ -13,7 +13,7 @@ export const PlayButtonView: React.FC<Props> = ({ track }) => {
 
   const handlerClick = () => {
     const idx = tracks?.findIndex((x) => x.id === track.id);
-    if (!idx) return;
+    if (!idx && idx !== 0) return;
     setQueue(tracks);
     setCurrentTrack(tracks?.[idx] ? tracks?.[idx] : null);
     setIsPlaying(true);
