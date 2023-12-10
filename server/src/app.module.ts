@@ -26,6 +26,7 @@ import { MailModule } from './shared/mail/mail.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { GenreTrackModule } from './modules/genre/genre-track/genre-track.module';
 import { GenreAlbumModule } from './modules/genre/genre-album/genre-album.module';
+import { GoogleDriveModule } from './shared/googleDrive/google-drive.module';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { GenreAlbumModule } from './modules/genre/genre-album/genre-album.module
     AuthModule,
     MailModule,
     DigitalOceanModule,
+    GoogleDriveModule,
   ],
   controllers: [],
   providers: [],
