@@ -110,6 +110,7 @@ export const TrackInfo: React.FC = () => {
                     type={ButtonManagerType.DOWNLOAD}
                     trackId={track.id}
                     fileName={track.title}
+                    url={track.url}
                   />
                 </div>
               </div>

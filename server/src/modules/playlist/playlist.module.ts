@@ -6,8 +6,8 @@ import { playlistProviders } from './playlist.providers';
 import { PlaylistTrackModule } from './playlist-track/playlist-track.module';
 import { TrackModule } from '../track/track.module';
 import { AuthModule } from '../auth/auth.module';
-import { DigitalOceanModule } from '../../shared/digitalOcean/digital-ocean.module';
 import { UserModule } from '../user/user.module';
+import { GoogleDriveModule } from '../../shared/googleDrive/google-drive.module';
 
 @Module({
   imports: [
@@ -16,7 +16,8 @@ import { UserModule } from '../user/user.module';
     TrackModule,
     AuthModule,
     UserModule,
-    DigitalOceanModule,
+    GoogleDriveModule,
+    //DigitalOceanModule,
   ],
   controllers: [PlaylistController],
   providers: [PlaylistService, ...playlistProviders],

@@ -20,7 +20,6 @@ import { FavoriteTrackModule } from './modules/favorite/favorite-track/favorite-
 import { RepostModule } from './modules/repost/repost.module';
 import { AlbumTrackModule } from './modules/album/album-track/album-track.module';
 import { SharedModule } from './shared/shared.module';
-import { DigitalOceanModule } from './shared/digitalOcean/digital-ocean.module';
 import { UserTokenModule } from './modules/user/user-token/user-token.module';
 import { MailModule } from './shared/mail/mail.module';
 import { AuthModule } from './modules/auth/auth.module';
@@ -58,7 +57,7 @@ import { GoogleDriveModule } from './shared/googleDrive/google-drive.module';
 
     AuthModule,
     MailModule,
-    DigitalOceanModule,
+    //DigitalOceanModule,
     GoogleDriveModule,
   ],
   controllers: [],

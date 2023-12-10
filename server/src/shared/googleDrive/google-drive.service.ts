@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { google } from 'googleapis';
+import { Readable } from 'stream';
 import fs from 'fs';
 
 @Injectable()
@@ -46,8 +47,12 @@ export class GoogleDriveService {
     });
   }
 
-  async uploadFile(file: Buffer, title: string): Promise<string> {
+  async uploadFile(file: any, title: string): Promise<string> {
     try {
+      const fileStream = new Readable();
+      fileStream.push(file.buffer);
+      fileStream.push(null);
+
       // Создание метаданных файла для загрузки в Google Drive
       const fileMetadata = {
         name: title,
@@ -55,8 +60,8 @@ export class GoogleDriveService {
 
       // Подготовка содержимого файла для загрузки
       const media = {
-        mimeType: 'application/octet-stream',
-        body: file,
+        mimeType: file.mimetype,
+        body: fileStream,
       };
 
       // Выполнение загрузки файла в Google Drive
@@ -66,9 +71,20 @@ export class GoogleDriveService {
         fields: 'id',
       });
 
+      const fileId = uploadedFile.data.id; // Полученный ID загруженного файла
+
+      // Установка разрешений для файла (доступ для всех пользователей)
+      await this.driveClient.permissions.create({
+        fileId: fileId,
+        requestBody: {
+          type: 'anyone',
+          role: 'reader',
+        },
+      });
+
       // Получение ссылки для скачивания загруженного файла
       const fileInfo = await this.driveClient.files.get({
-        fileId: uploadedFile.data.id,
+        fileId: fileId,
         fields: 'webContentLink',
       });
 
@@ -79,7 +95,7 @@ export class GoogleDriveService {
     }
   }
 
-  async download(title: string): Promise<Buffer> {
+  async download(title: string): Promise<ArrayBuffer> {
     const file = await this.getFileByTitle(title);
     if (!file) {
       throw new Error(`File "${title}" not found`);
@@ -87,16 +103,10 @@ export class GoogleDriveService {
 
     const response = await this.driveClient.files.get(
       { fileId: file.id, alt: 'media' },
-      { responseType: 'stream' },
+      { responseType: 'arraybuffer' },
     );
 
-    return new Promise((resolve, reject) => {
-      const chunks: Uint8Array[] = [];
-      response.data
-        .on('data', (chunk) => chunks.push(chunk))
-        .on('end', () => resolve(Buffer.concat(chunks)))
-        .on('error', (err) => reject(err));
-    });
+    return response.data; // Возвращаем массив байтов (arraybuffer)
   }
 
   async removeFile(title: string): Promise<boolean> {

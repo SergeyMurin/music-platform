@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { Track } from './track.entity';
 
-import { DigitalOceanService } from '../../shared/digitalOcean/digital-ocean.service';
 import * as dotenv from 'dotenv';
 import * as process from 'process';
 import { GenreTrackService } from '../genre/genre-track/genre-track.service';
@@ -29,6 +28,7 @@ import { CommentService } from '../comment/comment.service';
 import { FavoriteTrackService } from '../favorite/favorite-track/favorite-track.service';
 import { RepostService } from '../repost/repost.service';
 import { Op } from 'sequelize';
+import { GoogleDriveService } from '../../shared/googleDrive/google-drive.service';
 
 dotenv.config();
 
@@ -41,7 +41,7 @@ export class TrackService {
     private readonly tagTrackRepository: typeof TagTrack,
     @Inject('GENRE_TRACK_REPOSITORY')
     private readonly genreTrackRepository: typeof GenreTrack,
-    private readonly digitalOceanService: DigitalOceanService,
+    private readonly googleDriveService: GoogleDriveService,
     private readonly tagTrackService: TagTrackService,
     private readonly tagService: TagService,
     private readonly genreTrackService: GenreTrackService,
@@ -100,7 +100,7 @@ export class TrackService {
     const user = await this.userService.getById(jwtPayload.user_id);
     if (!user) {
       throw new HttpException(
-        `Cannot find user with od ${jwtPayload.user_id}`,
+        `Cannot find user with id ${jwtPayload.user_id}`,
         HttpStatus.NOT_FOUND,
       );
     }
@@ -112,9 +112,9 @@ export class TrackService {
       lyrics: dto.lyrics,
     });
 
-    const trackUrl = await this.digitalOceanService.uploadFile(
-      files.track[0].buffer,
-      process.env.DIGITAL_OCEAN_BUCKET_TRACK_PATH + track.id,
+    const trackUrl = await this.googleDriveService.uploadFile(
+      files.track[0],
+      track.id,
     );
     if (!trackUrl) {
       await track.destroy();
@@ -123,9 +123,9 @@ export class TrackService {
 
     let pictureUrl = null;
     if (files.picture) {
-      pictureUrl = await this.digitalOceanService.uploadFile(
-        files.picture[0].buffer,
-        process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH + track.id,
+      pictureUrl = await this.googleDriveService.uploadFile(
+        files.picture[0],
+        track.id,
       );
     }
 
@@ -186,10 +186,7 @@ export class TrackService {
       );
     }
 
-    await this.digitalOceanService.removeFile(
-      track.id,
-      process.env.DIGITAL_OCEAN_BUCKET_TRACK_PATH,
-    );
+    await this.googleDriveService.removeFile(track.id);
 
     await this.clearTrackTags(track.id);
     await this.clearTrackGenres(track.id);
@@ -209,10 +206,7 @@ export class TrackService {
       return;
     }
 
-    await this.digitalOceanService.removeFile(
-      track.id,
-      process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH,
-    );
+    await this.googleDriveService.removeFile(track.id);
   }
 
   async clearTrackTags(id) {
@@ -336,16 +330,12 @@ export class TrackService {
         process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH,
       )[1] !== 'default'
     ) {
-      await this.digitalOceanService.removeFile(
-        track.id,
-        process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH,
-      );
+      await this.googleDriveService.removeFile(track.id);
     }
 
-    track.picture_url = await this.digitalOceanService.uploadFile(
-      picture.buffer,
+    track.picture_url = await this.googleDriveService.uploadFile(
+      picture,
       track.id,
-      process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH,
     );
 
     await track.save();
@@ -395,6 +385,6 @@ export class TrackService {
   }
 
   async download(id: string) {
-    return await this.digitalOceanService.download(id);
+    return await this.googleDriveService.download(id);
   }
 }
