@@ -20,12 +20,12 @@ import { FavoriteTrackModule } from './modules/favorite/favorite-track/favorite-
 import { RepostModule } from './modules/repost/repost.module';
 import { AlbumTrackModule } from './modules/album/album-track/album-track.module';
 import { SharedModule } from './shared/shared.module';
-import { DigitalOceanModule } from './shared/digitalOcean/digital-ocean.module';
 import { UserTokenModule } from './modules/user/user-token/user-token.module';
 import { MailModule } from './shared/mail/mail.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { GenreTrackModule } from './modules/genre/genre-track/genre-track.module';
 import { GenreAlbumModule } from './modules/genre/genre-album/genre-album.module';
+import { GoogleDriveModule } from './shared/googleDrive/google-drive.module';
 
 @Module({
   imports: [
@@ -57,7 +57,8 @@ import { GenreAlbumModule } from './modules/genre/genre-album/genre-album.module
 
     AuthModule,
     MailModule,
-    DigitalOceanModule,
+    //DigitalOceanModule,
+    GoogleDriveModule,
   ],
   controllers: [],
   providers: [],

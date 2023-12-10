@@ -265,6 +265,7 @@ export const PlayerView: React.FC<Props> = ({ audioElem, author }) => {
               type={ButtonManagerType.DOWNLOAD}
               trackId={currentTrack ? currentTrack.id : ""}
               fileName={currentTrack ? currentTrack.title : ""}
+              url={currentTrack ? currentTrack.url : ""}
             />
           </div>
         </div>

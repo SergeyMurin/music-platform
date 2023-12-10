@@ -84,6 +84,9 @@ export const TrackItem: React.FC<Props> = ({ track }) => {
                 ? currentTrack?.title
                 : track.title
             }
+            url={
+              isCurrent(track) && currentTrack ? currentTrack?.url : track.url
+            }
           />
         </div>
       </div>

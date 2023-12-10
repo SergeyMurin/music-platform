@@ -32,6 +32,7 @@ type ButtonDownloadPayload = {
   type: ButtonManagerType.DOWNLOAD;
   trackId: string;
   fileName: string;
+  url: string;
 };
 
 type Props =
@@ -48,9 +49,9 @@ export const ButtonManager: React.FC<Props> = (payload) => {
       return <ToggleLikeButton track={track} />;
     }
     case ButtonManagerType.DOWNLOAD: {
-      const { trackId, fileName } = payload;
+      const { trackId, fileName, url } = payload;
       if (!trackId && !fileName) return null;
-      return <DownloadButton trackId={trackId} fileName={fileName} />;
+      return <DownloadButton trackId={trackId} fileName={fileName} url={url} />;
     }
     case ButtonManagerType.SUBSCRIBE: {
       const { user } = payload;

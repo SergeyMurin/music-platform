@@ -4,7 +4,6 @@ import { TrackModule } from '../track/track.module';
 import { AlbumController } from './album.controller';
 import { AlbumService } from './album.service';
 import { albumProviders } from './album.providers';
-import { DigitalOceanModule } from '../../shared/digitalOcean/digital-ocean.module';
 import { TagModule } from '../tag/tag.module';
 import { GenreAlbumModule } from '../genre/genre-album/genre-album.module';
 import { UserModule } from '../user/user.module';
@@ -18,13 +17,15 @@ import { TagTrackModule } from '../tag/tag-track/tag-track.module';
 import { GenreTrackModule } from '../genre/genre-track/genre-track.module';
 import { CommentModule } from '../comment/comment.module';
 import { RepostModule } from '../repost/repost.module';
+import { GoogleDriveModule } from '../../shared/googleDrive/google-drive.module';
 
 @Module({
   imports: [
     forwardRef(() => AlbumTrackModule),
     forwardRef(() => TrackModule),
     DatabaseModule,
-    DigitalOceanModule,
+    GoogleDriveModule,
+    //DigitalOceanModule,
     TagModule,
     TagAlbumModule,
     TagTrackModule,

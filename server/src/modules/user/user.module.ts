@@ -4,15 +4,15 @@ import { UserService } from './user.service';
 import { userProviders } from './user.providers';
 import { UserController } from './user.controller';
 import { AuthModule } from '../auth/auth.module';
-import { DigitalOceanModule } from '../../shared/digitalOcean/digital-ocean.module';
 import { TrackModule } from '../track/track.module';
 import { AlbumModule } from '../album/album.module';
+import { GoogleDriveModule } from '../../shared/googleDrive/google-drive.module';
 
 @Module({
   imports: [
     DatabaseModule,
     forwardRef(() => AuthModule),
-    DigitalOceanModule,
+    GoogleDriveModule,
     forwardRef(() => TrackModule),
     forwardRef(() => AlbumModule),
   ],

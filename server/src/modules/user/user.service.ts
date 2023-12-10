@@ -10,12 +10,12 @@ import { GetUserDto } from '../../common/dto/user/get-user.dto';
 import { AuthService } from '../auth/auth.service';
 import process from 'process';
 import dotenv from 'dotenv';
-import { DigitalOceanService } from '../../shared/digitalOcean/digital-ocean.service';
 import { EditUserDto } from '../../common/dto/user/edit-user.dto';
 import { SearchDto, searchType } from '../../common/dto/user/search.dto';
 import { TrackService } from '../track/track.service';
 import { AlbumService } from '../album/album.service';
 import { Op } from 'sequelize';
+import { GoogleDriveService } from '../../shared/googleDrive/google-drive.service';
 
 dotenv.config();
 
@@ -26,7 +26,7 @@ export class UserService {
     private readonly userRepository: typeof User,
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
-    private readonly digitalOceanService: DigitalOceanService,
+    private readonly googleDriveService: GoogleDriveService,
     @Inject(forwardRef(() => TrackService))
     private readonly trackService: TrackService,
     @Inject(forwardRef(() => AlbumService))
@@ -79,16 +79,12 @@ export class UserService {
         process.env.DIGITAL_OCEAN_BUCKET_PICTURE_PROFILE_PATH,
       )[1] !== 'default'
     ) {
-      await this.digitalOceanService.removeFile(
-        user.id,
-        process.env.DIGITAL_OCEAN_BUCKET_PICTURE_PROFILE_PATH,
-      );
+      await this.googleDriveService.removeFile(user.id);
     }
 
-    user.picture_url = await this.digitalOceanService.uploadFile(
-      picture.buffer,
+    user.picture_url = await this.googleDriveService.uploadFile(
+      picture,
       user.id,
-      process.env.DIGITAL_OCEAN_BUCKET_PICTURE_PROFILE_PATH,
     );
 
     await user.save();

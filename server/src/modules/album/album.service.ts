@@ -10,7 +10,6 @@ import {
 import { Album } from './album.entity';
 import { Track } from '../track/track.entity';
 import { CreateAlbumDto } from '../../common/dto/album/create-album.dto';
-import { DigitalOceanService } from '../../shared/digitalOcean/digital-ocean.service';
 import { TrackService } from '../track/track.service';
 import { TagService } from '../tag/tag.service';
 import { GenreAlbumService } from '../genre/genre-album/genre-album.service';
@@ -31,6 +30,7 @@ import { FavoriteAlbumService } from '../favorite/favorite-album/favorite-album.
 import { FavoriteTrackService } from '../favorite/favorite-track/favorite-track.service';
 import { RepostService } from '../repost/repost.service';
 import { Op } from 'sequelize';
+import { GoogleDriveService } from '../../shared/googleDrive/google-drive.service';
 
 dotenv.config();
 
@@ -45,7 +45,7 @@ export class AlbumService {
     private tagAlbumRepository: typeof TagAlbum,
     @Inject('GENRE_ALBUM_REPOSITORY')
     private genreAlbumRepository: typeof GenreAlbum,
-    private readonly digitalOceanService: DigitalOceanService,
+    private readonly googleDriveService: GoogleDriveService,
     @Inject(forwardRef(() => TrackService))
     private readonly trackService: TrackService,
     private readonly tagService: TagService,
@@ -141,9 +141,9 @@ export class AlbumService {
   async uploadAlbumPicture(pictureFile: any, albumId: string): Promise<string> {
     let pictureUrl = null;
     if (pictureFile) {
-      pictureUrl = await this.digitalOceanService.uploadFile(
-        pictureFile.buffer,
-        process.env.DIGITAL_OCEAN_BUCKET_PICTURE_ALBUM_PATH + albumId,
+      pictureUrl = await this.googleDriveService.uploadFile(
+        pictureFile,
+        albumId,
       );
     }
 
@@ -188,9 +188,9 @@ export class AlbumService {
       album_id: albumId,
     });
 
-    const trackUrl = await this.digitalOceanService.uploadFile(
-      trackFile.buffer,
-      process.env.DIGITAL_OCEAN_BUCKET_TRACK_PATH + track.id,
+    const trackUrl = await this.googleDriveService.uploadFile(
+      trackFile,
+      track.id,
     );
     if (!trackUrl) {
       await track.destroy();
@@ -329,7 +329,7 @@ export class AlbumService {
    * @param {string} albumId
    * @returns {Promise<void>}
    */
-  async albumTagGenreHandler(dto, albumId: string) {
+  async albumTagGenreHandler(dto, albumId: string): Promise<void> {
     const genreIds = await this.parseComma(dto.genres);
     genreIds.map(async (genreId) => {
       await this.genreAlbumService.create(genreId, albumId);
@@ -349,7 +349,11 @@ export class AlbumService {
    * @param {AddTrackToAlbumDto} dto
    * @returns {Promise<{track_id: string, id: string}>}
    */
-  async addTrackToAlbum(token, files, dto: AddTrackToAlbumDto) {
+  async addTrackToAlbum(
+    token,
+    files,
+    dto: AddTrackToAlbumDto,
+  ): Promise<{ track_id: string; id: string }> {
     const jwtPayload = await this.authService.verifyToken(token);
     const user = await this.userService.getById(jwtPayload.user_id);
     const album = await this.getById(dto.id);
@@ -383,9 +387,12 @@ export class AlbumService {
    *
    * @param token
    * @param {EditAlbumDto} dto
-   * @returns {Promise<void>}
+   * @returns {Promise<{id:string, title:string}>}
    */
-  async edit(token, dto: EditAlbumDto) {
+  async edit(
+    token: string,
+    dto: EditAlbumDto,
+  ): Promise<{ id: string; title: string }> {
     const jwtPayload = await this.authService.verifyToken(token);
     const user = await this.userService.getById(jwtPayload.user_id);
     const album = await this.getById(dto.id);
@@ -443,10 +450,7 @@ export class AlbumService {
     await Promise.all(
       albumTracks.map(async (albumTrack) => {
         const track = await this.trackService.getTrackById(albumTrack.track_id);
-        await this.digitalOceanService.removeFile(
-          track.id,
-          process.env.DIGITAL_OCEAN_BUCKET_TRACK_PATH,
-        );
+        await this.googleDriveService.removeFile(track.id);
 
         await this.albumTrackService.remove(album.id, track.id);
         await this.trackService.clearTrackTags(track.id);
@@ -466,17 +470,11 @@ export class AlbumService {
           return;
         }
 
-        await this.digitalOceanService.removeFile(
-          track.id,
-          process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH,
-        );
+        await this.googleDriveService.removeFile(track.id);
       }),
     );
 
-    await this.digitalOceanService.removeFile(
-      album.id,
-      process.env.DIGITAL_OCEAN_BUCKET_PICTURE_ALBUM_PATH,
-    );
+    await this.googleDriveService.removeFile(album.id);
 
     await this.clearAlbumTags(album.id);
     await this.clearAlbumGenres(album.id);
@@ -543,16 +541,12 @@ export class AlbumService {
         process.env.DIGITAL_OCEAN_BUCKET_PICTURE_ALBUM_PATH,
       )[1] !== 'default'
     ) {
-      await this.digitalOceanService.removeFile(
-        album.id,
-        process.env.DIGITAL_OCEAN_BUCKET_PICTURE_ALBUM_PATH,
-      );
+      await this.googleDriveService.removeFile(album.id);
     }
 
-    album.picture_url = await this.digitalOceanService.uploadFile(
-      picture.buffer,
+    album.picture_url = await this.googleDriveService.uploadFile(
+      picture,
       album.id,
-      process.env.DIGITAL_OCEAN_BUCKET_PICTURE_ALBUM_PATH,
     );
 
     const albumTracks = await this.trackRepository.findAll({
@@ -587,10 +581,7 @@ export class AlbumService {
     }
 
     const track = await this.trackService.getTrackById(albumTrack.track_id);
-    await this.digitalOceanService.removeFile(
-      track.id,
-      process.env.DIGITAL_OCEAN_BUCKET_TRACK_PATH,
-    );
+    await this.googleDriveService.removeFile(track.id);
 
     await this.clearAlbumTags(album.id);
     await this.clearAlbumGenres(album.id);
@@ -611,10 +602,7 @@ export class AlbumService {
       return;
     }
 
-    await this.digitalOceanService.removeFile(
-      track.id,
-      process.env.DIGITAL_OCEAN_BUCKET_PICTURE_TRACK_PATH,
-    );
+    await this.googleDriveService.removeFile(track.id);
   }
 
   async searchByTerm(term: string) {

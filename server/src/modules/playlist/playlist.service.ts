@@ -3,12 +3,12 @@ import { Playlist } from './playlist.entity';
 import { PlaylistTrackService } from './playlist-track/playlist-track.service';
 import { TrackService } from '../track/track.service';
 import { AuthService } from '../auth/auth.service';
-import { DigitalOceanService } from '../../shared/digitalOcean/digital-ocean.service';
 import process from 'process';
 import { AddTrackToPlaylistDto } from '../../common/dto/playlist/add-track-to-playlist.dto';
 import { RemoveTrackFromPlaylistDto } from '../../common/dto/playlist/remove-track-from-playlist.dto';
 import { UserService } from '../user/user.service';
 import { EditPlaylistDto } from '../../common/dto/playlist/edit-playlist.dto';
+import { GoogleDriveService } from '../../shared/googleDrive/google-drive.service';
 
 @Injectable()
 export class PlaylistService {
@@ -17,7 +17,7 @@ export class PlaylistService {
     private playlistRepository: typeof Playlist,
     private readonly trackService: TrackService,
     private readonly authService: AuthService,
-    private readonly digitalOceanService: DigitalOceanService,
+    private readonly googleDriveService: GoogleDriveService,
     private readonly playlistTrackService: PlaylistTrackService,
     private readonly userService: UserService,
   ) {}
@@ -92,9 +92,9 @@ export class PlaylistService {
 
     let pictureUrl = null;
     if (files.picture) {
-      pictureUrl = await this.digitalOceanService.uploadFile(
-        files.picture[0].buffer,
-        process.env.DIGITAL_OCEAN_BUCKET_PICTURE_PLAYLIST_PATH + playlist.id,
+      pictureUrl = await this.googleDriveService.uploadFile(
+        files.picture[0],
+        playlist.id,
       );
     }
 
@@ -200,16 +200,12 @@ export class PlaylistService {
         process.env.DIGITAL_OCEAN_BUCKET_PICTURE_PLAYLIST_PATH,
       )[1] !== 'default'
     ) {
-      await this.digitalOceanService.removeFile(
-        playlist.id,
-        process.env.DIGITAL_OCEAN_BUCKET_PICTURE_PLAYLIST_PATH,
-      );
+      await this.googleDriveService.removeFile(playlist.id);
     }
 
-    playlist.picture_url = await this.digitalOceanService.uploadFile(
-      picture.buffer,
+    playlist.picture_url = await this.googleDriveService.uploadFile(
+      picture,
       playlist.id,
-      process.env.DIGITAL_OCEAN_BUCKET_PICTURE_PLAYLIST_PATH,
     );
 
     await playlist.save();

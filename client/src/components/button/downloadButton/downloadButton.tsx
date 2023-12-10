@@ -6,9 +6,10 @@ import { createBlob, downloadBlob } from "../../../helpers/helpers";
 type Props = {
   trackId: string;
   fileName: string;
+  url?: string;
 };
 
-export const DownloadButton: React.FC<Props> = ({ trackId, fileName }) => {
+export const DownloadButton: React.FC<Props> = ({ trackId, fileName, url }) => {
   const handleDownload = async () => {
     try {
       const response = await downloadTrackAsync(trackId);
@@ -21,12 +22,14 @@ export const DownloadButton: React.FC<Props> = ({ trackId, fileName }) => {
 
   return (
     <button>
-      <img
-        src={downloadIcon}
-        className={"btn_action"}
-        onClick={handleDownload}
-        alt={"download"}
-      />
+      <a href={url} download={fileName}>
+        <img
+          src={downloadIcon}
+          className={"btn_action"}
+          // onClick={handleDownload}
+          alt={"download"}
+        />
+      </a>
     </button>
   );
 };
